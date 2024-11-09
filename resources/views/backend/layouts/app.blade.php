@@ -44,22 +44,23 @@
     <link href="/assets/backend/css/user-rtl.min.css" type="text/css" rel="stylesheet" id="user-style-rtl">
     <link href="/assets/backend/css/user.min.css" type="text/css" rel="stylesheet" id="user-style-default">
 
-    @stack('css')
+
     <script>
-        var phoenixIsRTL = window.config.config.phoenixIsRTL;
-        if (phoenixIsRTL) {
-            var linkDefault = document.getElementById('style-default');
-            var userLinkDefault = document.getElementById('user-style-default');
-            linkDefault.setAttribute('disabled', true);
-            userLinkDefault.setAttribute('disabled', true);
-            document.querySelector('html').setAttribute('dir', 'rtl');
-        } else {
-            var linkRTL = document.getElementById('style-rtl');
-            var userLinkRTL = document.getElementById('user-style-rtl');
-            linkRTL.setAttribute('disabled', true);
-            userLinkRTL.setAttribute('disabled', true);
-        }
+    var phoenixIsRTL = window.config.config.phoenixIsRTL;
+    if (phoenixIsRTL) {
+        var linkDefault = document.getElementById('style-default');
+        var userLinkDefault = document.getElementById('user-style-default');
+        linkDefault.setAttribute('disabled', true);
+        userLinkDefault.setAttribute('disabled', true);
+        document.querySelector('html').setAttribute('dir', 'rtl');
+    } else {
+        var linkRTL = document.getElementById('style-rtl');
+        var userLinkRTL = document.getElementById('user-style-rtl');
+        linkRTL.setAttribute('disabled', true);
+        userLinkRTL.setAttribute('disabled', true);
+    }
     </script>
+    @stack('css')
 </head>
 
 
@@ -95,17 +96,17 @@
             </footer>
         </div>
         <script>
-            var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
-            var navbarTop = document.querySelector('.navbar-top');
-            if (navbarTopStyle === 'darker') {
-                navbarTop.setAttribute('data-navbar-appearance', 'darker');
-            }
+        var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
+        var navbarTop = document.querySelector('.navbar-top');
+        if (navbarTopStyle === 'darker') {
+            navbarTop.setAttribute('data-navbar-appearance', 'darker');
+        }
 
-            var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
-            var navbarVertical = document.querySelector('.navbar-vertical');
-            if (navbarVertical && navbarVerticalStyle === 'darker') {
-                navbarVertical.setAttribute('data-navbar-appearance', 'darker');
-            }
+        var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+        var navbarVertical = document.querySelector('.navbar-vertical');
+        if (navbarVertical && navbarVerticalStyle === 'darker') {
+            navbarVertical.setAttribute('data-navbar-appearance', 'darker');
+        }
         </script>
         <div class="support-chat-container">
             <div class="container-fluid support-chat">
@@ -154,7 +155,7 @@
                             <div class="text-center mt-auto">
                                 <div class="avatar avatar-3xl status-online"><img
                                         class="rounded-circle border border-3 border-light-subtle"
-                                        src="../assets/img/team/30.webp" alt="" /></div>
+                                        src="/assets/backend/img/team/30.webp" alt="" /></div>
                                 <h5 class="mt-2 mb-3">Eric</h5>
                                 <p class="text-center text-body-emphasis mb-0">Ask us anything – we’ll get back to you
                                     here or by email
