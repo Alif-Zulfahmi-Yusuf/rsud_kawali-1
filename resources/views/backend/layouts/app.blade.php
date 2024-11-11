@@ -74,7 +74,6 @@
         @include('backend.layouts.sidebar')
         <!-- end sidebar -->
 
-
         <!-- navbar -->
         @include('backend.layouts.navbar')
         <!-- end navbar -->

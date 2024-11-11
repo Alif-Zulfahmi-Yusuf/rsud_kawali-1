@@ -84,22 +84,16 @@
                 <!-- Pangkat Field -->
                 <div class="form-group mb-3">
                     <label for="pangkat" class="form-label">{{ __('Pangkat') }}</label>
-                    <select class="form-control" id="pangkat" name="pangkat">
-                        <option value="" disabled>{{ __('Select Pangkat') }}</option>
-                        @foreach ([
-                        'I/a-Juru Muda', 'I/b-Juru Muda tingkat I', 'I/c-Juru', 'I/d-juru tingkat I',
-                        'II/a-pengatur muda', 'II/b-pengatur muda TK.I', 'II/c-pengatur', 'II/d-pengatur TK.I',
-                        'III/a-penata muda', 'III/b-penata muda TK.I', 'III/c-penata', 'III/d-penata TK.I',
-                        'IV/a-pembina', 'IV/b-Pembina TK.I', 'IV/c-pembina utama muda', 'IV/d-pembina utama madya',
-                        'IV/e-pembina utama', 'V-V', 'VII-VII', 'IX-IX', 'X-X', 'VIII-VIII'
-                        ] as $rank)
-                        <option value="{{ $rank }}" {{ old('pangkat', $user->pangkat) === $rank ? 'selected' : '' }}>
-                            {{ $rank }}
+                    <select class="form-control" id="pangkat" name="pangkat_id">
+                        <option value="" disabled selected>{{ __('Select Pangkat') }}</option>
+                        @foreach ($pangkats as $pangkat)
+                        <option value="{{ $pangkat->id }}" {{ $user->pangkat_id == $pangkat->id ? 'selected' : '' }}>
+                            {{ $pangkat->name }}
                         </option>
                         @endforeach
                     </select>
-                    @if($errors->has('pangkat'))
-                    <div class="text-danger mt-1">{{ $errors->first('pangkat') }}</div>
+                    @if($errors->has('pangkat_id'))
+                    <div class="text-danger mt-1">{{ $errors->first('pangkat_id') }}</div>
                     @endif
                 </div>
 

@@ -22,7 +22,7 @@ class PangkatRequest extends FormRequest
      */
     public function rules(): array
     {
-        $routeUuid = $this->route('pangkat')?->uuid;
+        $routeUuid = $this->route('pangkats')?->uuid;
 
         return [
             'name' => ['required', 'unique:pangkats,name,' . $routeUuid, 'max:255'],

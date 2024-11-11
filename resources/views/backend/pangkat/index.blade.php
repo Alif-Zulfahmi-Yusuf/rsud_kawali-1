@@ -27,77 +27,60 @@
 
 <div class="card shadow border rounded-lg mb-4">
     <div class="card-body">
-        <div>
+        <div class="table-responsive">
             <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
                 <a class="btn btn-success" href="{{ route('pangkat.create') }}">
                     <i class="fa fa-plus me-1"></i> New Pangkat
                 </a>
             </div>
-            <div class="table-responsive">
-                <table id="tablePangkat" class="table table-striped table-sm fs-9 mb-0">
-                    <thead>
-                        <tr>
-                            <th width="5%" class="text-center">No</th>
-                            <th>Name</th>
-                            <th>Slug</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($pangkats as $pangkat)
-                        <tr>
-                            <td class="text-center">{{ $loop->iteration }}</td>
-                            <td>{{ $pangkat->name }}</td>
-                            <td>{{ $pangkat->slug }}</td>
-                            <td>
-                                <div class="dropdown position-static">
-                                    <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <!-- Icon Ellipsis -->
-                                        <svg class="fs-10" aria-hidden="true" focusable="false"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16"
-                                            height="16">
-                                            <path fill="currentColor"
-                                                d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z">
-                                            </path>
-                                        </svg>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a class="dropdown-item"
-                                                href="{{ route('pangkat.show', $pangkat->uuid) }}">View</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item"
-                                                href="{{ route('pangkat.edit', $pangkat->uuid) }}">Edit</a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li>
-                                            <form method="POST" action="{{ route('pangkat.destroy', $pangkat->uuid) }}"
-                                                onsubmit="return confirm('Are you sure you want to delete this pangkat?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger">Delete</button>
-                                            </form>
-                                        </li>
-                                    </ul>
+            <table id="tablePangkat" class="table table-hover table-sm fs-9 mb-0">
+                <thead>
+                    <tr>
+                        <th class="sort border-top text-center">No</th>
+                        <th class="sort border-top">Name</th>
+                        <th class="sort border-top">Slug</th>
+                        <th class="sort border-top">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($pangkats as $pangkat)
+                    <tr>
+                        <td class="text-center">{{ $loop->iteration }}</td>
+                        <td>{{ $pangkat->name }}</td>
+                        <td>{{ $pangkat->slug }}</td>
+                        <td>
+                            <div class="btn-reveal-trigger position-static">
+                                <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <!-- Icon Ellipsis -->
+                                    <svg class="fs-10" aria-hidden="true" focusable="false"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16">
+                                        <path fill="currentColor"
+                                            d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z">
+                                        </path>
+                                    </svg>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end py-2">
+
+                                    <a class="dropdown-item" href="{{ route('pangkat.edit', $pangkat->uuid) }}">Edit</a>
+
+
+                                    <hr class="dropdown-divider">
+
+
+                                    <form method="POST" action="{{ route('pangkat.destroy', $pangkat->uuid) }}"
+                                        onsubmit="return confirm('Are you sure you want to delete this pangkat?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="dropdown-item text-danger">Delete</button>
+                                    </form>
                                 </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th width="5%" class="text-center">No</th>
-                            <th>Name</th>
-                            <th>Slug</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -114,18 +97,17 @@
 
 <!-- Include pangkat.js -->
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
-<script src="{{ asset('/assets/backend/js/pangkat.js') }}"></script>
 <script>
-@if(session('status'))
-toastSuccess("{{ session('status') }}");
-@endif
+    @if(session('status'))
+    toastSuccess("{{ session('status') }}");
+    @endif
 
-@if(session('error'))
-toastError({
-    errors: {
-        message: "{{ session('error') }}"
-    }
-});
-@endif
+    @if(session('error'))
+    toastError({
+        errors: {
+            message: "{{ session('error') }}"
+        }
+    });
+    @endif
 </script>
 @endpush

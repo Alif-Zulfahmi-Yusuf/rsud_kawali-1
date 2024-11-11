@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pangkat;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,12 +16,14 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
+    public function edit()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = auth()->user();
+        $pangkats = Pangkat::all(); // Pastikan model Pangkat ada dan terhubung dengan tabel pangkats
+
+        return view('profile.edit', compact('user', 'pangkats'));
     }
+
 
     /**
      * Update the user's profile information.
@@ -29,10 +32,15 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
+        // Check and create 'profile_images' directory if it doesn't exist
+        if (!Storage::disk('public')->exists('profile_images')) {
+            Storage::disk('public')->makeDirectory('profile_images');
+        }
+
         // Update the profile image if it is provided
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imagePath = $image->store('profile_images', 'public'); // Store image in 'storage/app/public/profile_images'
+            $imagePath = $image->store('profile_images', 'public');
 
             // Delete old image if exists
             if ($user->image) {
@@ -48,7 +56,7 @@ class ProfileController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'nip' => $request->input('nip'),
-            'pangkat' => $request->input('pangkat'),
+            'pangkat_id' => $request->input('pangkat_id'),
             'unit_kerja' => $request->input('unit_kerja'),
             'tmt_jabatan' => $request->input('tmt_jabatan'),
         ]);

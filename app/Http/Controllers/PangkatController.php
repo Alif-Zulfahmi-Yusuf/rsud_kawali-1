@@ -61,17 +61,26 @@ class PangkatController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $uuid)
+    public function edit(string $uuid, PangkatService $pangkatService)
     {
-        //
+        $pangkat = $pangkatService->selectFirstById('uuid', $uuid);
+
+        return view('backend.pangkat.edit', compact('pangkat'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PangkatRequest $request, string $uuid)
     {
-        //
+        try {
+            $this->pangkatService->update($request->validated(), $uuid);
+
+            return redirect()->route('pangkat.index')->with('status', 'Data berhasil di edit.');
+        } catch (\Exception $e) {
+            Log::error('Failed to update Pangkat: ' . $e->getMessage());
+            return redirect()->route('pangkat.index')->with('status', 'Data gagal di edit. Silakan coba lagi.');
+        }
     }
 
     /**

@@ -25,7 +25,7 @@ class User extends Authenticatable
         'password',
         'image',
         'nip',
-        'pangkat',
+        'pangkat_id',
         'unit_kerja',
         'tmt_jabatan',
     ];
@@ -82,5 +82,10 @@ class User extends Authenticatable
             Log::error('Image upload failed: ' . $e->getMessage());
             throw new \Exception("Image upload failed: " . $e->getMessage());
         }
+    }
+
+    public function pangkat()
+    {
+        return $this->belongsTo(Pangkat::class);
     }
 }

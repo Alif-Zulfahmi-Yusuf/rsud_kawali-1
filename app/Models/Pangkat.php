@@ -34,4 +34,9 @@ class Pangkat extends Model
     {
         return 'uuid';
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

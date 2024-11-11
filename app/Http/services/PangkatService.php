@@ -17,4 +17,17 @@ class PangkatService
 
         return Pangkat::create($data);
     }
+
+    public function update($data, $uuid)
+    {
+        $data['slug'] = Str::slug($data['name']);
+
+        return Pangkat::where('uuid', $uuid)->update($data);
+    }
+
+    public function selectFirstById($column, $value)
+    {
+        // Mengambil data pangakt berdasarkan kolom yang ditentukan
+        return Pangkat::where($column, $value)->firstOrFail();
+    }
 }

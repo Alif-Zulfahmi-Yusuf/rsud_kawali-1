@@ -30,19 +30,32 @@
         <div class="col-12 col-md-3 mb-3 mb-md-0">
             <div class="card shadow-sm text-center border-0">
                 <div class="card-body">
+                    <!-- Profile Image -->
                     <img src="{{ Auth::user()->image ? url('storage/' . Auth::user()->image) : url('storage/images/default.png') }}"
                         alt="User Profile" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
-                    <h5 class="card-title">{{ Auth::user()->name }}</h5>
-                    <p class="text-muted">{{ Auth::user()->email }}</p>
+
+                    <!-- User Name -->
+                    <h5 class="card-title mb-2">{{ Auth::user()->name }}</h5>
+
+                    <!-- NIP -->
+                    <p class="text-muted mb-3">{{ Auth::user()->nip }}</p>
+
                     <hr />
-                    <p class="small">
-                        @foreach(Auth::user()->getRoleNames() as $role)
-                        {{ $role }}
-                        @endforeach
+
+                    <!-- User Details -->
+                    <p class="small mb-1">
+                        <strong>Pangkat:</strong> {{ Auth::user()->pangkat->name ?? 'Unknown Pangkat' }}
+                    </p>
+                    <p class="small mb-1">
+                        <strong>Unit Kerja:</strong> {{ Auth::user()->unit_kerja ?? 'Unknown Unit' }}
+                    </p>
+                    <p class="small mb-1">
+                        <strong>TMT Jabatan:</strong> {{ Auth::user()->tmt_jabatan ?? 'Unknown TMT' }}
                     </p>
                 </div>
             </div>
         </div>
+
 
         <!-- Monthly Performance Chart Card -->
         <div class="col-12 col-md-9">

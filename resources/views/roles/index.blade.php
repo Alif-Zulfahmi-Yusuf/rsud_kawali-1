@@ -1,5 +1,9 @@
 @extends('backend.layouts.app')
 
+@push('css')
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+@endpush
+
 @section('content')
 <div class="row gy-3 mb-6 justify-content-between">
     <div class="col-md-9 col-auto">
@@ -16,52 +20,38 @@
 </div>
 
 <div class="card shadow border rounded-lg mb-4">
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
-
     <div class="card-body">
-        <div id="tableExample3"
-            data-list="{&quot;valueNames&quot;:[&quot;name&quot;,&quot;page&quot;:5,&quot;pagination&quot;:true}">
+        <div class="table-responsive">
             <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
                 @can('role-create')
                 <a class="btn btn-success" href="{{ route('roles.create') }}">
                     <i class="fa fa-plus me-1"></i>Create New Role
                 </a>
                 @endcan
-
-                <form class="position-relative">
-                    <input class="form-control search-input search form-control-sm" type="search" placeholder="Search"
-                        aria-label="Search">
-                </form>
-
             </div>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm fs-9 mb-0">
+            <table id="tableRoles" class="table table-hover table-sm fs-9 mb-0">
+                <thead>
                     <tr>
                         <th>Name</th>
                         <th>Action</th>
                     </tr>
+                </thead>
+                <tbody class="list">
                     @foreach ($roles as $key => $role)
                     <tr>
                         <td class="align-middle ps-3 name">{{ $role->name }}</td>
                         <td>
                             <div class="btn-reveal-trigger position-static">
-                                <button
-                                    class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
-                                    type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true"
-                                    aria-expanded="false" data-bs-reference="parent"><svg
-                                        class="svg-inline--fa fa-ellipsis fs-10" aria-hidden="true" focusable="false"
-                                        data-prefix="fas" data-icon="ellipsis" role="img"
-                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                                <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <!-- Icon Ellipsis -->
+                                    <svg class="fs-10" aria-hidden="true" focusable="false"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16">
                                         <path fill="currentColor"
                                             d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z">
                                         </path>
                                     </svg>
-                                    <!-- <span class="fas fa-ellipsis-h fs-10"></span> Font Awesome fontawesome.com --></button>
+                                </button>
                                 <div class="dropdown-menu dropdown-menu-end py-2">
 
                                     <a class="dropdown-item" href="{{ route('roles.show', $role->id) }}">View</a>
@@ -85,16 +75,32 @@
                         </td>
                     </tr>
                     @endforeach
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-{!! $roles->links('pagination::bootstrap-5') !!}
 
 @endsection
 
 @push('js')
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
+
+<script>
+    @if(session('status'))
+    toastSuccess("{{ session('status') }}");
+    @endif
+
+    @if(session('error'))
+    toastError({
+        errors: {
+            message: "{{ session('error') }}"
+        }
+    });
+    @endif
+</script>
 @endpush
