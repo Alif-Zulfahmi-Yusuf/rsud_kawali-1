@@ -44,7 +44,7 @@
                 </thead>
                 <tbody>
                     @foreach ($pangkats as $pangkat)
-                    <tr>
+                    <tr data-uuid="{{ $pangkat->uuid }}">
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $pangkat->name }}</td>
                         <td>{{ $pangkat->slug }}</td>
@@ -52,7 +52,6 @@
                             <div class="btn-reveal-trigger position-static">
                                 <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
-                                    <!-- Icon Ellipsis -->
                                     <svg class="fs-10" aria-hidden="true" focusable="false"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16">
                                         <path fill="currentColor"
@@ -61,19 +60,10 @@
                                     </svg>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end py-2">
-
                                     <a class="dropdown-item" href="{{ route('pangkat.edit', $pangkat->uuid) }}">Edit</a>
-
-
                                     <hr class="dropdown-divider">
-
-
-                                    <form method="POST" action="{{ route('pangkat.destroy', $pangkat->uuid) }}"
-                                        onsubmit="return confirm('Are you sure you want to delete this pangkat?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger">Delete</button>
-                                    </form>
+                                    <button type="button" class="dropdown-item text-danger delete-button"
+                                        onclick="deleteData(this)" data-uuid="{{ $pangkat->uuid }}">Delete</button>
                                 </div>
                             </div>
                         </td>
@@ -92,22 +82,20 @@
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-</script>
-
-<!-- Include pangkat.js -->
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
-<script>
-    @if(session('status'))
-    toastSuccess("{{ session('status') }}");
-    @endif
+<script src="{{ asset('/assets/backend/js/pangkat.js') }}"></script>
 
-    @if(session('error'))
-    toastError({
-        errors: {
-            message: "{{ session('error') }}"
-        }
-    });
-    @endif
+<script>
+@if(session('status'))
+toastSuccess("{{ session('status') }}");
+@endif
+
+@if(session('error'))
+toastError({
+    errors: {
+        message: "{{ session('error') }}"
+    }
+});
+@endif
 </script>
 @endpush

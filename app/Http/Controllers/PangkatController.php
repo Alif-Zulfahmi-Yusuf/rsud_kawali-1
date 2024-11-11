@@ -88,6 +88,12 @@ class PangkatController extends Controller
      */
     public function destroy(string $uuid)
     {
-        //
+        $result = $this->pangkatService->delete($uuid);
+
+        if ($result) {
+            return response()->json(['message' => 'Item successfully deleted.']);
+        }
+
+        return response()->json(['message' => 'Failed to delete the item.'], 500);
     }
 }

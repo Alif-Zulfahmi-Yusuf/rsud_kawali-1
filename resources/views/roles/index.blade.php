@@ -89,18 +89,19 @@
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
+<script src="{{ asset('/assets/backend/js/role.js') }}"></script>
 
 <script>
-    @if(session('status'))
-    toastSuccess("{{ session('status') }}");
-    @endif
+@if(session('status'))
+toastSuccess("{{ session('status') }}");
+@endif
 
-    @if(session('error'))
-    toastError({
-        errors: {
-            message: "{{ session('error') }}"
-        }
-    });
-    @endif
+@if(session('error'))
+toastError({
+    errors: {
+        message: "{{ session('error') }}"
+    }
+});
+@endif
 </script>
 @endpush
