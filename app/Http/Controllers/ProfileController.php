@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Atasan;
 use App\Models\Pangkat;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -20,24 +21,22 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
         $pangkats = Pangkat::all(); // Pastikan model Pangkat ada dan terhubung dengan tabel pangkats
+        $atasans = Atasan::all(); // Ambil semua data atasan
 
-        return view('profile.edit', compact('user', 'pangkats'));
+        return view('profile.edit', compact('user', 'pangkats', 'atasans'));
     }
 
 
     /**
      * Update the user's profile information.
      */
+
+
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
 
-        // Check and create 'profile_images' directory if it doesn't exist
-        if (!Storage::disk('public')->exists('profile_images')) {
-            Storage::disk('public')->makeDirectory('profile_images');
-        }
-
-        // Update the profile image if it is provided
+        // Update profile image if provided
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imagePath = $image->store('profile_images', 'public');
@@ -59,6 +58,7 @@ class ProfileController extends Controller
             'pangkat_id' => $request->input('pangkat_id'),
             'unit_kerja' => $request->input('unit_kerja'),
             'tmt_jabatan' => $request->input('tmt_jabatan'),
+            'atasan_id' => $request->input('atasan_id'), // Update atasan_id
         ]);
 
         if ($user->isDirty('email')) {

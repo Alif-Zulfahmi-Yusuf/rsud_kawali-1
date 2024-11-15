@@ -36,7 +36,7 @@
                                     <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
                                         href="{{ route('users.index') }}">
                                         <div class="d-flex align-items-center">
-                                            <span class="nav-link-text">Users</span>
+                                            <span class="nav-link-text">Data Users</span>
                                         </div>
                                     </a>
                                     @endcan
@@ -46,7 +46,7 @@
                                     <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}"
                                         href="{{ route('roles.index') }}">
                                         <div class="d-flex align-items-center">
-                                            <span class="nav-link-text">Roles</span>
+                                            <span class="nav-link-text">Data Roles</span>
                                         </div>
                                     </a>
                                     <!-- more inner pages-->
@@ -55,7 +55,16 @@
                                     <a class="nav-link {{ request()->routeIs('pangkat.*') ? 'active' : '' }}"
                                         href="{{ route('pangkat.index') }}">
                                         <div class="d-flex align-items-center">
-                                            <span class="nav-link-text">Pangkat</span>
+                                            <span class="nav-link-text">Data Pangkat</span>
+                                        </div>
+                                    </a>
+                                    <!-- more inner pages-->
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('atasans.*') ? 'active' : '' }}"
+                                        href="{{ route('atasans.index') }}">
+                                        <div class="d-flex align-items-center">
+                                            <span class="nav-link-text">Data Atasan</span>
                                         </div>
                                     </a>
                                     <!-- more inner pages-->

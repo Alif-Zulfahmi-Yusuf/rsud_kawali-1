@@ -5,12 +5,17 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
-class Pangkat extends Model
+class Atasan extends Model
 {
+    protected $table = 'atasans';
+
     protected $fillable = [
         'uuid',
+        'nip',
         'name',
-        'slug'
+        'jabatan',
+        'pangkat_id',
+        'unit_kerja',
     ];
 
     protected static function boot()
@@ -21,13 +26,6 @@ class Pangkat extends Model
         static::creating(function ($model) {
             $model->uuid = (string) Str::uuid();
         });
-
-        // Generate slug from name if not provided
-        static::creating(function ($model) {
-            if (empty($model->slug)) {
-                $model->slug = Str::slug($model->name);
-            }
-        });
     }
 
     public function getRouteKeyName()
@@ -35,13 +33,8 @@ class Pangkat extends Model
         return 'uuid';
     }
 
-    public function users()
+    public function pangkat()
     {
-        return $this->hasMany(User::class);
-    }
-
-    public function atasan()
-    {
-        return $this->hasMany(Atasan::class);
+        return $this->belongsTo(Pangkat::class);
     }
 }

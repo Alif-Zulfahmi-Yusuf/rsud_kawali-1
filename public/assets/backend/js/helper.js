@@ -2,30 +2,71 @@ let Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
-    timer: 3000
+    timer: 5000
 });
 
-const toastSuccess = (status) => {
+
+$(document).ready(function () {
+    // Inisialisasi Select2
+    $('.select-single').select2({
+        theme: "bootstrap-5", // Gunakan tema Bootstrap 5
+        width: '100%', // Menyesuaikan lebar dengan elemen induk
+        dropdownCssClass: 'bg-body text-body border', // Menyesuaikan background dan warna teks sesuai tema
+        placeholder: $(this).data('placeholder'), // Mengambil placeholder dari atribut data-placeholder
+        containerCssClass: 'fs--1', // Ukuran font lebih kecil (sesuaikan dengan ukuran yang diinginkan)
+        selectionCssClass: 'form-control form-control-sm', // Memperkecil ukuran input select
+        allowClear: true // Menambahkan opsi untuk menghapus pilihan
+    });
+
+    // Sesuaikan warna dan font untuk dropdown jika diperlukan
+    $('.select-single').on('select2:open', function () {
+        $('.select2-dropdown').css({
+            'background-color': '#fff', // Sesuaikan background dropdown jika perlu
+            'color': '#000', // Sesuaikan warna teks dropdown jika perlu
+            'border': '1px solid #ced4da' // Sesuaikan border dropdown jika perlu
+        });
+    });
+});
+
+
+
+const toastSuccess = (message) => {
     Toast.fire({
         icon: 'success',
-        title: status
-    });
-};
+        title: message
+    })
+}
 
 
-const toastError = (status) => {
-    let resJson = JSON.parse(status); // Mengonversi JSON untuk mendapatkan pesan error
+
+const toastError = (message) => {
+    let resJson;
+
+    try {
+        resJson = JSON.parse(message);
+    } catch (error) {
+        console.log("Error parsing JSON:", error);
+        return; // Jika parsing JSON gagal
+    }
+
     let errorText = '';
-    for (let key in resJson.errors) {
-        errorText = resJson.errors[key];
-        break; // Ambil pesan error pertama dari array
+
+    // Akses error dari Laravel
+    if (resJson.errors) {
+        for (let key in resJson.errors) {
+            errorText = resJson.errors[key][0]; // Ambil pesan error pertama dari tiap field
+            break;
+        }
+    } else {
+        errorText = resJson.message; // Ambil pesan umum jika tidak ada detail
     }
 
     Toast.fire({
         icon: 'error',
-        title: 'Ops! Data Tidak Valid <br>' + errorText
+        title: 'Data cannot be saved <br>' + errorText
     });
 };
+
 
 const startLoading = (str = 'Please wait...') => {
     Swal.fire({
@@ -64,5 +105,27 @@ document.addEventListener('DOMContentLoaded', function () {
         sessionStorage.removeItem('error');
     }
 });
+
+$(document).ready(function () {
+    // Trigger the modal when "Select Atasan" button is clicked
+    $('#selectAtasanBtn').on('click', function () {
+        $('#atasanModal').modal('show');
+    });
+
+    // Select atasan and fill the input fields
+    $('.select-atasan').on('click', function () {
+        var atasanId = $(this).data('id');
+        var atasanName = $(this).data('name');
+
+        // Set the selected atasan's ID and Name in the form
+        $('#atasan_id').val(atasanId); // Set the atasan ID to the hidden input
+        $('#atasan_name').val(atasanName); // Set the atasan name to the disabled text input
+
+        // Close the modal after selection
+        $('#atasanModal').modal('hide');
+    });
+});
+
+
 
 

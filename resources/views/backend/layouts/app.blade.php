@@ -413,8 +413,8 @@
     <!-- ===============================================-->
     <!--    JavaScripts-->
     <!-- ===============================================-->
-    <script src="/assets/backend/vendors/popper/popper.min.js"></script>
-    <script src="/assets/backend/vendors/bootstrap/bootstrap.min.js"></script>
+    <script src="{{ asset('assets/backend/vendors/popper/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/bootstrap/bootstrap.min.js') }}"></script>
     <script src="/assets/backend/vendors/anchorjs/anchor.min.js"></script>
     <script src="/assets/backend/vendors/is/is.min.js"></script>
     <script src="/assets/backend/vendors/fontawesome/all.min.js"></script>
@@ -426,6 +426,7 @@
     <script src="/assets/backend/vendors/echarts/echarts.min.js"></script>
     <script src="/assets/backend/vendors/dhtmlx-gantt/dhtmlxgantt.js"></script>
     <script src="/assets/backend/vendors/flatpickr/flatpickr.min.js"></script>
+    <script src="{{ asset('assets/backend/vendors/prism/prism.js')}}"></script>
     <script src="/assets/backend/js/phoenix.js"></script>
     <script src="/assets/backend/js/projectmanagement-dashboard.js"></script>
 

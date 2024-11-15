@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PangkatRequest extends FormRequest
+class AtasanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,14 @@ class PangkatRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'max:255'],
-        ];
-    }
+        $routeUuid = $this->route('atasan');
 
-    protected function prepareForValidation()
-    {
-        // membuat slug berdasarkan nama
-        $this->merge([
-            'slug' => Str::slug($this->name),
-        ]);
+        return [
+            'name' => 'required|unique:atasans,name,' . $routeUuid . ',uuid| max:255',
+            'nip' => 'required | max:255',
+            'jabatan' => 'required | max:255',
+            'pangkat_id' => 'required',
+            'unit_kerja' => 'required | max:255',
+        ];
     }
 }

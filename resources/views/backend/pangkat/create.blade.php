@@ -11,8 +11,7 @@
             <h2>Create New Pangkat</h2>
         </div>
         <div class="pull-right">
-            <a class="btn btn-primary btn-sm mb-2" href="{{ route('pangkat.index') }}"><i class="fa fa-arrow-left"></i>
-                Back</a>
+
         </div>
     </div>
 </div>
@@ -49,6 +48,9 @@
                             <button type="submit" class="btn btn-primary btn-sm mt-2 mb-3">
                                 <i class="fa-solid fa-floppy-disk"></i> Submit
                             </button>
+                            <a class="btn btn-primary btn-sm mb-2" href="{{ route('pangkat.index') }}"><i
+                                    class="fa fa-arrow-left"></i>
+                                Back</a>
                         </div>
                     </div>
                 </form>

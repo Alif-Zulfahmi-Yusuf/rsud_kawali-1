@@ -44,8 +44,8 @@ class PangkatController extends Controller
 
             return redirect()->route('pangkat.index')->with('status', 'Data berhasil disimpan.');
         } catch (\Exception $e) {
-            Log::error('Failed to store Pangkat: ' . $e->getMessage());
-            return redirect()->route('pangkat.index')->with('status', 'Data gagal disimpan. Silakan coba lagi.');
+
+            return redirect()->route('pangkat.index')->with('status', 'Data gagal disimpan. Silakan coba lagi:' . $e->getMessage());
         }
     }
 

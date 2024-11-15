@@ -28,6 +28,7 @@ class User extends Authenticatable
         'pangkat_id',
         'unit_kerja',
         'tmt_jabatan',
+        'atasan_id',
     ];
 
     /**
@@ -87,5 +88,11 @@ class User extends Authenticatable
     public function pangkat()
     {
         return $this->belongsTo(Pangkat::class);
+    }
+
+
+    public function atasan()
+    {
+        return $this->belongsTo(User::class, 'atasan_id'); // Menyesuaikan dengan field yang sesuai
     }
 }
