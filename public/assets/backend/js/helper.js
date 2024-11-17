@@ -112,19 +112,30 @@ $(document).ready(function () {
         $('#atasanModal').modal('show');
     });
 
-    // Select atasan and fill the input fields
-    $('.select-atasan').on('click', function () {
+    // Delegated event listener for dynamically loaded content
+    $('#atasanModal').on('click', '.select-atasan', function () {
         var atasanId = $(this).data('id');
         var atasanName = $(this).data('name');
+        var atasanPangkat = $(this).data('pangkat');
+        var atasanUnitKerja = $(this).data('unit-kerja');
+        var atasanJabatan = $(this).data('jabatan');
 
-        // Set the selected atasan's ID and Name in the form
-        $('#atasan_id').val(atasanId); // Set the atasan ID to the hidden input
-        $('#atasan_name').val(atasanName); // Set the atasan name to the disabled text input
+        // Set the selected atasan's data into the form inputs
+        $('#atasan_id_input').val(atasanId); // Hidden input for atasan ID
+        $('#atasan_name').val(atasanName); // Disabled input for atasan name
+        $('#atasan_pangkat').val(atasanPangkat); // Disabled input for atasan pangkat
+        $('#atasan_unit_kerja').val(atasanUnitKerja); // Disabled input for unit kerja
+        $('#atasan_jabatan').val(atasanJabatan); // Disabled input for jabatan
 
         // Close the modal after selection
         $('#atasanModal').modal('hide');
     });
 });
+
+
+
+
+
 
 
 

@@ -42,7 +42,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array
      */
@@ -85,14 +85,19 @@ class User extends Authenticatable
         }
     }
 
-    public function pangkat()
-    {
-        return $this->belongsTo(Pangkat::class);
-    }
-
-
+    /**
+     * Relasi ke atasan (User lain yang menjadi atasan)
+     */
     public function atasan()
     {
-        return $this->belongsTo(User::class, 'atasan_id'); // Menyesuaikan dengan field yang sesuai
+        return $this->belongsTo(Atasan::class, 'atasan_id');
+    }
+
+    /**
+     * Relasi ke pangkat (Pangkat dari pengguna)
+     */
+    public function pangkat()
+    {
+        return $this->belongsTo(Pangkat::class, 'pangkat_id');
     }
 }

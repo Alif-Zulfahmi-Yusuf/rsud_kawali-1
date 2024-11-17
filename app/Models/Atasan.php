@@ -33,8 +33,19 @@ class Atasan extends Model
         return 'uuid';
     }
 
+    /**
+     * Relasi dengan pangkat
+     */
     public function pangkat()
     {
         return $this->belongsTo(Pangkat::class);
+    }
+
+    /**
+     * Relasi ke user yang menjadi atasan
+     */
+    public function users()
+    {
+        return $this->hasMany(User::class, 'atasan_id');
     }
 }

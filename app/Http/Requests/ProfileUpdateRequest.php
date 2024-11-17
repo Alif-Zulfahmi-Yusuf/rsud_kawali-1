@@ -25,12 +25,12 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            'nip' => ['nullable', 'string', 'max:18'],  // Assuming NIP is a string with a maximum length of 18
-            'pangkat_id' => ['nullable', 'exists:pangkats,id'],  // Ensure pangkat ID exists in the pangkats table
-            'atasan_id' => ['nullable', 'exists:atasans,id'],  // Ensure atasan ID exists in the atasans table
-            'unit_kerja' => ['nullable', 'string', 'max:255'],
-            'tmt_jabatan' => ['nullable', 'date'],  // Validate that it's a valid date
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],  // Validate image upload if exists
+            'nip' => ['nullable', 'string', 'max:18'],  // Validasi untuk NIP
+            'pangkat_id' => ['nullable', 'exists:pangkats,id'],  // Pastikan pangkat_id ada di tabel pangkats
+            'atasan_id' => ['nullable', 'exists:atasans,id'],  // Pastikan atasan_id ada di tabel atasans
+            'unit_kerja' => ['nullable', 'string', 'max:255'],  // Validasi unit kerja
+            'tmt_jabatan' => ['nullable', 'date'],  // Pastikan TMT Jabatan adalah tanggal valid
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],  // Validasi untuk gambar profil
         ];
     }
 
@@ -45,8 +45,8 @@ class ProfileUpdateRequest extends FormRequest
             'name' => 'Nama',
             'email' => 'Email',
             'nip' => 'NIP',
-            'pangkat_id' => 'Pangkat_ID',
-            'atasan_id' => 'Atasan_ID',
+            'pangkat_id' => 'Pangkat',
+            'atasan_id' => 'Atasan',
             'unit_kerja' => 'Unit Kerja',
             'tmt_jabatan' => 'TMT Jabatan',
             'image' => 'Gambar Profil',

@@ -19,12 +19,18 @@ class ProfileController extends Controller
      */
     public function edit()
     {
-        $user = auth()->user();
-        $pangkats = Pangkat::all(); // Pastikan model Pangkat ada dan terhubung dengan tabel pangkats
-        $atasans = Atasan::all(); // Ambil semua data atasan
+        // Muat relasi atasan untuk pengguna yang sedang login
+        $user = auth()->user()->load('atasan');
+
+        // Ambil semua pangkat dan atasan untuk keperluan form
+        $pangkats = Pangkat::all();
+        $atasans = Atasan::all();
 
         return view('profile.edit', compact('user', 'pangkats', 'atasans'));
     }
+
+
+
 
 
     /**
@@ -36,39 +42,39 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // Update profile image if provided
+        // Simpan data lainnya
+        $user->fill($request->only([
+            'name',
+            'email',
+            'nip',
+            'pangkat_id',
+            'unit_kerja',
+            'tmt_jabatan',
+            'atasan_id'
+        ]));
+
+        // Update gambar jika ada
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imagePath = $image->store('profile_images', 'public');
 
-            // Delete old image if exists
+            // Hapus gambar lama jika ada
             if ($user->image) {
                 Storage::disk('public')->delete($user->image);
             }
 
-            // Set the new image path
             $user->image = $imagePath;
         }
 
-        // Update the rest of the user's profile
-        $user->fill([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'nip' => $request->input('nip'),
-            'pangkat_id' => $request->input('pangkat_id'),
-            'unit_kerja' => $request->input('unit_kerja'),
-            'tmt_jabatan' => $request->input('tmt_jabatan'),
-            'atasan_id' => $request->input('atasan_id'), // Update atasan_id
-        ]);
-
         if ($user->isDirty('email')) {
-            $user->email_verified_at = null; // Reset email verification when email is updated
+            $user->email_verified_at = null; // Reset verifikasi jika email berubah
         }
 
         $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+
 
 
 

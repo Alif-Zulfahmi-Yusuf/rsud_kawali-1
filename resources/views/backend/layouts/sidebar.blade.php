@@ -28,7 +28,7 @@
                             </div>
                         </a>
                         <div class="parent-wrapper label-1">
-                            <ul class="nav collapse parent {{ request()->routeIs('users.*', 'roles.*', 'pangkat.*') ? 'show' : '' }}"
+                            <ul class="nav collapse parent {{ request()->routeIs('users.*') || request()->routeIs('roles.*') || request()->routeIs('pangkat.*') ? 'show' : '' }}"
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-home">
                                 <li class="collapsed-nav-item-title d-none">Home</li>
                                 <li class="nav-item">
@@ -40,16 +40,16 @@
                                         </div>
                                     </a>
                                     @endcan
-                                    <!-- more inner pages-->
                                 </li>
                                 <li class="nav-item">
+                                    @can('role-list')
                                     <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}"
                                         href="{{ route('roles.index') }}">
                                         <div class="d-flex align-items-center">
                                             <span class="nav-link-text">Data Roles</span>
                                         </div>
                                     </a>
-                                    <!-- more inner pages-->
+                                    @endcan
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('pangkat.*') ? 'active' : '' }}"
@@ -58,7 +58,6 @@
                                             <span class="nav-link-text">Data Pangkat</span>
                                         </div>
                                     </a>
-                                    <!-- more inner pages-->
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('atasans.*') ? 'active' : '' }}"
@@ -67,7 +66,6 @@
                                             <span class="nav-link-text">Data Atasan</span>
                                         </div>
                                     </a>
-                                    <!-- more inner pages-->
                                 </li>
                             </ul>
                         </div>

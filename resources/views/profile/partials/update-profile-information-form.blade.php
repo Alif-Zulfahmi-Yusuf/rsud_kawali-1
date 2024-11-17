@@ -78,7 +78,7 @@
 
                         <div class="form-group mb-3">
                             <label for="pangkat" class="form-label">{{ __('Pangkat') }}</label>
-                            <select class="form-control" id="pangkat" name="pangkat_id">
+                            <select class="form-select select-single" id="pangkat" name="pangkat_id">
                                 <option value="" disabled selected>{{ __('Select Pangkat') }}</option>
                                 @foreach ($pangkats as $pangkat)
                                 <option value="{{ $pangkat->id }}"
@@ -121,9 +121,9 @@
             </div>
             <div class="card-body">
                 <div class="form-group mb-3">
-                    <label for="atasan_id" class="form-label">{{ __('Atasan') }}</label>
-                    <button type="button" class="btn btn-outline-primary"
-                        id="selectAtasanBtn">{{ __('Select Atasan') }}</button>
+                    <button type="button" class="btn btn-phoenix-secondary me-1 mb-1" id="selectAtasanBtn">
+                        {{ __('Select Atasan') }}
+                    </button>
                 </div>
 
                 <div class="form-group mb-3">
@@ -133,34 +133,32 @@
 
                     <label for="atasan_name" class="form-label">{{ __('Atasan Name') }}</label>
                     <input type="text" class="form-control" id="atasan_name"
-                        value="{{ old('atasan_name', $user->atasan ? $user->atasan->name : '') }}" disabled>
+                        value="{{ old('atasan_name', optional($user->atasan)->name) }}" disabled>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="atasan_pangkat" class="form-label">{{ __('Atasan Pangkat') }}</label>
                     <input type="text" class="form-control" id="atasan_pangkat"
-                        value="{{ old('atasan_pangkat', $user->atasan ? $user->atasan->pangkat : '') }}" disabled>
+                        value="{{ old('atasan_pangkat', optional($user->atasan)->pangkat ? $user->atasan->pangkat->name : '') }}"
+                        disabled>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="atasan_unit_kerja" class="form-label">{{ __('Atasan Unit Kerja') }}</label>
                     <input type="text" class="form-control" id="atasan_unit_kerja"
-                        value="{{ old('atasan_unit_kerja', $user->atasan ? $user->atasan->unit_kerja : '') }}" disabled>
+                        value="{{ old('atasan_unit_kerja', optional($user->atasan)->unit_kerja) }}" disabled>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="atasan_jabatan" class="form-label">{{ __('Atasan Jabatan') }}</label>
                     <input type="text" class="form-control" id="atasan_jabatan"
-                        value="{{ old('atasan_jabatan', $user->atasan ? $user->atasan->jabatan : '') }}" disabled>
+                        value="{{ old('atasan_jabatan', optional($user->atasan)->jabatan) }}" disabled>
                 </div>
             </div>
         </div>
-
         <!-- Save Button -->
         <div class="d-flex align-items-center gap-2">
             <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
-
         </div>
     </form>
-
 </section>

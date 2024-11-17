@@ -44,9 +44,6 @@
         <div class="d-flex align-items-center gap-2">
             <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
 
-            @if (session('status') === 'password-updated')
-            <p class="text-success mb-0">{{ __('Saved.') }}</p>
-            @endif
         </div>
     </form>
 </section>
