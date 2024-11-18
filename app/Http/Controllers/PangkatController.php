@@ -20,7 +20,7 @@ class PangkatController extends Controller
     public function index()
     {
         $pangkats = Pangkat::all();
-        return view('backend/pangkat.index', compact('pangkats'));
+        return view('backend.pangkat.index', compact('pangkats'));
     }
 
     /**

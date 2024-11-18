@@ -2,6 +2,7 @@
 
 use App\Models\Atasan;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AtasanController;
@@ -24,6 +25,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('atasans', AtasanController::class);
     Route::delete('/atasans/destroy/{uuid}', [AtasanController::class, 'destroy'])->name('atasans.destroy');
+
 
 
 

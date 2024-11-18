@@ -16,33 +16,35 @@
     <!-- ===============================================-->
     <!--    Favicons-->
     <!-- ===============================================-->
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/backend/img/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/backend/img/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/backend/img/favicons/favicon-16x16.png">
-    <link rel="shortcut icon" type="image/x-icon" href="/assets/backend/img/favicons/favicon.ico">
-    <link rel="manifest" href="/assets/backend/img/favicons/manifest.json">
-    <meta name="msapplication-TileImage" content="/assets/backend/img/favicons/mstile-150x150.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/backend/img/favicons/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/backend/img/favicons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/backend/img/favicons/favicon-16x16.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/backend/img/favicons/favicon.ico') }}">
+    <link rel="manifest" href="{{ asset('assets/backend/img/favicons/manifest.json') }}">
+    <meta name="msapplication-TileImage" content="{{ asset('assets/backend/img/favicons/mstile-150x150.png') }}">
     <meta name="theme-color" content="#ffffff">
-    <script src="/assets/backend/vendors/simplebar/simplebar.min.js"></script>
-    <script src="/assets/backend/js/config.js"></script>
+    <script src="{{ asset('assets/backend/vendors/simplebar/simplebar.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/config.js') }}"></script>
 
 
     <!-- ===============================================-->
     <!--    Stylesheets-->
     <!-- ===============================================-->
-    <link href="/assets/backend/vendors/choices/choices.min.css" rel="stylesheet">
-    <link href="/assets/backend/vendors/dhtmlx-gantt/dhtmlxgantt.css" rel="stylesheet">
-    <link href="/assets/backend/vendors/flatpickr/flatpickr.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/backend/vendors/choices/choices.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/backend/vendors/dhtmlx-gantt/dhtmlxgantt.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/backend/vendors/flatpickr/flatpickr.min.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
         rel="stylesheet">
-    <link href="/assets/backend/vendors/simplebar/simplebar.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/backend/vendors/simplebar/simplebar.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
-    <link href="/assets/backend/css/theme-rtl.css" type="text/css" rel="stylesheet" id="style-rtl">
-    <link href="/assets/backend/css/theme.min.css" type="text/css" rel="stylesheet" id="style-default">
-    <link href="/assets/backend/css/user-rtl.min.css" type="text/css" rel="stylesheet" id="user-style-rtl">
-    <link href="/assets/backend/css/user.min.css" type="text/css" rel="stylesheet" id="user-style-default">
+    <link href="{{ asset('assets/backend/css/theme-rtl.css') }}" type="text/css" rel="stylesheet" id="style-rtl">
+    <link href="{{ asset('assets/backend/css/theme.min.css') }}" type="text/css" rel="stylesheet" id="style-default">
+    <link href="{{ asset('assets/backend/css/user-rtl.min.css') }}" type="text/css" rel="stylesheet"
+        id="user-style-rtl">
+    <link href="{{ asset('assets/backend/css/user.min.css') }}" type="text/css" rel="stylesheet"
+        id="user-style-default">
     <script>
     var phoenixIsRTL = window.config.config.phoenixIsRTL;
     if (phoenixIsRTL) {
@@ -138,11 +140,11 @@
                                                 <span class="fas fa-key text-body fs-9 form-icon"></span>
                                                 <button
                                                     class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary"
-                                                    data-password-toggle="data-password-toggle"><span
+                                                    data-password-toggle="data-password-toggle" type="button"><span
                                                         class="uil uil-eye show"></span><span
                                                         class="uil uil-eye-slash hide"></span></button>
                                             </div>
-                                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+
                                         </div>
                                         <div class="row flex-between-center mb-7">
                                             <div class="col-auto">
@@ -169,21 +171,21 @@
     <!-- ===============================================-->
     <!--    JavaScripts-->
     <!-- ===============================================-->
-    <script src="/assets/backend/vendors/popper/popper.min.js"></script>
-    <script src="/assets/backend/vendors/bootstrap/bootstrap.min.js"></script>
-    <script src="/assets/backend/vendors/anchorjs/anchor.min.js"></script>
-    <script src="/assets/backend/vendors/is/is.min.js"></script>
-    <script src="/assets/backend/vendors/fontawesome/all.min.js"></script>
-    <script src="/assets/backend/vendors/lodash/lodash.min.js"></script>
-    <script src="/assets/backend/vendors/list.js/list.min.js"></script>
-    <script src="/assets/backend/vendors/feather-icons/feather.min.js"></script>
-    <script src="/assets/backend/vendors/dayjs/dayjs.min.js"></script>
-    <script src="/assets/backend/vendors/choices/choices.min.js"></script>
-    <script src="/assets/backend/vendors/echarts/echarts.min.js"></script>
-    <script src="/assets/backend/vendors/dhtmlx-gantt/dhtmlxgantt.js"></script>
-    <script src="/assets/backend/vendors/flatpickr/flatpickr.min.js"></script>
-    <script src="/assets/backend/js/phoenix.js"></script>
-    <script src="/assets/backend/js/projectmanagement-dashboard.js"></script>
+    <script src="{{ asset('assets/backend/vendors/popper/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/bootstrap/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/anchorjs/anchor.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/is/is.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/fontawesome/all.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/lodash/lodash.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/list.js/list.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/feather-icons/feather.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/dayjs/dayjs.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/choices/choices.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/dhtmlx-gantt/dhtmlxgantt.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/flatpickr/flatpickr.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/phoenix.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/projectmanagement-dashboard.js') }}"></script>
 
 </body>
 
