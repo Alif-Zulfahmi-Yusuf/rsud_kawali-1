@@ -29,7 +29,7 @@ class PangkatController extends Controller
     public function create()
     {
 
-        return view('backend/pangkat.create');
+        return view('backend.pangkat.create');
     }
 
     /**

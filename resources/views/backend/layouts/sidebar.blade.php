@@ -28,7 +28,7 @@
                             </div>
                         </a>
                         <div class="parent-wrapper label-1">
-                            <ul class="nav collapse parent {{ request()->routeIs('users.*') || request()->routeIs('roles.*') || request()->routeIs('pangkat.*') ? 'show' : '' }}"
+                            <ul class="nav collapse parent {{ request()->routeIs('users.*') || request()->routeIs('roles.*') || request()->routeIs('pangkat.*') || request()->routeIs('atasans.*') ? 'show' : '' }}"
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-home">
                                 <li class="collapsed-nav-item-title d-none">Home</li>
                                 <li class="nav-item">

@@ -30,21 +30,21 @@
     <!-- ===============================================-->
     <!--    Stylesheets-->
     <!-- ===============================================-->
-    <link href="/assets/backend/vendors/choices/choices.min.css" rel="stylesheet">
-    <link href="/assets/backend/vendors/dhtmlx-gantt/dhtmlxgantt.css" rel="stylesheet">
-    <link href="/assets/backend/vendors/flatpickr/flatpickr.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/backend/vendors/choices/choices.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/backend/vendors/dhtmlx-gantt/dhtmlxgantt.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/backend/vendors/flatpickr/flatpickr.min.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
         rel="stylesheet">
-    <link href="/assets/backend/vendors/simplebar/simplebar.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/backend/vendors/simplebar/simplebar.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link href="/assets/backend/css/theme-rtl.css" type="text/css" rel="stylesheet" id="style-rtl">
     <link href="/assets/backend/css/theme.min.css" type="text/css" rel="stylesheet" id="style-default">
     <link href="/assets/backend/css/user-rtl.min.css" type="text/css" rel="stylesheet" id="user-style-rtl">
     <link href="/assets/backend/css/user.min.css" type="text/css" rel="stylesheet" id="user-style-default">
 
-
+    @stack('css')
     <script>
     var phoenixIsRTL = window.config.config.phoenixIsRTL;
     if (phoenixIsRTL) {
@@ -60,7 +60,7 @@
         userLinkRTL.setAttribute('disabled', true);
     }
     </script>
-    @stack('css')
+    
 </head>
 
 
@@ -262,20 +262,20 @@
     <!-- ===============================================-->
     <script src="{{ asset('assets/backend/vendors/popper/popper.min.js') }}"></script>
     <script src="{{ asset('assets/backend/vendors/bootstrap/bootstrap.min.js') }}"></script>
-    <script src="/assets/backend/vendors/anchorjs/anchor.min.js"></script>
-    <script src="/assets/backend/vendors/is/is.min.js"></script>
-    <script src="/assets/backend/vendors/fontawesome/all.min.js"></script>
-    <script src="/assets/backend/vendors/lodash/lodash.min.js"></script>
-    <script src="/assets/backend/vendors/list.js/list.min.js"></script>
-    <script src="/assets/backend/vendors/feather-icons/feather.min.js"></script>
-    <script src="/assets/backend/vendors/dayjs/dayjs.min.js"></script>
-    <script src="/assets/backend/vendors/choices/choices.min.js"></script>
-    <script src="/assets/backend/vendors/echarts/echarts.min.js"></script>
-    <script src="/assets/backend/vendors/dhtmlx-gantt/dhtmlxgantt.js"></script>
-    <script src="/assets/backend/vendors/flatpickr/flatpickr.min.js"></script>
-    <script src="{{ asset('assets/backend/vendors/prism/prism.js')}}"></script>
-    <script src="/assets/backend/js/phoenix.js"></script>
-    <script src="/assets/backend/js/projectmanagement-dashboard.js"></script>
+    <script src="{{ asset('assets/backend/vendors/anchorjs/anchor.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/is/is.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/fontawesome/all.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/lodash/lodash.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/list.js/list.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/feather-icons/feather.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/dayjs/dayjs.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/choices/choices.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/dhtmlx-gantt/dhtmlxgantt.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/flatpickr/flatpickr.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/prism/prism.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/phoenix.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/projectmanagement-dashboard.js') }}"></script>
 
     @stack('js')
 

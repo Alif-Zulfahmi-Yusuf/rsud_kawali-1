@@ -38,7 +38,6 @@ const toastSuccess = (message) => {
 }
 
 
-
 const toastError = (message) => {
     let resJson;
 
