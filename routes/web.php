@@ -3,6 +3,7 @@
 use App\Models\Atasan;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\SkpController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AtasanController;
@@ -20,14 +21,16 @@ Route::get('/dashboard', function () {
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+    // bagian pangkat
     Route::resource('pangkat', PangkatController::class);
     Route::delete('/pangkat/destroy/{uuid}', [PangkatController::class, 'destroy'])->name('pangkat.destroy');
 
+    // bagian atasan 
     Route::resource('atasans', AtasanController::class);
     Route::delete('/atasans/destroy/{uuid}', [AtasanController::class, 'destroy'])->name('atasans.destroy');
 
-
-
+    // bagian skp
+    Route::resource('skp', SkpController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

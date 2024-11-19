@@ -45,7 +45,7 @@
                                     @can('role-list')
                                     <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}"
                                         href="{{ route('roles.index') }}">
-                                        <div class="d-flex align-items-center">
+                                        <div class="zd-flex align-items-center">
                                             <span class="nav-link-text">Data Roles</span>
                                         </div>
                                     </a>
@@ -64,6 +64,34 @@
                                         href="{{ route('atasans.index') }}">
                                         <div class="d-flex align-items-center">
                                             <span class="nav-link-text">Data Atasan</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link dropdown-indicator label-1" href="#nv-perencanaan" role="button"
+                            data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-perencanaan">
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown-indicator-icon-wrapper">
+                                    <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                </div>
+                                <span class="nav-link-icon"><span data-feather="file-text"></span></span>
+                                <span class="nav-link-text">Perencaan Kinerja</span>
+                                <!-- <span class="fa-solid fa-circle text-info ms-1 new-page-indicator"
+                                    style="font-size: 6px"></span> -->
+                            </div>
+                        </a>
+                        <div class="parent-wrapper label-1">
+                            <ul class="nav collapse parent {{ request()->routeIs('skp.*') || request()->routeIs('roles.*') || request()->routeIs('pangkat.*') || request()->routeIs('atasans.*') ? 'show' : '' }}"
+                                data-bs-parent="#navbarVerticalCollapse" id="nv-perencanaan">
+                                <li class="collapsed-nav-item-title d-none">Perencaan</li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('skp.*') ? 'active' : '' }}"
+                                        href="{{ route('skp.index') }}">
+                                        <div class="d-flex align-items-center">
+                                            <span class="nav-link-text">SKP</span>
                                         </div>
                                     </a>
                                 </li>
