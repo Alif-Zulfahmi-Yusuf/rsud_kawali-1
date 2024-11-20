@@ -11,22 +11,25 @@ $(document).ready(function () {
     $('.select-single').select2({
         theme: "bootstrap-5", // Gunakan tema Bootstrap 5
         width: '100%', // Menyesuaikan lebar dengan elemen induk
-        dropdownCssClass: 'bg-body text-body border', // Menyesuaikan background dan warna teks sesuai tema
-        placeholder: $(this).data('placeholder'), // Mengambil placeholder dari atribut data-placeholder
-        containerCssClass: 'fs--1', // Ukuran font lebih kecil (sesuaikan dengan ukuran yang diinginkan)
-        selectionCssClass: 'form-control form-control-sm', // Memperkecil ukuran input select
+        dropdownCssClass: 'bg-body text-body border fs--1', // Ukuran font lebih kecil pada dropdown
+        placeholder: $(this).data('placeholder'), // Placeholder dari atribut data-placeholder
+        containerCssClass: 'fs--1', // Ukuran font lebih kecil
+        selectionCssClass: 'form-control form-control-sm py-0', // Memperkecil ukuran input select
         allowClear: true // Menambahkan opsi untuk menghapus pilihan
     });
 
-    // Sesuaikan warna dan font untuk dropdown jika diperlukan
+    // Sesuaikan tampilan dropdown jika diperlukan
     $('.select-single').on('select2:open', function () {
         $('.select2-dropdown').css({
-            'background-color': '#fff', // Sesuaikan background dropdown jika perlu
-            'color': '#000', // Sesuaikan warna teks dropdown jika perlu
-            'border': '1px solid #ced4da' // Sesuaikan border dropdown jika perlu
+            'background-color': '#fff', // Background dropdown
+            'color': '#000', // Warna teks dropdown
+            'border': '1px solid #ced4da', // Border dropdown
+            'font-size': '0.5rem', // Ukuran font dropdown lebih kecil
+            'padding': '4px' // Padding lebih kecil
         });
     });
 });
+
 
 
 

@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('skps', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->foreign('data_skp_id')->references('id')->on('skps')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('jabatan');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('atasan_id')->constrained('atasans')->onDelete('cascade');
             $table->string('unit_kerja');
-            $table->timestamp('tanggal_skp');
-            $table->date('tanggal_akhir');
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->integer('tahun'); // Tahun SKP
+            $table->string('module'); // Module (kuantitatif/kualitatif)
+            $table->date('tanggal_skp'); // Tanggal awal SKP
+            $table->date('tanggal_akhir')->nullable(); // Tanggal akhir otomatis akhir tahun
             $table->timestamps();
         });
     }

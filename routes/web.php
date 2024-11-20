@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // bagian skp
     Route::resource('skp', SkpController::class);
+    Route::delete('/skp/destroy/{uuid}', [SkpController::class, 'destroy'])->name('skp.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
