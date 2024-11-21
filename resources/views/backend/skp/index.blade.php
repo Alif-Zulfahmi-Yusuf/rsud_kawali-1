@@ -11,6 +11,18 @@
 <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
+<style>
+tr.group,
+tr.group:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+:root.dark tr.group,
+:root.dark tr.group:hover {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+}
+</style>
 @endpush
 
 
@@ -40,26 +52,28 @@
             <table id="tableSkp" class="table table-hover table-sm fs-9 mb-0">
                 <thead>
                     <tr>
-                        <th class=" sort border-top text-center">No</th>
-                        <th class="sort border-top">Jabatan</th>
-                        <th class="sort border-top text-center">Unit Keja</th>
+                        <th class="sort border-top text-center">No</th>
+                        <th class="sort border-top text-center">Tahun</th> <!-- Kolom untuk grouping -->
+                        <th class="sort border-top text-center">Jabatan</th>
+                        <th class="sort border-top text-center">Unit Kerja</th>
                         <th class="sort border-top text-center">Tanggal Skp</th>
                         <th class="sort border-top text-center">Tanggal Akhir</th>
-                        <th class="sort border-top">Posisi</th>
-                        <th class="sort border-top">Status</th>
-                        <th class="sort border-top">Action</th>
+                        <th class="sort border-top text-center">Posisi</th>
+                        <th class="sort border-top text-center">Status</th>
+                        <th class="sort border-top text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($skps as $skp)
                     <tr data-uuid="{{ $skp->uuid }}">
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $skp->user->jabatan }}</td>
+                        <td>{{ $skp->tahun }}</td> <!-- Kolom Tahun -->
+                        <td class="text-center">{{ $skp->user->jabatan }}</td>
                         <td class="text-center">{{ $skp->user->unit_kerja }}</td>
                         <td class="text-center">{{ $skp->tanggal_skp }}</td>
                         <td class="text-center">{{ $skp->tanggal_akhir }}</td>
-                        <td>{{ $skp->user->atasan->name ?? '-' }}</td>
-                        <td>{{ $skp->user->status }}</td>
+                        <td class="text-center">{{ $skp->user->atasan->name ?? '-' }}</td>
+                        <td class="text-center">{{ $skp->user->status }}</td>
                         <td class="text-center">
                             <div class="btn-reveal-trigger position-static">
                                 <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -82,10 +96,10 @@
                     </tr>
                     @endforeach
                 </tbody>
+
             </table>
         </div>
     </div>
-
 </div>
 @include('backend.skp._modal')
 
@@ -99,16 +113,17 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
 <script src="{{ asset('/assets/backend/js/skp.js') }}"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
 @if(session('status'))
 toastSuccess("{{ session('status') }}");
 @endif
 
-@if(session('error'))
+@if(session('status'))
 toastError({
     errors: {
-        message: "{{ session('error') }}"
+        message: "{{ session('status') }}"
     }
 });
 @endif

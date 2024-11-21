@@ -1,21 +1,53 @@
 $(document).ready(function () {
-    // Inisialisasi DataTable dengan opsi bahasa
-    window.tablePangkat = $('#tableSkp').DataTable({
+    var groupColumn = 1; // Kolom kedua (indeks 1) untuk pengelompokan
+    var table = $('#tableSkp').DataTable({
+        columnDefs: [
+            { visible: false, targets: groupColumn } // Sembunyikan kolom Tahun
+        ],
+        order: [[groupColumn, 'asc']], // Urutkan berdasarkan Tahun
+        drawCallback: function (settings) {
+            var api = this.api();
+            var rows = api.rows({ page: 'current' }).nodes();
+            var last = null;
+
+            api.column(groupColumn, { page: 'current' })
+                .data()
+                .each(function (group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before(
+                            '<tr class="group"><td colspan="9" class="fw-bold bg-light text-center">' + group +
+                            '</td></tr>'
+                        );
+                        last = group;
+                    }
+                });
+        },
         language: {
-            emptyTable: "No data available in table",
-            info: "Showing _START_ to _END_ of _TOTAL_ entries",
-            infoEmpty: "Showing 0 to 0 of 0 entries",
-            lengthMenu: "Show _MENU_ entries",
-            search: "Search:",
+            emptyTable: "Tidak ada data yang tersedia",
+            info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ data",
+            infoEmpty: "Menampilkan 0 hingga 0 dari 0 data",
+            lengthMenu: "Tampilkan _MENU_ data",
+            search: "Cari:",
             paginate: {
-                first: "First",
-                last: "Last",
-                next: "Next",
-                previous: "Previous"
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Berikutnya",
+                previous: "Sebelumnya"
             }
         }
     });
+
+    // Event klik pada grup untuk mengurutkan data
+    $('#tableSkp tbody').on('click', 'tr.group', function () {
+        var currentOrder = table.order()[0];
+        if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+            table.order([groupColumn, 'desc']).draw();
+        } else {
+            table.order([groupColumn, 'asc']).draw();
+        }
+    });
 });
+
 
 // Fungsi untuk menghapus data dengan konfirmasi SweetAlert
 const deleteData = (e) => {

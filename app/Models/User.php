@@ -101,4 +101,22 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Pangkat::class, 'pangkat_id');
     }
+
+    // Relasi ke Rencana Hasil Kinerja
+    public function rencanaHasilKinerja()
+    {
+        return $this->hasMany(RencanaHasilKinerja::class);
+    }
+
+    // Relasi ke Rencana Hasil Kinerja Pegawai
+    public function rencanaHasilKinerjaPegawai()
+    {
+        return $this->hasMany(RencanaHasilKinerjaPegawai::class);
+    }
+
+    // Relasi ke Indikator Kinerja
+    public function indikatorKinerja()
+    {
+        return $this->hasMany(IndikatorKinerja::class);
+    }
 }
