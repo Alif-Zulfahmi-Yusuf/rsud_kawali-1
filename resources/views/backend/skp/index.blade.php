@@ -12,17 +12,7 @@
     href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
-<style>
-tr.group,
-tr.group:hover {
-    background-color: rgba(0, 0, 0, 0.1) !important;
-}
 
-:root.dark tr.group,
-:root.dark tr.group:hover {
-    background-color: rgba(0, 0, 0, 0.75) !important;
-}
-</style>
 @endpush
 
 
@@ -96,7 +86,6 @@ tr.group:hover {
                     </tr>
                     @endforeach
                 </tbody>
-
             </table>
         </div>
     </div>

@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Requests\SkpRequest;
 use App\Http\Services\SkpService;
+use App\Models\RencanaHasilKinerja;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class SkpController extends Controller
@@ -44,8 +46,10 @@ class SkpController extends Controller
     {
         try {
             $this->skpService->store($request->validated(), Auth::user());
+
             return redirect()->back()->with('status', 'Data SKP berhasil disimpan.');
         } catch (\Exception $e) {
+
             return redirect()->back()->with('status', 'Data SKP gagal disimpan. Silakan coba lagi.' . $e->getMessage());
         }
     }
@@ -61,10 +65,20 @@ class SkpController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $uuid)
+    public function edit($uuid)
     {
-        //
+        try {
+            // Mendapatkan detail SKP menggunakan service
+            $skpDetail = $this->skpService->getSkpDetail($uuid);
+
+            // Menampilkan view edit dengan data SKP
+            return view('backend.skp.edit', compact('skpDetail'));
+        } catch (\RuntimeException $e) {
+            // Tangani jika data tidak ditemukan
+            abort(404, $e->getMessage());
+        }
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -86,5 +100,34 @@ class SkpController extends Controller
         }
 
         return response()->json(['message' => 'Failed to delete the item.'], 500);
+    }
+
+    public function getData($uuid)
+    {
+        // Ambil data utama dari RencanaHasilKinerja berdasarkan UUID
+        $rencana = RencanaHasilKinerja::where('uuid', $uuid)
+            ->with(['rencanaPegawai.indikatorKinerja'])
+            ->first();
+
+        if (!$rencana) {
+            return response()->json(['error' => 'Data tidak ditemukan'], 404);
+        }
+
+        // Proses data menjadi format tabel
+        $data = [];
+        foreach ($rencana->rencanaPegawai as $pegawai) {
+            foreach ($pegawai->indikatorKinerja as $indikator) {
+                $data[] = [
+                    'nama_pegawai' => $pegawai->user->name ?? 'N/A',
+                    'rencana' => $pegawai->rencana,
+                    'indikator' => $indikator->indikator_kinerja,
+                    'target_min' => $indikator->target_minimum,
+                    'target_max' => $indikator->target_maksimum,
+                    'satuan' => $indikator->satuan,
+                ];
+            }
+        }
+
+        return response()->json(['data' => $data]);
     }
 }

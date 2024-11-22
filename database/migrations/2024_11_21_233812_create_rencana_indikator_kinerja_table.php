@@ -14,15 +14,16 @@ return new class extends Migration
         Schema::create('rencana_indikator_kinerja', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->foreignId('rencana_hasil_kerja_id')->constrained('rencana_hasil_kerja')->onDelete('cascade');
+            $table->foreignId('rencana_kerja_pegawai_id')->constrained('rencana_hasil_kerja_pegawai')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->enum('aspek', ['kualitas', 'kuantitas', 'waktu']);
             $table->string('indikator_kinerja');
-            $table->enum('tipe_target', ['satu_nilai', 'range_nilai', 'kualitatif']);
+            $table->enum('tipe_target', ['satu_nilai', 'range_nilai', 'kualitatif'])->nullable();
             $table->string('target_minimum')->nullable();
             $table->string('target_maksimum')->nullable();
             $table->string('satuan')->nullable();
-            $table->enum('report', ['bulanan', 'triwulan', 'semesteran', 'tahunan']);
+            $table->enum('report', ['bulanan', 'triwulan', 'semesteran', 'tahunan'])->nullable();
+            $table->enum('status', ['pending', 'approve', 'revisi'])->default('pending');
             $table->timestamps();
         });
     }

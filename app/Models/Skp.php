@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class Skp extends Model
 {
@@ -23,13 +26,24 @@ class Skp extends Model
         'tanggal_akhir',
     ];
 
+    protected $casts = [
+        'tanggal_skp' => 'datetime',
+        'tanggal_akhir' => 'datetime',
+    ];
+
+    protected $hidden = [
+        'atasan_id',
+        'user_id',
+    ];
+
     protected static function boot()
     {
         parent::boot();
 
-        // Generate UUID on create
         static::creating(function ($model) {
-            $model->uuid = (string) Str::uuid();
+            if (empty($model->uuid)) {
+                $model->uuid = (string) Str::uuid();
+            }
         });
     }
 
@@ -38,15 +52,29 @@ class Skp extends Model
         return 'uuid';
     }
 
-    // Relasi ke model User
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relasi ke model Atasan
-    public function atasan()
+    public function atasan(): BelongsTo
     {
         return $this->belongsTo(Atasan::class);
+    }
+
+    public function rencanaAtasan(): HasMany
+    {
+        return $this->hasMany(RencanaHasilKinerja::class);
+    }
+
+
+    public function scopeByYear(Builder $query, int $year): Builder
+    {
+        return $query->where('tahun', $year);
+    }
+
+    public function scopeByUser(Builder $query, int $userId): Builder
+    {
+        return $query->where('user_id', $userId);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Skp;
+use App\Models\RencanaHasilKinerja;
 use Illuminate\Support\Facades\Log;
 
 class SkpService
@@ -30,5 +31,20 @@ class SkpService
         $skp = Skp::where('uuid', $uuid)->firstOrFail();
 
         return $skp->delete();
+    }
+
+    // Tambahkan fungsi untuk mendapatkan data detail
+    public function getSkpDetail(string $uuid)
+    {
+        try {
+            return Skp::where('uuid', $uuid)
+                ->with([
+                    'rencanaAtasan.rencanaPegawai.indikatorKinerja', // Mengambil rencana pegawai dan indikator kinerja
+                ])
+                ->firstOrFail();
+        } catch (\Exception $e) {
+            Log::error('Gagal mendapatkan detail SKP', ['uuid' => $uuid, 'error' => $e->getMessage()]);
+            throw new \RuntimeException('Data SKP tidak ditemukan.');
+        }
     }
 }

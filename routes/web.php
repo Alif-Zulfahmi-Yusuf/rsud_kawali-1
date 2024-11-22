@@ -9,6 +9,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AtasanController;
 use App\Http\Controllers\PangkatController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RencanaKerjaController;
+use App\Http\Controllers\IndikatorKinerjaController;
+use App\Http\Controllers\RencanaKerjaPegawaiController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -32,6 +35,12 @@ Route::group(['middleware' => ['auth']], function () {
     // bagian skp
     Route::resource('skp', SkpController::class);
     Route::delete('/skp/destroy/{uuid}', [SkpController::class, 'destroy'])->name('skp.destroy');
+
+
+    Route::resource('rencana-kerja', RencanaKerjaController::class);
+    Route::resource('rencana-kerja-pegawai', RencanaKerjaPegawaiController::class);
+    Route::resource('indikator-kinerja', IndikatorKinerjaController::class);
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

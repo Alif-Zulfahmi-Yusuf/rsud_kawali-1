@@ -12,20 +12,19 @@ class RencanaHasilKinerja extends Model
 {
     use HasFactory;
 
-    protected $table = 'rencana_hasil_kinerja';
+    protected $table = 'rencana_hasil_kerja';
 
     protected $fillable = [
         'uuid',
         'user_id',
         'skp_id',
-        'rencana'
+        'rencana',
     ];
 
     protected static function boot()
     {
         parent::boot();
 
-        // Generate UUID on create
         static::creating(function ($model) {
             $model->uuid = (string) Str::uuid();
         });
@@ -41,15 +40,24 @@ class RencanaHasilKinerja extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Relasi ke SKP
     public function skp(): BelongsTo
     {
         return $this->belongsTo(Skp::class);
     }
 
-    // Relasi ke RencanaHasilKinerjaPegawai
-    public function rencanaPegawai(): HasMany
+    public function rencanaPegawai()
     {
         return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'rencana_atasan_id');
+    }
+
+    public function indikatorKinerja(): HasMany
+    {
+        return $this->hasMany(IndikatorKinerja::class);
+    }
+
+    // Fungsi untuk mengambil data pegawai dan indikator terkait
+    public function getPegawaiDanIndikator()
+    {
+        return $this->rencanaPegawai()->with('indikatorKinerja');
     }
 }

@@ -30,7 +30,6 @@ class IndikatorKinerja extends Model
     {
         parent::boot();
 
-        // Generate UUID on create
         static::creating(function ($model) {
             $model->uuid = (string) Str::uuid();
         });
@@ -46,9 +45,8 @@ class IndikatorKinerja extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Relasi ke RencanaHasilKinerjaPegawai
     public function rencanaPegawai(): BelongsTo
     {
-        return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_pegawai_id');
+        return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_hasil_kerja_pegawai_id');
     }
 }

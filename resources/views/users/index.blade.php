@@ -1,7 +1,10 @@
 @extends('backend.layouts.app')
 
+@section('title', 'Users')
+
 @push('css')
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+
 @endpush
 
 @section('content')
