@@ -67,6 +67,7 @@
                     <thead>
                         <tr>
                             <th width="5%" class="text-center">No</th>
+                            <th class="text-center">Rencana Hasil Kerja</th>
                             <th class="text-center">Aspek</th>
                             <th class="text-center">Indikator Kinerja</th>
                             <th class="text-center">Target</th>
@@ -80,32 +81,18 @@
                         @endphp
 
                         @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
-                        <!-- Baris Grup untuk Rencana Hasil Kerja -->
-                        <tr class="group">
-                            <td colspan="6">
-                                <small class="d-block" style="font-weight: bold">
-                                    <span class="badge rounded-pill bg-dark me-50">
-                                        {{ $loop->iteration }}
-                                    </span>
-                                    Rencana Hasil Kerja:
-                                </small>
-                                {{ $rencana->rencana }}
-                                <small class="text-muted d-block" style="font-weight: bold">
-                                    Rencana Hasil Kerja Pimpinan yang Diintervensi:
-                                </small>
-                                <small class="text-muted d-block">
-                                    {{ $rencana->rencanaPegawai->first()->rencana ?? '-' }}
-                                </small>
-                            </td>
+                        <!-- Baris Grup -->
+                        <tr>
+                            <td colspan="7" class="d-none">{{ $rencana->rencana }}</td>
+                            <!-- Kolom untuk pengelompokan -->
                         </tr>
 
+                        <!-- Baris Detail -->
                         @foreach ($rencana->rencanaPegawai as $pegawai)
                         @foreach ($pegawai->indikatorKinerja as $indikator)
-                        <!-- Baris Detail untuk Indikator Kinerja -->
                         <tr>
-                            <td class="text-center">
-                                {{ $no++ }} <!-- Penomoran increment -->
-                            </td>
+                            <td class="text-center">{{ $no++ }}</td>
+                            <td>{{ $rencana->rencana }}</td> <!-- Tetap untuk kolom Rencana -->
                             <td>{{ $indikator->aspek }}</td>
                             <td>{{ $indikator->indikator_kinerja }}</td>
                             <td>{{ $indikator->tipe_target }}</td>
@@ -123,8 +110,8 @@
                         @endforeach
                         @endforeach
                     </tbody>
-
                 </table>
+
             </div>
         </div>
     </div>
@@ -147,16 +134,16 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-    @if(session('status'))
-    toastSuccess("{{ session('status') }}");
-    @endif
+@if(session('status'))
+toastSuccess("{{ session('status') }}");
+@endif
 
-    @if(session('status'))
-    toastError({
-        errors: {
-            message: "{{ session('status') }}"
-        }
-    });
-    @endif
+@if(session('status'))
+toastError({
+    errors: {
+        message: "{{ session('status') }}"
+    }
+});
+@endif
 </script>
 @endpush

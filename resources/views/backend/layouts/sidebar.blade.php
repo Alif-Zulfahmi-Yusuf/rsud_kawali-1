@@ -30,7 +30,7 @@
                         <div class="parent-wrapper label-1">
                             <ul class="nav collapse parent {{ request()->routeIs('users.*') || request()->routeIs('roles.*') || request()->routeIs('pangkat.*') || request()->routeIs('atasans.*') ? 'show' : '' }}"
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-home">
-                                <li class="collapsed-nav-item-title d-none">Home</li>
+                                <li class="collapsed-nav-item-title d-none">Data Master</li>
                                 <li class="nav-item">
                                     @can('user-list')
                                     <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     <div class="nav-item-wrapper">
-                        <a class="nav-link dropdown-indicator label-1" href="#nv-perencanaan" role="button"
+                        <a class="nav-link dropdown-indicator label-2" href="#nv-perencanaan" role="button"
                             data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-perencanaan">
                             <div class="d-flex align-items-center">
                                 <div class="dropdown-indicator-icon-wrapper">
@@ -83,8 +83,8 @@
                                     style="font-size: 6px"></span> -->
                             </div>
                         </a>
-                        <div class="parent-wrapper label-1">
-                            <ul class="nav collapse parent {{ request()->routeIs('skp.*') || request()->routeIs('roles.*') || request()->routeIs('pangkat.*') || request()->routeIs('atasans.*') ? 'show' : '' }}"
+                        <div class="parent-wrapper label-2">
+                            <ul class="nav collapse parent {{ request()->routeIs('skp.*') ? 'show' : '' }}"
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-perencanaan">
                                 <li class="collapsed-nav-item-title d-none">Perencaan</li>
                                 <li class="nav-item">

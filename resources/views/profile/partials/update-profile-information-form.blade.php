@@ -23,14 +23,24 @@
                     <div class="card-body">
                         <div class="row">
                             <!-- Profile Image Column -->
-                            <div class="col-md-4 text-center">
-                                <div class="mb-3">
-                                    <img src="{{ $user->image ? url('storage/' . $user->image) : url('storage/images/default.png') }}"
-                                        alt="Profile Image" class="img-thumbnail mb-3" width="150">
-                                </div>
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="image" class="form-label">{{ __('Update Profile Image') }}</label>
-                                    <input type="file" class="form-control" id="image" name="image">
+                                    <input class="d-none" id="upload-porfile-picture" type="file" name="image" />
+                                    <div class="hoverbox feed-profile" style="width: 150px; height: 150px">
+                                        <div class="hoverbox-content rounded-circle d-flex flex-center z-1"
+                                            style="--phoenix-bg-opacity: .56;">
+                                            <span class="fa-solid fa-camera fs-3 text-secondary-light"></span>
+                                        </div>
+                                        <div
+                                            class="position-relative bg-body-quaternary rounded-circle cursor-pointer d-flex flex-center mb-xxl-7">
+                                            <div class="avatar avatar-5xl"><img
+                                                    class="rounded-circle rounded-circle img-thumbnail shadow-sm border-0"
+                                                    src="{{ $user->image ? url('storage/' . $user->image) : url('storage/images/default.png') }}"
+                                                    alt="" /></div>
+                                            <label class="w-100 h-100 position-absolute z-1"
+                                                for="upload-porfile-picture"></label>
+                                        </div>
+                                    </div>
                                     @if($errors->has('image'))
                                     <div class="text-danger mt-1">{{ $errors->first('image') }}</div>
                                     @endif

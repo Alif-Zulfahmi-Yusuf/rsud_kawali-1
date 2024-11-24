@@ -9,25 +9,28 @@ class RencanaKerjaPegawaiRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize()
     {
-        return true;
+        return true; // Pastikan autentikasi diatur sebelumnya
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    public function rules()
     {
-        $routeUuid = $this->route('rencana-kerja-pegawai');
-
         return [
-            'rencana' => 'required|unique:rencana_hasil_kerja_pegawai,rencana,' . $routeUuid . ',uuid| max:255',
-            'skp_id' => 'required',
-            'user_id' => 'required',
-            'rencana_atasan_id' => 'required',
+            'rencana_atasan_id' => 'required|exists:rencana_hasil_kinerja,id', // Validasi rencana atasan
+            'rencana' => 'required|string|max:255', // Validasi rencana hasil kerja
+        ];
+    }
+
+
+    public function messages()
+    {
+        return [
+            'rencana_atasan_id.required' => 'Rencana atasan wajib dipilih.',
+            'rencana_atasan_id.exists' => 'Rencana atasan tidak valid.',
+            'rencana.required' => 'Rencana hasil kerja wajib diisi.',
+            'rencana.string' => 'Rencana hasil kerja harus berupa teks.',
+            'rencana.max' => 'Rencana hasil kerja tidak boleh lebih dari 255 karakter.',
         ];
     }
 }

@@ -50,37 +50,63 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
+    var groupColumn = 1; // Kolom kedua untuk pengelompokan (Rencana Hasil Kerja)
     var table = $('#tableRencana').DataTable({
         columnDefs: [
-            { orderable: false, targets: [0, 5] }, // Non-urutkan kolom No dan Action
+            { orderable: false, targets: [0, 6] }, // Kolom No dan Action tidak dapat diurutkan
+            { visible: false, targets: groupColumn }, // Kolom untuk grup disembunyikan
         ],
-        order: [], // Tidak ada urutan default
-        paging: true, // Nonaktifkan pagination untuk menampilkan semua data
+        order: [[groupColumn, 'asc']], // Urutkan berdasarkan grup
+        paging: true, // Aktifkan pagination
         info: false, // Nonaktifkan informasi jumlah data
         searching: false, // Nonaktifkan fitur pencarian
         language: {
             emptyTable: "Tidak ada data yang tersedia",
+            lengthMenu: "Tampilkan _MENU_ data",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Berikutnya",
+                previous: "Sebelumnya",
+            },
         },
-        drawCallback: function () {
+        drawCallback: function (settings) {
             var api = this.api();
             var rows = api.rows({ page: 'current' }).nodes();
+            var last = null;
 
-            // Styling khusus untuk baris grup
-            $(rows).each(function () {
-                if ($(this).hasClass('group')) {
-                    $(this).css({
-                        'background-color': '#dfdff5',
-                        'color': '#333',
-                        'font-weight': 'bold',
-                    });
-                }
+            // Tambahkan baris grup sebelum baris detail
+            api.column(groupColumn, { page: 'current' })
+                .data()
+                .each(function (group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before(
+                            '<tr class="group"><td colspan="7" class="fw-bold bg-light">' + group +
+                            '</td></tr>'
+                        );
+                        last = group;
+                    }
+                });
+
+            // Tambahkan styling khusus untuk baris grup
+            $('.group').css({
+                'background-color': '#f8f9fa',
+                'color': '#495057',
+                'font-weight': 'bold',
             });
+        },
+    });
+
+    // Event klik pada grup untuk mengurutkan data
+    $('#tableRencana tbody').on('click', 'tr.group', function () {
+        var currentOrder = table.order()[0];
+        if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+            table.order([groupColumn, 'desc']).draw();
+        } else {
+            table.order([groupColumn, 'asc']).draw();
         }
     });
 });
-
-
-
 
 
 // Fungsi untuk menghapus data dengan konfirmasi SweetAlert

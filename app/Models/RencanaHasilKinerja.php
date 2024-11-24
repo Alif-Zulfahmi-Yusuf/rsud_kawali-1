@@ -45,9 +45,9 @@ class RencanaHasilKinerja extends Model
         return $this->belongsTo(Skp::class);
     }
 
-    public function rencanaPegawai()
+    public function rencanaPegawai(): HasMany
     {
-        return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'rencana_atasan_id');
+        return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'rencana_atasan_id', 'id');
     }
 
     public function indikatorKinerja(): HasMany

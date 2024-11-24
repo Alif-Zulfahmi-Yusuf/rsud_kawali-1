@@ -3,28 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\RencanaHasilKinerja;
+use App\Http\Requests\RencanaKerjaPegawaiRequest;
+use App\Http\Services\RencanaKerjaPegawaiService;
 
 class RencanaKerjaPegawaiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    protected $rencanaKerjaPegawaiService;
+
+    public function __construct(RencanaKerjaPegawaiService $rencanaKerjaPegawaiService)
     {
-        // Ambil data atasan berdasarkan loglica Anda
-        $atasans = RencanaHasilKinerja::pluck('id');
-        return response()->json([
-            'atasans' => $atasans,
-        ]);
+        $this->rencanaKerjaPegawaiService = $rencanaKerjaPegawaiService;
     }
 
     /**
@@ -32,8 +24,24 @@ class RencanaKerjaPegawaiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi data dari form
+        $validated = $request->validate([
+            'rencana_atasan_id' => 'required|exists:rencana_hasil_kinerja,id', // Validasi rencana atasan
+            'rencana' => 'required|string|max:255', // Validasi rencana hasil kerja
+        ]);
+
+        try {
+            // Simpan data menggunakan service
+            $this->rencanaKerjaPegawaiService->create($validated);
+
+            // Redirect ke halaman index atau halaman sukses lainnya
+            return back()->with('status', 'Rencana Hasil Kerja berhasil disimpan.');
+        } catch (\Exception $e) {
+            // Tangani error jika terjadi kesalahan
+            return back()->withErrors(['status' => $e->getMessage()]);
+        }
     }
+
 
     /**
      * Display the specified resource.

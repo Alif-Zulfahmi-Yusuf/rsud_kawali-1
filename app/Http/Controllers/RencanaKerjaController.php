@@ -16,19 +16,6 @@ class RencanaKerjaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -41,7 +28,7 @@ class RencanaKerjaController extends Controller
 
         try {
             // Simpan data menggunakan service
-            $rencanaHasilKerja = $this->rencanaKerjaatasanService->store($validated);
+            $this->rencanaKerjaatasanService->store($validated);
 
             // Redirect ke halaman index atau halaman sukses lainnya
             return back()->with('status', 'Rencana Hasil Kerja berhasil disimpan.');

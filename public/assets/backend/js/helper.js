@@ -17,17 +17,6 @@ $(document).ready(function () {
         selectionCssClass: 'form-control form-control-sm py-0', // Memperkecil ukuran input select
         allowClear: true // Menambahkan opsi untuk menghapus pilihan
     });
-
-    // Sesuaikan tampilan dropdown jika diperlukan
-    $('.select-single').on('select2:open', function () {
-        $('.select2-dropdown').css({
-            'background-color': '#fff', // Background dropdown
-            'color': '#000', // Warna teks dropdown
-            'border': '1px solid #ced4da', // Border dropdown
-            'font-size': '0.5rem', // Ukuran font dropdown lebih kecil
-            'padding': '4px' // Padding lebih kecil
-        });
-    });
 });
 
 
