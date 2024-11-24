@@ -75,6 +75,10 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                        $no = 1; // Penomoran utama untuk setiap indikator
+                        @endphp
+
                         @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
                         <!-- Baris Grup untuk Rencana Hasil Kerja -->
                         <tr class="group">
@@ -83,38 +87,44 @@
                                     <span class="badge rounded-pill bg-dark me-50">
                                         {{ $loop->iteration }}
                                     </span>
-                                    Rencana Hasil Kerja: {{ $rencana->rencana }}
+                                    Rencana Hasil Kerja:
                                 </small>
+                                {{ $rencana->rencana }}
                                 <small class="text-muted d-block" style="font-weight: bold">
                                     Rencana Hasil Kerja Pimpinan yang Diintervensi:
                                 </small>
                                 <small class="text-muted d-block">
-                                    {{ $rencana->rencana }}
+                                    {{ $rencana->rencanaPegawai->first()->rencana ?? '-' }}
                                 </small>
                             </td>
                         </tr>
+
                         @foreach ($rencana->rencanaPegawai as $pegawai)
                         @foreach ($pegawai->indikatorKinerja as $indikator)
                         <!-- Baris Detail untuk Indikator Kinerja -->
                         <tr>
                             <td class="text-center">
-                                {{ $loop->iteration }}
+                                {{ $no++ }} <!-- Penomoran increment -->
                             </td>
                             <td>{{ $indikator->aspek }}</td>
                             <td>{{ $indikator->indikator_kinerja }}</td>
                             <td>{{ $indikator->tipe_target }}</td>
                             <td>{{ $indikator->report }}</td>
                             <td class="text-center">
-                                <button class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-sm btn-primary">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                         @endforeach
                         @endforeach
                         @endforeach
                     </tbody>
-                </table>
 
+                </table>
             </div>
         </div>
     </div>
@@ -137,16 +147,16 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-@if(session('status'))
-toastSuccess("{{ session('status') }}");
-@endif
+    @if(session('status'))
+    toastSuccess("{{ session('status') }}");
+    @endif
 
-@if(session('status'))
-toastError({
-    errors: {
-        message: "{{ session('status') }}"
-    }
-});
-@endif
+    @if(session('status'))
+    toastError({
+        errors: {
+            message: "{{ session('status') }}"
+        }
+    });
+    @endif
 </script>
 @endpush
