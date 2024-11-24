@@ -12,8 +12,9 @@
                     @csrf
                     <!-- Rencana Atasan -->
                     <div class="form-group mb-3">
-                        <label for="atasan_id" class="form-label">Rencana Atasan</label>
-                        <select class="form-select select-single" id="atasan_id" name="atasan_id" required>
+                        <label for="rencana_atasan_id" class="form-label">Rencana Atasan</label>
+                        <select class="form-select select-single" id="rencana_atasan_id" name="rencana_atasan_id"
+                            required>
                             <option value="" disabled selected>Pilih Rencana Atasan</option>
 
                             @if ($skpDetail && $skpDetail->rencanaHasilKinerja)

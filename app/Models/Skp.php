@@ -62,10 +62,11 @@ class Skp extends Model
         return $this->belongsTo(Atasan::class);
     }
 
-    public function rencanaAtasan(): HasMany
+    public function rencanaHasilKinerja()
     {
-        return $this->hasMany(RencanaHasilKinerja::class);
+        return $this->hasMany(RencanaHasilKinerja::class, 'skp_id', 'id');
     }
+
 
 
     public function scopeByYear(Builder $query, int $year): Builder

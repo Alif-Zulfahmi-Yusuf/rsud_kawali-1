@@ -16,8 +16,8 @@ class RencanaKerjaAtasanService
             // Ambil user yang sedang login
             $user = Auth::user();
 
-            // Ambil SKP terkait dengan user, pastikan bahwa user sudah memiliki SKP
-            $skp = Skp::where('user_id', $user->id)->first(); // Sesuaikan query jika diperlukan untuk kondisi lain
+            // Ambil SKP terkait dengan user
+            $skp = Skp::where('user_id', $user->id)->first();
 
             if (!$skp) {
                 throw new Exception("SKP tidak ditemukan.");
@@ -25,7 +25,7 @@ class RencanaKerjaAtasanService
 
             // Menyimpan data RencanaHasilKerja
             $rencanaHasilKerja = RencanaHasilKinerja::create([
-                'rencana' => $data['rencana_hasil_kerja'],
+                'rencana' => $data['rencana_hasil_kerja'], // Gunakan nama field dari form
                 'user_id' => $user->id,
                 'skp_id' => $skp->id,
             ]);
@@ -39,7 +39,7 @@ class RencanaKerjaAtasanService
                 'data' => $data,
             ]);
 
-            // Melemparkan error untuk ditangani oleh controller atau service lainnya
+            // Melemparkan error untuk ditangani oleh controller
             throw new Exception('Gagal menyimpan Rencana Hasil Kerja: ' . $e->getMessage());
         }
     }

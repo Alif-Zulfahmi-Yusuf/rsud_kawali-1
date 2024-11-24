@@ -47,6 +47,6 @@ class IndikatorKinerja extends Model
 
     public function rencanaPegawai(): BelongsTo
     {
-        return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_hasil_kerja_pegawai_id');
+        return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_hasil_kerja_pegawai_id', 'id');
     }
 }

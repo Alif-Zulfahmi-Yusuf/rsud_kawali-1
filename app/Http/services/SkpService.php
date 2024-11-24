@@ -37,14 +37,25 @@ class SkpService
     public function getSkpDetail(string $uuid)
     {
         try {
+            // Mengambil detail SKP beserta relasi-relasinya
             return Skp::where('uuid', $uuid)
                 ->with([
-                    'rencanaAtasan.rencanaPegawai.indikatorKinerja', // Mengambil rencana pegawai dan indikator kinerja
+                    'rencanaHasilKinerja.rencanaPegawai.rencanaAtasan', // Relasi rencana atasan
+                    'rencanaHasilKinerja.rencanaPegawai.indikatorKinerja' => function ($query) {
+                        // Pastikan query memuat data sesuai dengan kolom yang benar
+                        $query->select(['id', 'uuid', 'rencana_kerja_pegawai_id', 'user_id', 'aspek', 'indikator_kinerja', 'tipe_target', 'target_minimum', 'target_maksimum', 'satuan', 'report', 'status']);
+                    },
                 ])
                 ->firstOrFail();
         } catch (\Exception $e) {
-            Log::error('Gagal mendapatkan detail SKP', ['uuid' => $uuid, 'error' => $e->getMessage()]);
-            throw new \RuntimeException('Data SKP tidak ditemukan.');
+            // Logging error jika terjadi kesalahan
+            Log::error('Gagal mendapatkan detail SKP', [
+                'uuid' => $uuid,
+                'error' => $e->getMessage(),
+            ]);
+
+            // Lemparkan exception agar dapat ditangani oleh controller
+            throw new \RuntimeException('Data SKP tidak ditemukan. Pastikan relasi dan data sudah sesuai.');
         }
     }
 }

@@ -12,7 +12,6 @@
     href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
-
 @endpush
 
 
@@ -64,48 +63,50 @@
                         </ul>
                     </div>
                 </div>
-                <table id="tableSkp" class="table table-hover table-sm fs-9 mb-0">
+                <table id="tableRencana" class="table table-hover table-bordered table-sm fs-9 mb-0">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Aspek</th>
-                            <th>Indikator Kinerja</th>
-                            <th>Target</th>
-                            <th>Polarisasi</th>
-                            <th>Report</th>
-                            <th>Action</th>
-
+                            <th width="5%" class="text-center">No</th>
+                            <th class="text-center">Aspek</th>
+                            <th class="text-center">Indikator Kinerja</th>
+                            <th class="text-center">Target</th>
+                            <th class="text-center">Report</th>
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($skpDetail->rencanaAtasan as $rencana)
+                        @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
+                        <!-- Baris Grup untuk Rencana Hasil Kerja -->
+                        <tr class="group">
+                            <td colspan="6">
+                                <small class="d-block" style="font-weight: bold">
+                                    <span class="badge rounded-pill bg-dark me-50">
+                                        {{ $loop->iteration }}
+                                    </span>
+                                    Rencana Hasil Kerja: {{ $rencana->rencana }}
+                                </small>
+                                <small class="text-muted d-block" style="font-weight: bold">
+                                    Rencana Hasil Kerja Pimpinan yang Diintervensi:
+                                </small>
+                                <small class="text-muted d-block">
+                                    {{ $rencana->rencana }}
+                                </small>
+                            </td>
+                        </tr>
                         @foreach ($rencana->rencanaPegawai as $pegawai)
                         @foreach ($pegawai->indikatorKinerja as $indikator)
-
-                        <tr data-uuid="{{ $skp->uuid }}">
-                            <td class="text-center">{{ $loop->iteration }}</td>
-                            <td>{{ $rencana->rencana }}</td>
-                            <td>{{ $pegawai->user->name }}</td>
-                            <td>{{ $indikator->indikator_kinerja }}</td>
+                        <!-- Baris Detail untuk Indikator Kinerja -->
+                        <tr>
                             <td class="text-center">
-                                <div class="btn-reveal-trigger position-static">
-                                    <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <svg class="fs-10" aria-hidden="true" focusable="false"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16"
-                                            height="16">
-                                            <path fill="currentColor"
-                                                d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z">
-                                            </path>
-                                        </svg>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end py-2">
-                                        <a class="dropdown-item" href="{{ route('skp.edit', $skp->uuid) }}">Edit</a>
-                                        <hr class="dropdown-divider">
-                                        <button type="button" class="dropdown-item text-danger delete-button"
-                                            onclick="deleteData(this)" data-uuid="{{ $skp->uuid }}">Delete</button>
-                                    </div>
-                                </div>
+                                {{ $loop->iteration }}
+                            </td>
+                            <td>{{ $indikator->aspek }}</td>
+                            <td>{{ $indikator->indikator_kinerja }}</td>
+                            <td>{{ $indikator->tipe_target }}</td>
+                            <td>{{ $indikator->report }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></button>
+                                <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </td>
                         </tr>
                         @endforeach
@@ -113,6 +114,7 @@
                         @endforeach
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>
