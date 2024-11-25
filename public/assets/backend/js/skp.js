@@ -53,7 +53,7 @@ $(document).ready(function () {
     var groupColumn = 1; // Kolom kedua untuk pengelompokan (Rencana Hasil Kerja)
     var table = $('#tableRencana').DataTable({
         columnDefs: [
-            { orderable: false, targets: [0, 6] }, // Kolom No dan Action tidak dapat diurutkan
+            { orderable: false, targets: [0, 1, 2, 3, 4, 5, 6] }, // Kolom No dan Action tidak dapat diurutkan
             { visible: false, targets: groupColumn }, // Kolom untuk grup disembunyikan
         ],
         order: [[groupColumn, 'asc']], // Urutkan berdasarkan grup

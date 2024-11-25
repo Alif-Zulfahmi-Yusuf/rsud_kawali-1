@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('target_maksimum')->nullable();
             $table->string('satuan')->nullable();
             $table->enum('report', ['bulanan', 'triwulan', 'semesteran', 'tahunan'])->nullable();
-            $table->enum('status', ['pending', 'approve', 'revisi'])->default('pending');
             $table->timestamps();
         });
     }

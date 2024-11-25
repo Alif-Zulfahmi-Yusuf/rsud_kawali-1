@@ -81,18 +81,20 @@
                         @endphp
 
                         @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
-                        <!-- Baris Grup -->
-                        <tr>
-                            <td colspan="7" class="d-none">{{ $rencana->rencana }}</td>
-                            <!-- Kolom untuk pengelompokan -->
-                        </tr>
-
                         <!-- Baris Detail -->
                         @foreach ($rencana->rencanaPegawai as $pegawai)
                         @foreach ($pegawai->indikatorKinerja as $indikator)
                         <tr>
                             <td class="text-center">{{ $no++ }}</td>
-                            <td>{{ $rencana->rencana }}</td> <!-- Tetap untuk kolom Rencana -->
+                            <td>
+                                <div><strong>Rencana Hasil Kerja:</strong></div>
+                                <div>{{ $pegawai->rencana }}</div>
+
+                                <div class="text-muted"><strong>Rencana Hasil Kerja Pimpinan yang Diintervensi:</strong>
+                                </div>
+                                <div class="text-muted">{{ $rencana->rencana }}</div>
+                            </td>
+                            <!-- Tetap untuk kolom Rencana -->
                             <td>{{ $indikator->aspek }}</td>
                             <td>{{ $indikator->indikator_kinerja }}</td>
                             <td>{{ $indikator->tipe_target }}</td>
@@ -115,7 +117,7 @@
             </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Simpan</button>
+    <button type="submit" class="btn btn-phoenix-secondary me-1 mb-1">Simpan</button>
 </form>
 @endsection
 

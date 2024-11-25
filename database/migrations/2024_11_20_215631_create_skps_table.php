@@ -20,7 +20,8 @@ return new class extends Migration
             $table->integer('tahun'); // Tahun SKP
             $table->string('module'); // Module (kuantitatif/kualitatif)
             $table->date('tanggal_skp'); // Tanggal awal SKP
-            $table->date('tanggal_akhir')->nullable(); // Tanggal akhir otomatis akhir tahun
+            $table->date('tanggal_akhir')->nullable();
+            $table->enum('status', ['pending', 'approve', 'revisi'])->default('pending'); // Tanggal akhir otomatis akhir tahun
             $table->timestamps();
         });
     }

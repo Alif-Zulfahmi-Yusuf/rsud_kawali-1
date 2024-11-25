@@ -52,7 +52,7 @@ class RencanaHasilKinerja extends Model
 
     public function indikatorKinerja(): HasMany
     {
-        return $this->hasMany(IndikatorKinerja::class);
+        return $this->hasMany(IndikatorKinerja::class, 'rencana_kerja_pegawai_id', 'id');
     }
 
     // Fungsi untuk mengambil data pegawai dan indikator terkait

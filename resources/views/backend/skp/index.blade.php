@@ -63,7 +63,7 @@
                         <td class="text-center">{{ $skp->tanggal_skp }}</td>
                         <td class="text-center">{{ $skp->tanggal_akhir }}</td>
                         <td class="text-center">{{ $skp->user->atasan->name ?? '-' }}</td>
-                        <td class="text-center">{{ $skp->user->status }}</td>
+                        <td class="text-center">{{ $skp->status }}</td>
                         <td class="text-center">
                             <div class="btn-reveal-trigger position-static">
                                 <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"

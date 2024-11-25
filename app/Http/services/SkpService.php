@@ -18,6 +18,7 @@ class SkpService
             'module' => $data['module'],
             'tanggal_skp' => now(),
             'tanggal_akhir' => now()->endOfYear(),
+            'status' => 'pending',
         ]);
     }
 
@@ -41,10 +42,7 @@ class SkpService
             return Skp::where('uuid', $uuid)
                 ->with([
                     'rencanaHasilKinerja.rencanaPegawai.rencanaAtasan', // Relasi rencana atasan
-                    'rencanaHasilKinerja.rencanaPegawai.indikatorKinerja' => function ($query) {
-                        // Pastikan query memuat data sesuai dengan kolom yang benar
-                        $query->select(['id', 'uuid', 'rencana_kerja_pegawai_id', 'user_id', 'aspek', 'indikator_kinerja', 'tipe_target', 'target_minimum', 'target_maksimum', 'satuan', 'report', 'status']);
-                    },
+                    'rencanaHasilKinerja.rencanaPegawai.indikatorKinerja', // Relasi indikator kinerja
                 ])
                 ->firstOrFail();
         } catch (\Exception $e) {
