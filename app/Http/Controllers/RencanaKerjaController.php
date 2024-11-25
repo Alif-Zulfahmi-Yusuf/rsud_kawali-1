@@ -31,10 +31,10 @@ class RencanaKerjaController extends Controller
             $this->rencanaKerjaatasanService->store($validated);
 
             // Redirect ke halaman index atau halaman sukses lainnya
-            return back()->with('status', 'Rencana Hasil Kerja berhasil disimpan.');
+            return back()->with('success', 'Rencana Hasil Kerja berhasil disimpan.');
         } catch (\Exception $e) {
             // Tangani error jika terjadi kesalahan
-            return back()->withErrors(['error' => $e->getMessage()]);
+            return back()->with('error', $e->getMessage()); // Hanya kirim string error
         }
     }
 

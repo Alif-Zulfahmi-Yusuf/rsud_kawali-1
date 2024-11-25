@@ -37,10 +37,10 @@ class IndikatorKinerjaController extends Controller
             $indikator = $this->indikatorService->create($request->validated());
 
             // Redirect atau kembali dengan pesan sukses
-            return back()->with('status', 'Indikator Kinerja berhasil disimpan.');
+            return back()->with('success', 'Rencana Hasil Kerja berhasil disimpan.');
         } catch (\Exception $e) {
             // Tangani error jika terjadi kesalahan
-            return back()->withErrors(['status' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+            return back()->with('error', $e->getMessage()); // Hanya kirim string error
         }
     }
 

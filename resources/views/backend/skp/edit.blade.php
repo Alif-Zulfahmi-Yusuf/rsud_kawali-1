@@ -136,16 +136,12 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-@if(session('status'))
-toastSuccess("{{ session('status') }}");
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
 @endif
 
-@if(session('status'))
-toastError({
-    errors: {
-        message: "{{ session('status') }}"
-    }
-});
+@if(session('error'))
+toastError("{{ session('error') }}"); // Mengirim string error
 @endif
 </script>
 @endpush

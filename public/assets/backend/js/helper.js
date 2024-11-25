@@ -29,27 +29,19 @@ const toastSuccess = (message) => {
     })
 }
 
-
 const toastError = (message) => {
-    let resJson;
+    let errorText = message; // Inisialisasi errorText sebagai string error secara default
 
-    try {
-        resJson = JSON.parse(message);
-    } catch (error) {
-        console.log("Error parsing JSON:", error);
-        return; // Jika parsing JSON gagal
-    }
-
-    let errorText = '';
-
-    // Akses error dari Laravel
-    if (resJson.errors) {
-        for (let key in resJson.errors) {
-            errorText = resJson.errors[key][0]; // Ambil pesan error pertama dari tiap field
+    // Cek jika error adalah objek yang mengandung detail errors
+    if (typeof message === 'object' && message.errors) {
+        errorText = ''; // Reset errorText jika ada detail error
+        for (let key in message.errors) {
+            errorText = message.errors[key][0]; // Ambil pesan error pertama
             break;
         }
-    } else {
-        errorText = resJson.message; // Ambil pesan umum jika tidak ada detail
+    } else if (typeof message === 'object' && message.message) {
+        // Jika error memiliki properti 'message', ambil dari sana
+        errorText = message.message;
     }
 
     Toast.fire({
