@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class IndikatorKinerja extends Model
 {
@@ -40,13 +40,13 @@ class IndikatorKinerja extends Model
         return 'uuid';
     }
 
+    public function rencanaPegawai(): BelongsTo
+    {
+        return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_kerja_pegawai_id');
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function rencanaPegawai(): BelongsTo
-    {
-        return $this->belongsTo(RencanaHasilKinerjaPegawai::class);
     }
 }

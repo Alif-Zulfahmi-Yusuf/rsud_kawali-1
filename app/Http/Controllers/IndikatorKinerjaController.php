@@ -3,12 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Services\IndikatorService;
+use App\Http\Requests\IndikatorKinerjaRequest;
 
 class IndikatorKinerjaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    protected $indikatorService;
+
+    // Konstruktor untuk inject service
+    public function __construct(IndikatorService $indikatorService)
+    {
+        $this->indikatorService = $indikatorService;
+    }
+
     public function index()
     {
         //
@@ -17,18 +28,25 @@ class IndikatorKinerjaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function store(IndikatorKinerjaRequest $request)
     {
-        //
+        // Validasi sudah dilakukan di IndikatorKinerjaRequest
+
+        try {
+            // Menyimpan data menggunakan service
+            $indikator = $this->indikatorService->create($request->validated());
+
+            // Redirect atau kembali dengan pesan sukses
+            return back()->with('status', 'Indikator Kinerja berhasil disimpan.');
+        } catch (\Exception $e) {
+            // Tangani error jika terjadi kesalahan
+            return back()->withErrors(['status' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.

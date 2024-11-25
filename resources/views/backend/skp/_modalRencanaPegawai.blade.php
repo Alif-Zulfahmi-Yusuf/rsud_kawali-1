@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form SKP -->
-                <form action="{{ route('rencana-kerja-pegawai.store') }}" method="POST">
+                <form action="{{ route('rencana-pegawai.store') }}" method="POST">
                     @csrf
                     <!-- Rencana Atasan -->
                     <div class="form-group mb-3">

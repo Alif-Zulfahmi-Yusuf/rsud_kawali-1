@@ -13,24 +13,22 @@
 
                     <!-- Rencana Hasil Kerja -->
                     <div class="row mb-3 align-items-center">
-                        <label for="recana_kerja_pegawai_id" class="col-sm-4 col-form-label">Rencana Hasil Kerja</label>
+                        <label for="rencana_kerja_pegawai_id" class="col-sm-4 col-form-label">Rencana Hasil
+                            Kerja</label>
                         <div class="col-sm-8">
-                            <select class="form-select select-single" id="recana_kerja_pegawai_id"
-                                name="recana_kerja_pegawai_id" required>
+                            <select class="form-select select-single" id="rencana_kerja_pegawai_id"
+                                name="rencana_kerja_pegawai_id" required>
                                 <option value="" disabled selected>--pilih--</option>
-                                @if ($skpDetail && $skpDetail->rencanaPegawai)
-                                @foreach ($skpDetail->rencanaPegawai as $rencana)
-                                <option value="{{ $rencana->recana_kerja_pegawai_id }}">
-                                    {{ $rencana->rencana ?? '-' }} -
+                                @foreach ($skpDetail->rencanaHasilKinerja as $rencanaHasil)
+                                @foreach ($rencanaHasil->rencanaPegawai as $rencanaPegawai)
+                                <option value="{{ $rencanaPegawai->id }}">
+                                    {{ $rencanaPegawai->rencana ?? '-' }} -
                                 </option>
                                 @endforeach
-                                @else
-                                <option value="" disabled>Tidak ada data rencana hasil kerja.</option>
-                                @endif
+                                @endforeach
                             </select>
                         </div>
                     </div>
-
                     <!-- Aspek -->
                     <div class="row mb-3 align-items-center">
                         <label for="aspek" class="col-sm-4 col-form-label">Aspek</label>

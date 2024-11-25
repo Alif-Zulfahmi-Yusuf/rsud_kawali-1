@@ -7,6 +7,7 @@ use App\Models\Skp;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class RencanaKerjaPegawaiService
 {
@@ -20,36 +21,33 @@ class RencanaKerjaPegawaiService
     public function create(array $data)
     {
         try {
-            // Ambil user yang sedang login
-            $user = Auth::user();
+            DB::beginTransaction(); // Mulai transaksi
 
-            // Ambil SKP terkait dengan user
+            $user = Auth::user();
             $skp = Skp::where('user_id', $user->id)->first();
 
-            // Pastikan SKP ditemukan
             if (!$skp) {
                 throw new Exception("SKP tidak ditemukan.");
             }
 
-            // Menyimpan data RencanaHasilKerjaPegawai
+            // Menyimpan data RencanaHasilKinerjaPegawai
             $rencanaPegawai = RencanaHasilKinerjaPegawai::create([
-                'rencana_atasan_id' => $data['rencana_atasan_id'], // Dari form input
-                'rencana' => $data['rencana'], // Nama rencana dari form input
-                'user_id' => $user->id,       // User yang sedang login
-                'skp_id' => $skp->id,         // SKP yang terkait dengan user
+                'rencana_atasan_id' => $data['rencana_atasan_id'],
+                'rencana' => $data['rencana'],
+                'user_id' => $user->id,
+                'skp_id' => $skp->id,
             ]);
 
+            DB::commit(); // Commit transaksi jika semuanya berhasil
             return $rencanaPegawai;
         } catch (Exception $e) {
-            // Log error jika terjadi kesalahan
-            Log::error('Gagal menyimpan Rencana Hasil Kerja', [
+            DB::rollBack(); // Rollback jika terjadi kesalahan
+            Log::error('Gagal menyimpan Rencana Hasil Kerja Pegawai', [
                 'error' => $e->getMessage(),
                 'user_id' => Auth::id(),
                 'data' => $data,
             ]);
-
-            // Melemparkan error untuk ditangani oleh controller
-            throw new Exception('Gagal menyimpan Rencana Hasil Kerja: ' . $e->getMessage());
+            throw new Exception('Gagal menyimpan Rencana Hasil Kerja Pegawai: ' . $e->getMessage());
         }
     }
 
@@ -84,17 +82,4 @@ class RencanaKerjaPegawaiService
      * @return RencanaHasilKinerjaPegawai
      * @throws Exception
      */
-    public function getDetail($uuid)
-    {
-        try {
-            return RencanaHasilKinerjaPegawai::where('uuid', $uuid)->firstOrFail();
-        } catch (Exception $e) {
-            Log::error('Gagal mendapatkan detail Rencana Hasil Kerja Pegawai', [
-                'error' => $e->getMessage(),
-                'uuid' => $uuid,
-            ]);
-
-            throw new Exception('Gagal mendapatkan detail Rencana Hasil Kerja Pegawai: ' . $e->getMessage());
-        }
-    }
 }

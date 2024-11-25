@@ -16,7 +16,7 @@ class RencanaHasilKinerjaPegawai extends Model
 
     protected $fillable = [
         'uuid',
-        'rencana_atasan_id', // Pastikan kolom ini sesuai dengan yang ada di database
+        'rencana_atasan_id',
         'user_id',
         'skp_id',
         'rencana',
@@ -41,7 +41,7 @@ class RencanaHasilKinerjaPegawai extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function rencanaAtasan()
+    public function rencanaAtasan(): BelongsTo
     {
         return $this->belongsTo(RencanaHasilKinerja::class, 'rencana_atasan_id');
     }
@@ -51,15 +51,11 @@ class RencanaHasilKinerjaPegawai extends Model
         return $this->belongsTo(Skp::class, 'skp_id');
     }
 
-    // Relasi ke IndikatorKinerja
-    // Model: RencanaPegawai.php
     public function indikatorKinerja(): HasMany
     {
         return $this->hasMany(IndikatorKinerja::class, 'rencana_kerja_pegawai_id', 'id');
     }
 
-
-    // Fungsi tambahan untuk data indikator
     public function getIndikatorWithDetails()
     {
         return $this->indikatorKinerja()->with('user');

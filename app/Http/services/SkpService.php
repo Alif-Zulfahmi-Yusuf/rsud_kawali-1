@@ -41,6 +41,7 @@ class SkpService
             // Mengambil detail SKP beserta relasi-relasinya
             return Skp::where('uuid', $uuid)
                 ->with([
+                    'rencanaHasilKinerja.rencanaPegawai', // Menambahkan relasi rencanaPegawai
                     'rencanaHasilKinerja.rencanaPegawai.rencanaAtasan', // Relasi rencana atasan
                     'rencanaHasilKinerja.rencanaPegawai.indikatorKinerja', // Relasi indikator kinerja
                 ])

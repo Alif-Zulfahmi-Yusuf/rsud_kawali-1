@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->foreignId('rencana_kerja_pegawai_id')->constrained('rencana_hasil_kerja_pegawai')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('skp_id')->constrained('skps')->onDelete('cascade');
             $table->enum('aspek', ['kualitas', 'kuantitas', 'waktu']);
             $table->string('indikator_kinerja');
             $table->enum('tipe_target', ['satu_nilai', 'range_nilai', 'kualitatif'])->nullable();

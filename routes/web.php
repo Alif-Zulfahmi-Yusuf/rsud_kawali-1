@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::resource('rencana-kerja', RencanaKerjaController::class);
-    Route::resource('rencana-kerja-pegawai', RencanaKerjaPegawaiController::class);
+    Route::resource('rencana-pegawai', RencanaKerjaPegawaiController::class);
     Route::resource('indikator-kinerja', IndikatorKinerjaController::class);
 
 
