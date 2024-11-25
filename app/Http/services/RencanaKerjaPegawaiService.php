@@ -47,9 +47,11 @@ class RencanaKerjaPegawaiService
                 'user_id' => Auth::id(),
                 'data' => $data,
             ]);
+            // Lempar exception lagi untuk ditangani controller
             throw new Exception('Gagal menyimpan Rencana Hasil Kerja Pegawai: ' . $e->getMessage());
         }
     }
+
 
 
     /**

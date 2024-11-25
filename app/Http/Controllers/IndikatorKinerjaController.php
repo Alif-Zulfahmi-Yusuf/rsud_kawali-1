@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Services\IndikatorService;
 use App\Http\Requests\IndikatorKinerjaRequest;
 
@@ -28,21 +29,35 @@ class IndikatorKinerjaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function store(IndikatorKinerjaRequest $request)
+    public function store(Request $request)
     {
-        // Validasi sudah dilakukan di IndikatorKinerjaRequest
-
         try {
-            // Menyimpan data menggunakan service
-            $indikator = $this->indikatorService->create($request->validated());
+            // Validasi input dari form
+            $validated = $request->validate([
+                'rencana_kerja_pegawai_id' => 'required|exists:rencana_hasil_kerja_pegawai,id',
+                'aspek' => 'required|string|in:kualitas,kuantitas,waktu',
+                'indikator_kinerja' => 'required|string|max:255',
+                'tipe_target' => 'required|string|in:satu_nilai,range_nilai,kualitatif',
+                'target_minimum' => 'required|numeric|min:0',
+                'target_maksimum' => 'required|numeric|min:0',
+                'satuan' => 'required|string|max:50',
+                'report' => 'required|string|in:bulanan,triwulan,semesteran,tahunan',
+            ]);
 
-            // Redirect atau kembali dengan pesan sukses
-            return back()->with('success', 'Rencana Hasil Kerja berhasil disimpan.');
+            // Simpan data menggunakan service
+            $this->indikatorService->create($validated);
+
+            return back()->with('success', 'Indikator Kinerja berhasil disimpan.');
         } catch (\Exception $e) {
-            // Tangani error jika terjadi kesalahan
-            return back()->with('error', $e->getMessage()); // Hanya kirim string error
+            // Log error jika terjadi kesalahan
+            Log::error('Gagal menyimpan Indikator Kinerja', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', $e->getMessage());
         }
     }
+
 
     /**
      * Store a newly created resource in storage.

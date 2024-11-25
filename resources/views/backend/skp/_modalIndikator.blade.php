@@ -33,7 +33,7 @@
                     <div class="row mb-3 align-items-center">
                         <label for="aspek" class="col-sm-4 col-form-label">Aspek</label>
                         <div class="col-sm-8">
-                            <select class="form-select select-single" id="aspek" name="module" required>
+                            <select class="form-select select-single" id="aspek" name="aspek" required>
                                 <option value="" disabled selected>--pilih--</option>
                                 <option value="kualitas">Kualitas</option>
                                 <option value="kuantitas">Kuantitas</option>
@@ -54,11 +54,11 @@
                     <div class="row mb-3 align-items-center">
                         <label for="tipe_target" class="col-sm-4 col-form-label">Tipe Target</label>
                         <div class="col-sm-8">
-                            <select class="form-select select-single" id="tipe_target" name="module" required>
+                            <select class="form-select select-single" id="tipe_target" name="tipe_target" required>
                                 <option value="" disabled selected>--pilih--</option>
-                                <option value="kualitas">Kualitas</option>
-                                <option value="kuantitas">Kuantitas</option>
-                                <option value="waktu">Waktu</option>
+                                <option value="satu_nilai">Satu Nilai</option>
+                                <option value="range_nilai">Range Nilai</option>
+                                <option value="kualitatif">Kualitatif</option>
                             </select>
                         </div>
                     </div>

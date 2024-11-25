@@ -18,7 +18,7 @@
 
                             @if ($skpDetail && $skpDetail->rencanaHasilKinerja)
                             @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
-                            <option value="{{ $rencana->rencana_atasan_id }}">
+                            <option value="{{ $rencana->id }}">
                                 {{ $rencana->rencana ?? '-' }} -
                             </option>
                             @endforeach

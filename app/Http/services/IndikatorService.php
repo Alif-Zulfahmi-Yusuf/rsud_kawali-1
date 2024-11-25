@@ -2,9 +2,10 @@
 
 namespace App\Http\Services;
 
-use App\Models\IndikatorKinerja; // Model yang digunakan untuk indikator kinerja
-use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Models\IndikatorKinerja; // Model yang digunakan untuk indikator kinerja
 
 class IndikatorService
 {
@@ -18,15 +19,24 @@ class IndikatorService
     public function create(array $data)
     {
         try {
+
+            $user = Auth::user();
+
             // Simpan data indikator kinerja ke database
             $indikator = IndikatorKinerja::create([
-                'nama' => $data['nama'],
-                'deskripsi' => $data['deskripsi'],
-                'nilai_target' => $data['nilai_target'],
+                'rencana_kerja_pegawai_id' => $data['rencana_kerja_pegawai_id'],
+                'user_id' => $user->id,
+                'aspek' => $data['aspek'], // `module` diinput dari select
+                'indikator_kinerja' => $data['indikator_kinerja'],
+                'tipe_target' => $data['tipe_target'],
+                'target_minimum' => $data['target_minimum'],
+                'target_maksimum' => $data['target_maksimum'],
+                'satuan' => $data['satuan'],
+                'report' => $data['report'],
             ]);
 
             return $indikator;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Log error jika terjadi kesalahan
             Log::error('Gagal menyimpan Indikator Kinerja', [
                 'error' => $e->getMessage(),

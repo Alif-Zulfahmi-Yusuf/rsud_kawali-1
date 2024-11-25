@@ -39,13 +39,15 @@ class SkpService
     {
         try {
             // Mengambil detail SKP beserta relasi-relasinya
-            return Skp::where('uuid', $uuid)
+            $skpDetail = Skp::where('uuid', $uuid)
                 ->with([
                     'rencanaHasilKinerja.rencanaPegawai', // Menambahkan relasi rencanaPegawai
                     'rencanaHasilKinerja.rencanaPegawai.rencanaAtasan', // Relasi rencana atasan
                     'rencanaHasilKinerja.rencanaPegawai.indikatorKinerja', // Relasi indikator kinerja
                 ])
-                ->firstOrFail();
+                ->firstOrFail(); // Jika data tidak ditemukan, akan memunculkan ModelNotFoundException
+
+            return $skpDetail;
         } catch (\Exception $e) {
             // Logging error jika terjadi kesalahan
             Log::error('Gagal mendapatkan detail SKP', [

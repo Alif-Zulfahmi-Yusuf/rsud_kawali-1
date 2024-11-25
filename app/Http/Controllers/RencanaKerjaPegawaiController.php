@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Services\SkpService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use App\Http\Services\RencanaKerjaPegawaiService;
 
 class RencanaKerjaPegawaiController extends Controller
@@ -13,10 +15,12 @@ class RencanaKerjaPegawaiController extends Controller
      */
 
     protected $rencanaKerjaPegawaiService;
+    protected $skpService;
 
-    public function __construct(RencanaKerjaPegawaiService $rencanaKerjaPegawaiService)
+    public function __construct(RencanaKerjaPegawaiService $rencanaKerjaPegawaiService, SkpService $skpService)
     {
         $this->rencanaKerjaPegawaiService = $rencanaKerjaPegawaiService;
+        $this->skpService = $skpService;
     }
 
     /**
@@ -24,23 +28,28 @@ class RencanaKerjaPegawaiController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi data dari form
-        $validated = $request->validate([
-            'rencana' => 'required|string|max:255', // Validasi rencana hasil kerja
-        ]);
-
         try {
+            // Validasi data dari form
+            $validated = $request->validate([
+                'rencana_atasan_id' => 'required|exists:rencana_hasil_kerja,id', // Validasi rencana atasan
+                'rencana' => 'required|string|max:255', // Validasi rencana hasil kerja
+            ]);
+
             // Simpan data menggunakan service
             $this->rencanaKerjaPegawaiService->create($validated);
 
-            // Redirect ke halaman index atau halaman sukses lainnya
+            // Redirect dengan pesan sukses
             return back()->with('success', 'Rencana Hasil Kerja berhasil disimpan.');
         } catch (\Exception $e) {
             // Tangani error jika terjadi kesalahan
-            return back()->with('error', $e->getMessage()); // Hanya kirim string error
+            Log::error('Gagal menyimpan Rencana Hasil Kerja Pegawai', [
+                'error' => $e->getMessage(),
+            ]);
+
+            // Kembalikan response dengan pesan error
+            return back()->with('error', $e->getMessage());
         }
     }
-
 
 
     /**
