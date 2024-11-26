@@ -12,7 +12,7 @@
                     @csrf
                     <div class="form-group mb-3">
                         <label for="skp_year" class="form-label">Tahun SKP</label>
-                        <select class="form-select select-single" id="skp_year" name="year" required>
+                        <select class="form-select" id="skp_year" name="year" required>
                             <option value="" disabled selected>Pilih Tahun</option>
                             @php
                             $currentYear = now()->year;
@@ -24,7 +24,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="skp_module" class="form-label">Module SKP</label>
-                        <select class="form-select select-single" id="skp_module" name="module" required>
+                        <select class="form-select" id="skp_module" name="module" required>
                             <option value="" disabled selected>Pilih Module</option>
                             <option value="kuantitatif">Kuantitatif</option>
                             <option value="kualitatif">Kualitatif</option>

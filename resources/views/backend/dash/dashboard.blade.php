@@ -6,6 +6,13 @@
 {{ __('Dashboard') }}
 @endsection
 
+@push('css')
+.echart-line-chart-example {
+width: 100%; /* Lebar penuh */
+min-height: 300px; /* Tinggi minimum */
+}
+@endpush
+
 @section('content')
 
 <div class="container">
@@ -75,7 +82,7 @@
 
 @push('js')
 <script src="{{ asset('assets/backend/js/echarts-example.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
-
 @endpush

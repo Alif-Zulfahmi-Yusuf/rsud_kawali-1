@@ -61,20 +61,16 @@
                                 <li class="nav-item"><a class="nav-link px-3 d-block"
                                         href="{{ route('profile.edit') }}"> <span class="me-2 text-body align-bottom"
                                             data-feather="user"></span><span>Profile</span></a></li>
-                                <li class="nav-item"><a class="nav-link px-3 d-block" href="#!"> <span
-                                            class="me-2 text-body align-bottom" data-feather="settings"></span>Settings
-                                        &amp; Privacy </a>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 d-block" href="#!">
+                                        <span class="me-2 text-body align-bottom" data-feather="settings">
+
+                                        </span>Settings
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                         <div class="card-footer p-0 border-top border-translucent">
-                            <ul class="nav d-flex flex-column my-3">
-                                <li class="nav-item"><a class="nav-link px-3 d-block" href="#!"> <span
-                                            class="me-2 text-body align-bottom" data-feather="user-plus"></span>Add
-                                        another account</a>
-                                </li>
-                            </ul>
-                            <hr />
                             <div class="px-3">
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf

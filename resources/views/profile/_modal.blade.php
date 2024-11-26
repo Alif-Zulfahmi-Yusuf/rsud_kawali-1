@@ -17,7 +17,7 @@
 
                 <!-- Table -->
                 <div class="table-responsive">
-                    <table id="atasanTable" class="table table-bordered table-hover align-middle">
+                    <table id="atasanTable" class="table table-hover table-sm fs-9 mb-0">
                         <thead class="table-light">
                             <tr>
                                 <th class="text-center" style="width: 30%;"> {{ __('Nama') }} </th>

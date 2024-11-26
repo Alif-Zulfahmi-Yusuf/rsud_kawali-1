@@ -1,7 +1,8 @@
 (function (factory) {
   typeof define === 'function' && define.amd ? define(factory) :
-  factory();
-})((function () { 'use strict';
+    factory();
+})((function () {
+  'use strict';
 
   // import * as echarts from 'echarts';
   const { merge } = window._;
@@ -82,22 +83,19 @@
     let tooltipItem = ``;
     params.forEach(el => {
       tooltipItem += `<div class='ms-1'>
-        <h6 class="text-body-tertiary"><span class="fas fa-circle me-1 fs-10" style="color:${
-          el.borderColor ? el.borderColor : el.color
+        <h6 class="text-body-tertiary"><span class="fas fa-circle me-1 fs-10" style="color:${el.borderColor ? el.borderColor : el.color
         }"></span>
-          ${el.seriesName} : ${
-      typeof el.value === 'object' ? el.value[1] : el.value
-    }
+          ${el.seriesName} : ${typeof el.value === 'object' ? el.value[1] : el.value
+        }
         </h6>
       </div>`;
     });
     return `<div>
             <p class='mb-2 text-body-tertiary'>
-              ${
-                window.dayjs(params[0].axisValue).isValid()
-                  ? window.dayjs(params[0].axisValue).format(dateFormatter)
-                  : params[0].axisValue
-              }
+              ${window.dayjs(params[0].axisValue).isValid()
+        ? window.dayjs(params[0].axisValue).format(dateFormatter)
+        : params[0].axisValue
+      }
             </p>
             ${tooltipItem}
           </div>`;
@@ -114,117 +112,132 @@
     return null; // else default behaviour
   };
 
-  const basicLineChartInit = () => {
+  const monthlyPerformanceChartInit = () => {
     const { getColor, getData } = window.phoenix.utils;
     const $chartEl = document.querySelector('.echart-line-chart-example');
+
     const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
-    const data = [
-      1000, 1500, 1250, 1010, 1045, 2000, 1200, 1330, 1000, 1200, 1410, 1200
-    ];
+    const dataHasilKerja1 = [1000, 1500, 1250, 1010, 1045, 2000, 1200, 1330, 1000, 1200, 1410, 1200];
+    const dataHasilKerja2 = [900, 1400, 1300, 980, 950, 1900, 1150, 1250, 1100, 1300, 1350, 1150];
 
-    const tooltipFormatter = params => {
-      return `
-    <div>
-        <h6 class="fs-9 text-body-tertiary mb-0">
-          <span class="fas fa-circle me-1" style='color:${params[0].borderColor}'></span>
-          ${params[0].name} : ${params[0].value}
-        </h6>
-    </div>
-    `;
-    };
-
+    // Inisialisasi chart dengan ECharts
     if ($chartEl) {
       const userOptions = getData($chartEl, 'echarts');
       const chart = window.echarts.init($chartEl);
+
+      // Default options untuk chart line
       const getDefaultOptions = () => ({
         tooltip: {
           trigger: 'axis',
-          padding: [7, 10],
           backgroundColor: getColor('body-highlight-bg'),
           borderColor: getColor('border-color'),
           textStyle: { color: getColor('light-text-emphasis') },
           borderWidth: 1,
-          transitionDuration: 0,
-          formatter: tooltipFormatter,
           axisPointer: {
-            type: 'none'
+            type: 'line' // Menggunakan garis untuk pointer
           }
         },
         xAxis: {
           type: 'category',
           data: months,
-          boundaryGap: false,
           axisLine: {
-            lineStyle: {
-              color: getColor('tertiary-bg')
-            }
+            lineStyle: { color: getColor('tertiary-bg') }
           },
-          axisTick: { show: false },
           axisLabel: {
             color: getColor('quaternary-color'),
-            formatter: value => value.substring(0, 3),
+            formatter: value => value.substring(0, 3), // Menampilkan hanya 3 huruf pertama
             margin: 15
-          },
-          splitLine: {
-            show: false
           }
         },
         yAxis: {
           type: 'value',
           splitLine: {
-            lineStyle: {
-              type: 'dashed',
-              color: getColor('secondary-bg')
-            }
+            lineStyle: { type: 'dashed', color: getColor('secondary-bg') }
           },
-          boundaryGap: false,
           axisLabel: {
-            show: true,
             color: getColor('quaternary-color'),
             margin: 15
-          },
-          axisTick: { show: false },
-          axisLine: { show: false },
-          min: 600
+          }
         },
         series: [
           {
-            type: 'line',
-            data,
+            name: 'Hasil Kerja 1',
+            type: 'line', // Menggunakan tipe 'line' untuk garis
+            data: dataHasilKerja1,
             itemStyle: {
-              color: getColor('body-highlight-bg'),
-              borderColor: getColor('primary'),
-              borderWidth: 2
+              color: getColor('primary'),
             },
-            lineStyle: {
-              color: getColor('primary')
+            smooth: true, // Membuat garis lebih halus
+          },
+          {
+            name: 'Hasil Kerja 2',
+            type: 'line', // Menggunakan tipe 'line' untuk garis
+            data: dataHasilKerja2,
+            itemStyle: {
+              color: getColor('secondary'),
             },
-            showSymbol: false,
-            symbol: 'circle',
-            symbolSize: 10,
-            smooth: false,
-            hoverAnimation: true
+            smooth: true, // Membuat garis lebih halus
           }
         ],
         grid: { right: '3%', left: '10%', bottom: '10%', top: '5%' }
       });
+
+      // Mengatur opsi chart dengan userOptions dan defaultOptions
       echartSetOption(chart, userOptions, getDefaultOptions);
+
+      // Fungsi untuk toggle visibilitas garis
+      const toggleLineChart = (index) => {
+        const option = chart.getOption();
+        const series = option.series;
+
+        // Toggle status show dari series
+        series[index].show = !series[index].show;
+        chart.setOption({
+          series: series
+        });
+      };
+
+      // Menambahkan tombol untuk toggle garis secara dinamis
+      const controlsContainer = document.createElement('div');
+      controlsContainer.className = 'chart-controls';
+      controlsContainer.style.marginTop = '20px';
+
+      const button1 = document.createElement('button');
+      button1.textContent = 'Toggle Hasil Kerja 1';
+      button1.style.marginRight = '10px';
+      button1.addEventListener('click', () => {
+        toggleLineChart(0); // Toggle garis pertama (Hasil Kerja 1)
+      });
+
+      const button2 = document.createElement('button');
+      button2.textContent = 'Toggle Hasil Kerja 2';
+      button2.addEventListener('click', () => {
+        toggleLineChart(1); // Toggle garis kedua (Hasil Kerja 2)
+      });
+
+      controlsContainer.appendChild(button1);
+      controlsContainer.appendChild(button2);
+
+      // Menambahkan tombol ke dalam DOM (misalnya setelah chart)
+      $chartEl.parentElement.appendChild(controlsContainer);
     }
   };
+
+  // Memastikan chart diinisialisasi setelah DOM siap
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof monthlyPerformanceChartInit === 'function') {
+      monthlyPerformanceChartInit();
+    } else {
+      console.error('monthlyPerformanceChartInit is not defined');
+    }
+  });
+
+
+
 
   const basicAreaLineChartInit = () => {
     const { getColor, getData, rgbaColor } = window.phoenix.utils;
@@ -2769,9 +2782,8 @@
             } else {
               tar = params[2];
             }
-            return `${window.dayjs(tar.name).format('MMM DD')}<br/>${
-            tar.seriesName
-          } : ${tar.value}`;
+            return `${window.dayjs(tar.name).format('MMM DD')}<br/>${tar.seriesName
+              } : ${tar.value}`;
           },
           transitionDuration: 0,
           axisPointer: {
@@ -3836,9 +3848,9 @@
           transitionDuration: 0,
           formatter: params =>
             `<strong>${params.data?.name} :</strong> ${(
-            (params.data?.value / total) *
-            100
-          ).toFixed(2)}%`
+              (params.data?.value / total) *
+              100
+            ).toFixed(2)}%`
         },
         toolbox: {
           show: false,
@@ -6154,9 +6166,8 @@
       const num = params.seriesIndex;
       return `<strong > ${params.name} </strong>
     <div class="fs-9 text-body-tertiary">
-      <strong >${indicators[params.seriesIndex][0]}</strong>: ${
-      params.value[0]
-    }  <br>
+      <strong >${indicators[params.seriesIndex][0]}</strong>: ${params.value[0]
+        }  <br>
       <strong>${indicators[num][1]}</strong>: ${params.value[1]}  <br>
       <strong>${indicators[num][2]}</strong>: ${params.value[2]}  <br>
       <strong>${indicators[num][3]}</strong>: ${params.value[3]}  <br>

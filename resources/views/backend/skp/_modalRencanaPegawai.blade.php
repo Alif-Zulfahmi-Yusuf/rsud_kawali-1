@@ -1,5 +1,6 @@
 <!-- Modal -->
-<div class="modal fade" id="modalRencanaPegawai" tabindex="-1" aria-labelledby="modalRencanaPegawai" aria-hidden="true">
+<div class="modal fade" id="modalRencanaPegawai" tabindex="-1" data-bs-backdrop="static"
+    aria-labelledby="modalRencanaPegawai" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -13,7 +14,7 @@
                     <!-- Rencana Atasan -->
                     <div class="form-group mb-3">
                         <label for="rencana_atasan" class="form-label">Rencana Atasan</label>
-                        <select class="form-select select-single" id="rencana_atasan" name="rencana_atasan_id" required>
+                        <select class="form-select" id="rencana_atasan" name="rencana_atasan_id" required>
                             <option value="" selected>Pilih Rencana Atasan</option>
 
                             @if ($skpDetail && $skpDetail->rencanaHasilKinerja)

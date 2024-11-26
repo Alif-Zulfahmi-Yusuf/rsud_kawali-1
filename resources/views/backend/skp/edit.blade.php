@@ -63,7 +63,7 @@
                         </ul>
                     </div>
                 </div>
-                <table id="tableRencana" class="table table-hover table-bordered table-sm fs-9 mb-0">
+                <table id="tableRencana" class="table table-hover table-sm fs-9 mb-0">
                     <thead>
                         <tr>
                             <th width="5%" class="text-center">No</th>
