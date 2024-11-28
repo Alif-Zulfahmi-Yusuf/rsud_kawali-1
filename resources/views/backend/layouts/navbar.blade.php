@@ -62,7 +62,7 @@
                                         href="{{ route('profile.edit') }}"> <span class="me-2 text-body align-bottom"
                                             data-feather="user"></span><span>Profile</span></a></li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 d-block" href="#!">
+                                    <a class="nav-link px-3 d-block" href="{{ route('settings.edit') }}">
                                         <span class="me-2 text-body align-bottom" data-feather="settings">
 
                                         </span>Settings

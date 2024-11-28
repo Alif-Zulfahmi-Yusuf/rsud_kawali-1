@@ -1,7 +1,13 @@
 <section>
     <header>
         <p class="mt-1 text-sm text-muted">
-            {{ __("Update your account's profile information, email address, and profile image.") }}
+            <span class="badge badge-phoenix fs-9 badge-phoenix-warning">
+                <span class="badge-label">
+                    {{ __("Update your account's profile information, email address, and profile image.") }}
+                    <span class="ms-1" data-feather="alert-octagon">
+                    </span>
+                </span>
+            </span>
         </p>
     </header>
 

@@ -32,7 +32,7 @@
 <form action="{{ route('skp.update', $skpDetail->uuid) }}" method="POST">
     @csrf
     @method('PUT')
-    <div class="card shadow border rounded-lg mb-4">
+    <div class="card shadow rounded-lg mb-4">
         <div class="card-body">
             <div class="table-responsive">
                 <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
@@ -113,10 +113,38 @@
                         @endforeach
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="mb-5">Perilaku Kerja (BerAKHLAK)</h5>
+            <div class="table-responsive">
+                <table class="table table-hover table-sm fs-9 mb-0">
+                    <thead>
+                        <tr>
+                            <th class="text-center" colspan="3">PERILAKU KERJA / BEHAVIOUR</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1.</td>
+                            <td>Ukuran keberhasilan/ Indikator Kinerja dan Target:
+                                Memahami dan memenuhi kebutuhan masyarakat
+                                Ramah, cekatan, solutif, dan dapat diandalkan
+                                Melakukan perbaikan tiada henti</td>
+                            <td>
+                                <textarea name="" id=""></textarea>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr>
     <button type="submit" class="btn btn-phoenix-secondary me-1 mb-1">Simpan</button>
 </form>
 @endsection
@@ -136,12 +164,12 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-@if(session('success'))
-toastSuccess("{{ session('success') }}");
-@endif
+    @if(session('success'))
+    toastSuccess("{{ session('success') }}");
+    @endif
 
-@if(session('error'))
-toastError("{{ session('error') }}"); // Mengirim string error
-@endif
+    @if(session('error'))
+    toastError("{{ session('error') }}"); // Mengirim string error
+    @endif
 </script>
 @endpush
