@@ -11,7 +11,7 @@ class Setting extends Model
 
     protected $fillable = [
         'name',
-        'image',
+        'image', // Menambahkan kolom image agar bisa diupdate
         'address',
         'description',
     ];
@@ -21,7 +21,7 @@ class Setting extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->uuid = (string) Str::uuid();
+            $model->uuid = (string) Str::uuid(); // Menambahkan UUID saat create
         });
     }
 }

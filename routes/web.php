@@ -48,7 +48,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
-    Route::patch('/settings', [SettingController::class, 'update'])->name('setting.update');
+    Route::patch('/settings', [SettingController::class, 'update'])->name('settings.update');
     Route::delete('/settings', [SettingController::class, 'destroy'])->name('settings.destroy');
 });
 

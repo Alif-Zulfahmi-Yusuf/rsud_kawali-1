@@ -17,9 +17,12 @@
     <!--    Favicons-->
     <!-- ===============================================-->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/backend/img/favicons/apple-touch-icon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/backend/img/favicons/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/backend/img/favicons/favicon-16x16.png') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/backend/img/favicons/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="{{ $settings->image ? url('storage/' . $settings->image) : url('storage/images/pengaturan.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ $settings->image ? url('storage/' . $settings->image) : url('storage/images/pengaturan.png') }}">
+    <link rel="shortcut icon" type="image/x-icon"
+        href="{{ $settings->image ? url('storage/' . $settings->image) : url('storage/images/pengaturan.png') }}">
     <link rel="manifest" href="{{ asset('assets/backend/img/favicons/manifest.json') }}">
     <meta name="msapplication-TileImage" content="{{ asset('assets/backend/img/favicons/mstile-150x150.png') }}">
     <meta name="theme-color" content="#ffffff">
@@ -79,10 +82,8 @@
                                 </div>
                                 <div
                                     class="position-relative px-4 px-lg-7 pt-7 pb-7 pb-sm-5 text-center text-md-start pb-lg-7 pb-md-7">
-                                    <h3 class="mb-3 text-body-emphasis fs-7">E Kinerja RSUD KAWALI</h3>
-                                    <p class="text-body-tertiary">Give yourself some hassle-free development process
-                                        with the uniqueness
-                                        of Phoenix!</p>
+                                    <h3 class="mb-3 text-body-emphasis fs-7">{{ $settings->name }}</h3>
+                                    <p class="text-body-tertiary">{{ $settings->description }}</p>
                                     <ul class="list-unstyled mb-0 w-max-content w-md-auto">
                                         <li class="d-flex align-items-center"><span
                                                 class="uil uil-check-circle text-success me-2"></span><span
@@ -107,8 +108,8 @@
                                     <div class="text-center mb-7"><a
                                             class="d-flex flex-center text-decoration-none mb-4" href="/">
                                             <div class="d-flex align-items-center fw-bolder fs-3 d-inline-block">
-                                                <img src="/assets/backend/img/icons/logo.png" alt="phoenix"
-                                                    width="58" />
+                                                <img src="{{ $settings->image ? url('storage/' . $settings->image) : url('storage/images/pengaturan.png') }}"
+                                                    alt="phoenix" width="58" />
                                             </div>
                                         </a>
                                         <h3 class="text-body-highlight">Sign In</h3>

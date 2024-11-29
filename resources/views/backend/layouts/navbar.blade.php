@@ -8,9 +8,10 @@
                     class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
             <a class="navbar-brand me-1 me-sm-3" href="{{ route('dashboard') }}">
                 <div class="d-flex align-items-center">
-                    <div class="d-flex align-items-center"><img src="/assets/backend/img/icons/logo.png" alt="phoenix"
-                            width="27" />
-                        <h5 class="logo-text ms-2 d-none d-sm-block">E Kinerja</h5>
+                    <div class="d-flex align-items-center">
+                        <img src="{{ $settings->image ? url('storage/' . $settings->image) : url('storage/images/pengaturan.png') }}"
+                            alt="phoenix" width="35" />
+                        <h5 class="logo-text ms-2 d-none d-sm-block">{{ $settings->name }}</h5>
                     </div>
                 </div>
             </a>
@@ -72,7 +73,7 @@
                         </div>
                         <div class="card-footer p-0 border-top border-translucent">
                             <div class="px-3">
-                                <form method="POST" action="{{ route('logout') }}">
+                                <form method="POST" action="{{ route('logout') }}" class="p-3">
                                     @csrf
                                     <button type="submit" class="btn btn-phoenix-secondary d-flex flex-center w-100">
                                         <span class="icon" data-feather="log-out"></span>
@@ -80,10 +81,7 @@
                                     </button>
                                 </form>
                             </div>
-                            <div class="my-2 text-center fw-bold fs-10 text-body-quaternary"><a
-                                    class="text-body-quaternary me-1" href="#!">Privacy policy</a>&bull;<a
-                                    class="text-body-quaternary mx-1" href="#!">Terms</a>&bull;<a
-                                    class="text-body-quaternary ms-1" href="#!">Cookies</a></div>
+                            <div class="my-2 text-center fw-bold fs-10 text-body-quaternary"></div>
                         </div>
                     </div>
                 </div>

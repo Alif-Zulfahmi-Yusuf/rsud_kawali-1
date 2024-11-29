@@ -136,7 +136,7 @@
                                 Ramah, cekatan, solutif, dan dapat diandalkan
                                 Melakukan perbaikan tiada henti</td>
                             <td>
-                                <textarea name="" id=""></textarea>
+                                <textarea name="" id="" class="form-control"></textarea>
                             </td>
                         </tr>
                     </tbody>
@@ -164,12 +164,12 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}"); // Mengirim string error
-    @endif
+@if(session('error'))
+toastError("{{ session('error') }}"); // Mengirim string error
+@endif
 </script>
 @endpush

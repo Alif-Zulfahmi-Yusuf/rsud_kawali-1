@@ -3,7 +3,7 @@
 @section('title', 'Settings')
 
 @push('css')
-
+<!-- Tambahkan custom CSS jika perlu -->
 @endpush
 
 @section('content')
@@ -13,67 +13,114 @@
         <h2 class="mb-2 text-body-emphasis">Settings</h2>
     </div>
 </div>
+<!-- Header informasi -->
+<header>
+    <p class="mt-1 text-sm text-muted">
+        <span class="badge badge-phoenix fs-9 badge-phoenix-warning">
+            <span class="badge-label">
+                {{ __("Update Your Setting Information") }}
+                <span class="ms-1" data-feather="alert-octagon"></span>
+            </span>
+        </span>
+    </p>
+</header>
 
-<div class="card shadow none-border">
+<div class="card shadow-none border-0">
     <div class="card-body">
-        <header>
-            <p class="mt-1 text-sm text-muted">
-                <span class="badge badge-phoenix fs-9 badge-phoenix-warning">
-                    <span class="badge-label">
-                        {{ __("Update Your Setting Information") }}
-                        <span class="ms-1" data-feather="alert-octagon">
-                        </span>
-                    </span>
-                </span>
-            </p>
-        </header>
-        <form action="" method="" enctype="multipart/form-data">
+
+        <!-- Form untuk update setting -->
+        <form action="{{ route('settings.update') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('patch')
+
             <!-- Input Gambar -->
             <div class="text-center mb-4">
-                <input type="file" class="d-none" id="image" name="image">
-                <div class="hoverbox feed-profile" style="width: 150px; height: 150px">
-                    <div class="hoverbox-content rounded-circle d-flex flex-center z-1"
-                        style="--phoenix-bg-opacity: .56;">
-                        <span class="fa-solid fa-camera fs-3 text-secondary-light"></span>
+                <img src="{{ $settings->image ? url('storage/' . $settings->image) : url('storage/images/pengaturan.png') }}"
+                    alt="Web Logo" class="img-fluid" width="150" height="150" style="object-fit: cover">
+                <div class="mt-2">
+                    <input type="file" class="form-control d-inline-block" id="image" name="image" style="width: auto;">
+                    @error('image')
+                    <div class="text-danger">
+                        <span class="badge badge-phoenix fs-10 badge-phoenix-danger">
+                            {{ $message }}
+                        </span>
                     </div>
-                    <div
-                        class="position-relative bg-body-quaternary rounded-circle cursor-pointer d-flex flex-center mb-xxl-7">
-                        <div class="avatar avatar-5xl">
-                            <img class="rounded-circle rounded-circle img-thumbnail shadow-sm border-0"
-                                src=" {{ $settings->image ? url('storage/' . $settings->image) : url('storage/images/default.png')  }} "
-                                alt="">
-                        </div>
-                        <label class="w-100 h-100 position-absolute z-1" for="upload-porfile-picture"></label>
-                    </div>
+                    @enderror
                 </div>
             </div>
 
+            <!-- Input Data Lain -->
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ $settings->name }}">
+                        <input type="text" class="form-control" id="name" name="name" value="{{ $settings->name }}"
+                            required="">
+                        @error('name')
+                        <div class="text-danger">
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-danger">
+                                {{ $message }}
+                            </span>
+                        </div>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label for="description" class="form-label">Description</label>
-                    <input type="text" class="form-control" id="description" name="description"
-                        value="{{ $settings->description }}">
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description"
+                            value="{{ $settings->description }}" required="">
+                        @error('description')
+                        <div class="text-danger">
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-danger">
+                                {{ $message }}
+                            </span>
+                        </div>
+                        @enderror
+                    </div>
                 </div>
             </div>
-            <div class="row">
+
+            <div class=" row">
                 <div class="col-md-12">
-                    <label for="address" class="form-label">Address</label>
-                    <textarea name="address" id="address" class="form-control">{{ $settings->address }}</textarea>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea name="address" id="address" class="form-control" rows="4"
+                            required="">{{ $settings->address }}</textarea>
+                        @error('address')
+                        <div class="text-danger">
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-danger">
+                                {{ $message }}
+                            </span>
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Submit -->
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </div>
         </form>
-
     </div>
 </div>
 
 @endsection
 
 @push('js')
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
+<script>
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
 
+@if(session('error'))
+toastError("{{ session('error') }}"); // Menampilkan error toast jika ada
+@endif
+</script>
 @endpush
