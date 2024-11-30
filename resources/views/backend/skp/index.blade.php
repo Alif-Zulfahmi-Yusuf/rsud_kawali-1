@@ -63,7 +63,17 @@
                         <td class="text-center">{{ $skp->tanggal_skp }}</td>
                         <td class="text-center">{{ $skp->tanggal_akhir }}</td>
                         <td class="text-center">{{ $skp->user->atasan->name ?? '-' }}</td>
-                        <td class="text-center">{{ $skp->status }}</td>
+                        <td class="text-center">
+                            <span class="badge badge-phoenix 
+                                    {{ 
+                                        $skp->status == 'pending' ? 'badge-phoenix-secondary' : 
+                                        ($skp->status == 'approved' ? 'badge-phoenix-secondary' : 
+                                        ($skp->status == 'revisi' ? 'badge-phoenix-danger' : 'badge-phoenix-secondary')) 
+                                    }}">
+                                {{ ucfirst($skp->status) }}
+                            </span>
+                        </td>
+
                         <td class="text-center">
                             <div class="btn-reveal-trigger position-static">
                                 <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"

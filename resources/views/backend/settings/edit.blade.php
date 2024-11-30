@@ -15,13 +15,8 @@
 </div>
 <!-- Header informasi -->
 <header>
-    <p class="mt-1 text-sm text-muted">
-        <span class="badge badge-phoenix fs-9 badge-phoenix-warning">
-            <span class="badge-label">
-                {{ __("Update Your Setting Information") }}
-                <span class="ms-1" data-feather="alert-octagon"></span>
-            </span>
-        </span>
+    <p class="mt-1 text-sm text-muted">{{ __("Update Your Setting Information.") }}
+        <span class="ms-1" data-feather="alert-octagon"></span>
     </p>
 </header>
 

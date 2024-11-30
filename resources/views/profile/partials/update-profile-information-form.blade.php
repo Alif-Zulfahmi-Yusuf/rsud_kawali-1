@@ -1,12 +1,8 @@
 <section>
     <header>
         <p class="mt-1 text-sm text-muted">
-            <span class="badge badge-phoenix fs-9 badge-phoenix-warning">
-                <span class="badge-label">
-                    {{ __("Update your account's profile information, email address, and profile image.") }}
-                    <span class="ms-1" data-feather="alert-octagon">
-                    </span>
-                </span>
+            {{ __("Update your account's profile information, email address, and profile image.") }}
+            <span class="ms-1" data-feather="alert-octagon">
             </span>
         </p>
     </header>
@@ -31,22 +27,9 @@
                             <!-- Profile Image Column -->
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <input class="d-none" id="upload-porfile-picture" type="file" name="image" />
-                                    <div class="hoverbox feed-profile" style="width: 150px; height: 150px">
-                                        <div class="hoverbox-content rounded-circle d-flex flex-center z-1"
-                                            style="--phoenix-bg-opacity: .56;">
-                                            <span class="fa-solid fa-camera fs-3 text-secondary-light"></span>
-                                        </div>
-                                        <div
-                                            class="position-relative bg-body-quaternary rounded-circle cursor-pointer d-flex flex-center mb-xxl-7">
-                                            <div class="avatar avatar-5xl"><img
-                                                    class="rounded-circle rounded-circle img-thumbnail shadow-sm border-0"
-                                                    src="{{ $user->image ? url('storage/' . $user->image) : url('storage/images/default.png') }}"
-                                                    alt="" /></div>
-                                            <label class="w-100 h-100 position-absolute z-1"
-                                                for="upload-porfile-picture"></label>
-                                        </div>
-                                    </div>
+                                    <img src="{{ $user->image ? url('storage/' . $user->image) : url('storage/images/default.png') }}"
+                                        alt="" class="img-fluid">
+                                    <input type="file" name="image" class="form-control mt-2">
                                     @if($errors->has('image'))
                                     <div class="text-danger mt-1">{{ $errors->first('image') }}</div>
                                     @endif

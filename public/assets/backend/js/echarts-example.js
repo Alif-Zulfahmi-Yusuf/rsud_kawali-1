@@ -112,129 +112,142 @@
     return null; // else default behaviour
   };
 
-  const monthlyPerformanceChartInit = () => {
+  const basicLineChartInit = () => {
     const { getColor, getData } = window.phoenix.utils;
     const $chartEl = document.querySelector('.echart-line-chart-example');
-
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
     ];
 
-    const dataHasilKerja1 = [1000, 1500, 1250, 1010, 1045, 2000, 1200, 1330, 1000, 1200, 1410, 1200];
-    const dataHasilKerja2 = [900, 1400, 1300, 980, 950, 1900, 1150, 1250, 1100, 1300, 1350, 1150];
+    const data1 = [1000, 1500, 1250, 1010, 1045, 2000, 1200, 1330, 1000, 1200, 1410, 1200];
+    const data2 = [1200, 1100, 1010, 1200, 1500, 2000, 1300, 1250, 1100, 1000, 1300, 1200];
 
-    // Inisialisasi chart dengan ECharts
+    const tooltipFormatter = params => {
+      return `
+    <div>
+        <h6 class="fs-9 text-body-tertiary mb-0">
+          ${params.map(el => {
+        return `<span class="fas fa-circle me-1" style='color:${el.borderColor}'></span>
+            ${el.seriesName} : ${el.value}`;
+      }).join('<br />')}
+        </h6>
+    </div>
+    `;
+    };
+
     if ($chartEl) {
       const userOptions = getData($chartEl, 'echarts');
       const chart = window.echarts.init($chartEl);
-
-      // Default options untuk chart line
       const getDefaultOptions = () => ({
         tooltip: {
           trigger: 'axis',
+          padding: [7, 10],
           backgroundColor: getColor('body-highlight-bg'),
           borderColor: getColor('border-color'),
           textStyle: { color: getColor('light-text-emphasis') },
           borderWidth: 1,
+          transitionDuration: 0,
+          formatter: tooltipFormatter,
           axisPointer: {
-            type: 'line' // Menggunakan garis untuk pointer
+            type: 'none'
           }
+        },
+        legend: {
+          orient: 'horizontal',
+          right: '5%',
+          data: ['Category 1', 'Category 2']
         },
         xAxis: {
           type: 'category',
           data: months,
+          boundaryGap: false,
           axisLine: {
-            lineStyle: { color: getColor('tertiary-bg') }
+            lineStyle: {
+              color: getColor('tertiary-bg')
+            }
           },
+          axisTick: { show: false },
           axisLabel: {
             color: getColor('quaternary-color'),
-            formatter: value => value.substring(0, 3), // Menampilkan hanya 3 huruf pertama
+            formatter: value => value.substring(0, 3),
             margin: 15
+          },
+          splitLine: {
+            show: false
           }
         },
         yAxis: {
           type: 'value',
           splitLine: {
-            lineStyle: { type: 'dashed', color: getColor('secondary-bg') }
+            lineStyle: {
+              type: 'dashed',
+              color: getColor('secondary-bg')
+            }
           },
+          boundaryGap: false,
           axisLabel: {
+            show: true,
             color: getColor('quaternary-color'),
             margin: 15
-          }
+          },
+          axisTick: { show: false },
+          axisLine: { show: false },
+          min: 600
         },
         series: [
           {
-            name: 'Hasil Kerja 1',
-            type: 'line', // Menggunakan tipe 'line' untuk garis
-            data: dataHasilKerja1,
+            name: 'Category 1',
+            type: 'line',
+            data: data1,
             itemStyle: {
-              color: getColor('primary'),
+              color: getColor('body-highlight-bg'),
+              borderColor: getColor('primary'),
+              borderWidth: 2
             },
-            smooth: true, // Membuat garis lebih halus
+            lineStyle: {
+              color: getColor('primary')
+            },
+            showSymbol: false,
+            symbol: 'circle',
+            symbolSize: 10,
+            smooth: false,
+            hoverAnimation: true
           },
           {
-            name: 'Hasil Kerja 2',
-            type: 'line', // Menggunakan tipe 'line' untuk garis
-            data: dataHasilKerja2,
+            name: 'Category 2',
+            type: 'line',
+            data: data2,
             itemStyle: {
-              color: getColor('secondary'),
+              color: getColor('body-highlight-bg'),
+              borderColor: getColor('success'),
+              borderWidth: 2
             },
-            smooth: true, // Membuat garis lebih halus
+            lineStyle: {
+              color: getColor('success')
+            },
+            showSymbol: false,
+            symbol: 'circle',
+            symbolSize: 10,
+            smooth: false,
+            hoverAnimation: true
           }
         ],
         grid: { right: '3%', left: '10%', bottom: '10%', top: '5%' }
       });
-
-      // Mengatur opsi chart dengan userOptions dan defaultOptions
       echartSetOption(chart, userOptions, getDefaultOptions);
-
-      // Fungsi untuk toggle visibilitas garis
-      const toggleLineChart = (index) => {
-        const option = chart.getOption();
-        const series = option.series;
-
-        // Toggle status show dari series
-        series[index].show = !series[index].show;
-        chart.setOption({
-          series: series
-        });
-      };
-
-      // Menambahkan tombol untuk toggle garis secara dinamis
-      const controlsContainer = document.createElement('div');
-      controlsContainer.className = 'chart-controls';
-      controlsContainer.style.marginTop = '20px';
-
-      const button1 = document.createElement('button');
-      button1.textContent = 'Toggle Hasil Kerja 1';
-      button1.style.marginRight = '10px';
-      button1.addEventListener('click', () => {
-        toggleLineChart(0); // Toggle garis pertama (Hasil Kerja 1)
-      });
-
-      const button2 = document.createElement('button');
-      button2.textContent = 'Toggle Hasil Kerja 2';
-      button2.addEventListener('click', () => {
-        toggleLineChart(1); // Toggle garis kedua (Hasil Kerja 2)
-      });
-
-      controlsContainer.appendChild(button1);
-      controlsContainer.appendChild(button2);
-
-      // Menambahkan tombol ke dalam DOM (misalnya setelah chart)
-      $chartEl.parentElement.appendChild(controlsContainer);
     }
   };
-
-  // Memastikan chart diinisialisasi setelah DOM siap
-  document.addEventListener('DOMContentLoaded', () => {
-    if (typeof monthlyPerformanceChartInit === 'function') {
-      monthlyPerformanceChartInit();
-    } else {
-      console.error('monthlyPerformanceChartInit is not defined');
-    }
-  });
 
 
 

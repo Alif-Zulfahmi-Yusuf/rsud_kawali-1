@@ -76,16 +76,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                        $no = 1; // Penomoran utama untuk setiap indikator
-                        @endphp
 
                         @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
                         <!-- Baris Detail -->
                         @foreach ($rencana->rencanaPegawai as $pegawai)
                         @foreach ($pegawai->indikatorKinerja as $indikator)
                         <tr>
-                            <td class="text-center">{{ $no++ }}</td>
+                            <td class="text-center">{{ $loop->iteration }}</td>
                             <td>
                                 <div><strong>Rencana Hasil Kerja:</strong></div>
                                 <div>{{ $pegawai->rencana }}</div>
