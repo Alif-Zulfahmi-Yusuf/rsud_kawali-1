@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\setting;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
 
 class setting_table_seeder extends Seeder
 {

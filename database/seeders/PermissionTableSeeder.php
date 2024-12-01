@@ -28,6 +28,8 @@ class PermissionTableSeeder extends Seeder
             'rencana-pegawai-create',
             'data-master',
             'jabatan-atasan',
+            'pangkat-list',
+            'atasan-list',
 
         ];
 

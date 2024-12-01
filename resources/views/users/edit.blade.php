@@ -50,6 +50,20 @@
                                     value="{{ $user->email }}" required>
                             </div>
                         </div>
+                        <div class="col-mb-12">
+                            <div class="form-group">
+                                <label for="nip"><strong>NIP:</strong></label>
+                                <input type="text" name="nip" placeholder="NIP" class="form-control"
+                                    value="{{ $user->nip }}" required>
+                            </div>
+                        </div>
+                        <div class="col-mb-12">
+                            <div class="form-group">
+                                <label for="unitkerja"><strong>Unit Kerja:</strong></label>
+                                <input type="text" name="unit_kerja" placeholder="unitkerja" class="form-control"
+                                    value="{{ $user->unit_kerja }}" required>
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="password"><strong>Password:</strong></label>

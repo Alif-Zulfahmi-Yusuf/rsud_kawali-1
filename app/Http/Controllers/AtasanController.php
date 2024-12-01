@@ -14,7 +14,11 @@ class AtasanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct(private AtasanService $atasanService) {}
+    public function __construct(private AtasanService $atasanService)
+    {
+
+        $this->middleware('permission:atasan-list|atasan-create|atasan-edit|atasan-delete', ['only' => ['index', 'store']]);
+    }
 
     public function index()
     {

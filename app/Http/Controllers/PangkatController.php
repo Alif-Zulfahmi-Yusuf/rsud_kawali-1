@@ -15,7 +15,10 @@ class PangkatController extends Controller
      * Display a listing of the resource.
      */
 
-    public function __construct(private PangkatService $pangkatService) {}
+    public function __construct(private PangkatService $pangkatService)
+    {
+        $this->middleware('permission:pangkat-list|pangkat-create|pangkat-edit|pangkat-delete', ['only' => ['index', 'store']]);
+    }
 
     public function index()
     {
