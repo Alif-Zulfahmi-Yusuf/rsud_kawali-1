@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\Skp;
 use App\Models\RencanaHasilKinerja;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class SkpService
 {
@@ -38,8 +39,11 @@ class SkpService
     public function getSkpDetail(string $uuid)
     {
         try {
+            $user = Auth::user(); // Mendapatkan user yang sedang login
+
             // Mengambil detail SKP beserta relasi-relasinya
             $skpDetail = Skp::where('uuid', $uuid)
+                ->where('user_id', $user->id) // Filter berdasarkan user ID
                 ->with([
                     'rencanaHasilKinerja.rencanaPegawai', // Menambahkan relasi rencanaPegawai
                     'rencanaHasilKinerja.rencanaPegawai.rencanaAtasan', // Relasi rencana atasan
@@ -52,6 +56,7 @@ class SkpService
             // Logging error jika terjadi kesalahan
             Log::error('Gagal mendapatkan detail SKP', [
                 'uuid' => $uuid,
+                'user_id' => $user->id,
                 'error' => $e->getMessage(),
             ]);
 

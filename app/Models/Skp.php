@@ -67,6 +67,11 @@ class Skp extends Model
         return $this->hasMany(RencanaHasilKinerja::class, 'skp_id');
     }
 
+    public function indikatorKinerja(): HasMany
+    {
+        return $this->hasMany(IndikatorKinerja::class, 'skp_id');
+    }
+
     public function scopeByYear(Builder $query, int $year): Builder
     {
         return $query->where('tahun', $year);

@@ -13,10 +13,10 @@
                     @csrf
 
                     <!-- Rencana Hasil Kerja -->
+                    @can('select-rencana-pegawai')
                     <div class="mb-3">
                         <label for="rencana_kerja_pegawai_id" class="form-label">Rencana Hasil Kerja</label>
-                        <select class="form-select" id="rencana_kerja_pegawai_id" name="rencana_kerja_pegawai_id"
-                            required>
+                        <select class="form-select" id="rencana_kerja_pegawai_id" name="rencana_kerja_pegawai_id">
                             <option value="" disabled selected>-- pilih --</option>
                             @foreach ($skpDetail->rencanaHasilKinerja as $rencanaHasil)
                             @foreach ($rencanaHasil->rencanaPegawai as $rencanaPegawai)
@@ -27,21 +27,25 @@
                             @endforeach
                         </select>
                     </div>
+                    @endcan
 
+                    @can('select-rencana-atasan')
                     <div class="mb-3">
                         <label for="rencana_kerja_atasan_id" class="form-label">Rencana Hasil Kerja</label>
-                        <select class="form-select" id="rencana_kerja_atasan_id" name="rencana_kerja_atasan_id"
-                            required>
+                        <select class="form-select" id="rencana_kerja_atasan_id" name="rencana_kerja_atasan_id">
                             <option value="" disabled selected>-- pilih --</option>
-                            @foreach ($skpDetail->rencanaHasilKinerja as $rencanaHasil)
-                            @foreach ($rencanaHasil->rencanaAtasan as $rencanaAtasan)
-                            <option value="{{ $rencanaAtasan->id }}">
-                                {{ $rencanaAtasan->rencana ?? '-' }} -
+                            @if ($skpDetail && $skpDetail->rencanaHasilKinerja)
+                            @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
+                            <option value="{{ $rencana->id }}">
+                                {{ $rencana->rencana ?? '-' }} -
                             </option>
                             @endforeach
-                            @endforeach
+                            @else
+                            <option value="" disabled>Tidak ada data rencana hasil kerja atasan.</option>
+                            @endif
                         </select>
                     </div>
+                    @endcan
 
                     <!-- Aspek -->
                     <div class="mb-3">

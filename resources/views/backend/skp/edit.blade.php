@@ -80,16 +80,16 @@
                         </tr>
                     </thead>
                     <tbody>
-
                         @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
                         <!-- Baris Detail -->
-                        @foreach ($rencana->rencanaPegawai as $pegawai)
+                        @foreach ($rencana->rencanaPegawai ?? [] as $pegawai)
+                        <!-- Cek jika rencanaPegawai tidak null -->
                         @foreach ($pegawai->indikatorKinerja as $indikator)
                         <tr>
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td>
                                 <div><strong>Rencana Hasil Kerja:</strong></div>
-                                <div>{{ $pegawai->rencana }}</div>
+                                <div>{{ $pegawai->rencana ?? 'Data Rencana Pegawai Tidak Tersedia' }}</div>
 
                                 <div class="text-muted"><strong>Rencana Hasil Kerja Pimpinan yang Diintervensi:</strong>
                                 </div>
@@ -110,6 +110,35 @@
                             </td>
                         </tr>
                         @endforeach
+                        @endforeach
+
+                        <!-- Cek jika rencanaAtasan tidak null -->
+                        @foreach ($rencana->rencanaAtasan ?? [] as $atasan)
+                        <!-- Cek jika rencanaAtasan tidak null -->
+                        <tr>
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td>
+                                <div><strong>Rencana Hasil Kerja:</strong></div>
+                                <div>{{ 'Data Rencana Pegawai Tidak Ada' }}</div>
+
+                                <div class="text-muted"><strong>Rencana Hasil Kerja Pimpinan yang Diintervensi:</strong>
+                                </div>
+                                <div class="text-muted">{{ $atasan->rencana }}</div>
+                            </td>
+                            <!-- Tetap untuk kolom Rencana -->
+                            <td class="text-center">{{ $indikator->aspek }}</td>
+                            <td>{{ $indikator->indikator_kinerja }}</td>
+                            <td class="text-center">{{ $indikator->tipe_target }}</td>
+                            <td class="text-center">{{ $indikator->report }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-primary">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
                         @endforeach
                         @endforeach
                     </tbody>

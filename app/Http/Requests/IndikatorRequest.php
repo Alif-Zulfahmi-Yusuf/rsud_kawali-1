@@ -25,7 +25,6 @@ class IndikatorRequest extends FormRequest
 
         return [
             'rencana' => 'required|unique:rencana_indikator_kinerja,rencana,' . $routeUuid . ',uuid| max:255',
-            'rencana_hasil_kerja_id' => 'required',
             'user_id' => 'required',
             'aspek' => 'required',
             'indikator_kinerja' => 'required',
