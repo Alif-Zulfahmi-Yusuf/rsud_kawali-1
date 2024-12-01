@@ -45,6 +45,16 @@ class IndikatorKinerja extends Model
         return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_kerja_pegawai_id');
     }
 
+    public function rencanaAtasan(): BelongsTo
+    {
+        return $this->belongsTo(RencanaHasilKinerja::class, 'rencana_kerja_atasan_id');
+    }
+
+    public function skp(): BelongsTo
+    {
+        return $this->belongsTo(Skp::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

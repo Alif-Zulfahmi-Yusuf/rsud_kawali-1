@@ -17,7 +17,6 @@ class setting_table_seeder extends Seeder
             [
                 'name' => 'Pengaturan Aplikasi',
                 'description' => 'Pengaturan Aplikasi',
-                'image' => 'pengaturan.png',
                 'address' => '-',
             ],
         ];
@@ -33,7 +32,6 @@ class setting_table_seeder extends Seeder
             [
                 'name' => 'Pengaturan Aplikasi',
                 'description' => 'Pengaturan Aplikasi',
-                'image' => 'pengaturan.png',
                 'address' => '-',
             ],
         ];

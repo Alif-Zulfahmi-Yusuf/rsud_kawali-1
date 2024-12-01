@@ -43,7 +43,7 @@ class SkpService
                 ->with([
                     'rencanaHasilKinerja.rencanaPegawai', // Menambahkan relasi rencanaPegawai
                     'rencanaHasilKinerja.rencanaPegawai.rencanaAtasan', // Relasi rencana atasan
-                    'rencanaHasilKinerja.rencanaPegawai.indikatorKinerja', // Relasi indikator kinerja
+                    'rencanaHasilKinerja.rencanaPegawai.rencanaAtasan.indikatorKinerja', // Relasi indikator kinerja
                 ])
                 ->firstOrFail(); // Jika data tidak ditemukan, akan memunculkan ModelNotFoundException
 

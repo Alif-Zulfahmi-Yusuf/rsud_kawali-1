@@ -109,7 +109,7 @@
                                             class="d-flex flex-center text-decoration-none mb-4" href="/">
                                             <div class="d-flex align-items-center fw-bolder fs-3 d-inline-block">
                                                 <img src="{{ $settings->image ? url('storage/' . $settings->image) : url('storage/images/pengaturan.png') }}"
-                                                    alt="phoenix" width="58" />
+                                                    alt="" width="50" />
                                             </div>
                                         </a>
                                         <h3 class="text-body-highlight">Sign In</h3>

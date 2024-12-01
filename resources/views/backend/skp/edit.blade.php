@@ -42,18 +42,22 @@
                             <i class="fa fa-plus me-1"></i> Add Action
                         </button>
                         <ul class="dropdown-menu">
+                            @can('rencana-atasan-create')
                             <li>
                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
                                     data-bs-target="#modalRencana">Rencana Hasil
-                                    Kerja
+                                    Kerja Atasan
                                 </a>
                             </li>
+                            @endcan
+                            @can('rencana-pegawai-create')
                             <li>
                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
                                     data-bs-target="#modalRencanaPegawai">Rencana Hasil
                                     Kerja
                                 </a>
                             </li>
+                            @endcan
                             <li>
                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
                                     data-bs-target="#modalIndikator">
@@ -92,10 +96,10 @@
                                 <div class="text-muted">{{ $rencana->rencana }}</div>
                             </td>
                             <!-- Tetap untuk kolom Rencana -->
-                            <td>{{ $indikator->aspek }}</td>
+                            <td class="text-center">{{ $indikator->aspek }}</td>
                             <td>{{ $indikator->indikator_kinerja }}</td>
-                            <td>{{ $indikator->tipe_target }}</td>
-                            <td>{{ $indikator->report }}</td>
+                            <td class="text-center">{{ $indikator->tipe_target }}</td>
+                            <td class="text-center">{{ $indikator->report }}</td>
                             <td class="text-center">
                                 <button class="btn btn-sm btn-primary">
                                     <i class="fa fa-edit"></i>

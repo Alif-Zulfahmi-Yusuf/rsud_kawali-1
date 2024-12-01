@@ -28,6 +28,21 @@
                         </select>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="rencana_kerja_atasan_id" class="form-label">Rencana Hasil Kerja</label>
+                        <select class="form-select" id="rencana_kerja_atasan_id" name="rencana_kerja_atasan_id"
+                            required>
+                            <option value="" disabled selected>-- pilih --</option>
+                            @foreach ($skpDetail->rencanaHasilKinerja as $rencanaHasil)
+                            @foreach ($rencanaHasil->rencanaAtasan as $rencanaAtasan)
+                            <option value="{{ $rencanaAtasan->id }}">
+                                {{ $rencanaAtasan->rencana ?? '-' }} -
+                            </option>
+                            @endforeach
+                            @endforeach
+                        </select>
+                    </div>
+
                     <!-- Aspek -->
                     <div class="mb-3">
                         <label for="aspek" class="form-label">Aspek</label>

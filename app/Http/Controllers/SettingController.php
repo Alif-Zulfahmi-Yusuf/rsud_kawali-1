@@ -14,6 +14,12 @@ class SettingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
+    public function __construct()
+    {
+        $this->middleware('permission:setting-edit', ['only' => ['edit', 'update']]);
+    }
+
     public function edit()
     {
         // Ambil data setting pertama

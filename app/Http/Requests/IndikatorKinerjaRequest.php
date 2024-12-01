@@ -26,6 +26,7 @@ class IndikatorKinerjaRequest extends FormRequest
         return [
             'rencana_kerja_pegawai_id' => 'required|exists:rencana_hasil_kerja_pegawai,id', // Validasi jika rencana kerja pegawai ada di database
             'user_id' => 'required|exists:users,id', // Validasi jika user ada di database
+            'skp_id' => 'required|exists:skps,id',
             'aspek' => 'required|string|max:255', // Aspek harus ada dan berupa string
             'indikator_kinerja' => 'required|string|max:255', // Indikator kinerja harus ada dan berupa string
             'tipe_target' => 'required|string|max:50', // Tipe target harus ada dan berupa string
@@ -48,6 +49,7 @@ class IndikatorKinerjaRequest extends FormRequest
             'rencana_kerja_pegawai_id.exists' => 'Rencana Kerja Pegawai tidak ditemukan.',
             'user_id.required' => 'User ID wajib diisi.',
             'user_id.exists' => 'User tidak ditemukan.',
+            'skp_id.required' => 'SKP tidak ditemukan.',
             'aspek.required' => 'Aspek wajib diisi.',
             'indikator_kinerja.required' => 'Indikator Kinerja wajib diisi.',
             'tipe_target.required' => 'Tipe Target wajib diisi.',

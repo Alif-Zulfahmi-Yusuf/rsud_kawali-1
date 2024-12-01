@@ -27,6 +27,7 @@ class ProfileUpdateRequest extends FormRequest
             ],
             'nip' => ['nullable', 'string', 'max:18'],  // Validasi untuk NIP
             'pangkat_id' => ['nullable', 'exists:pangkats,id'],  // Pastikan pangkat_id ada di tabel pangkats
+            'jabatan' => ['nullable', 'string', 'max:255'],
             'atasan_id' => ['nullable', 'exists:atasans,id'],  // Pastikan atasan_id ada di tabel atasans
             'unit_kerja' => ['nullable', 'string', 'max:255'],  // Validasi unit kerja
             'tmt_jabatan' => ['nullable', 'date'],  // Pastikan TMT Jabatan adalah tanggal valid
@@ -46,6 +47,7 @@ class ProfileUpdateRequest extends FormRequest
             'email' => 'Email',
             'nip' => 'NIP',
             'pangkat_id' => 'Pangkat',
+            'jabatan' => 'Jabatan',
             'atasan_id' => 'Atasan',
             'unit_kerja' => 'Unit Kerja',
             'tmt_jabatan' => 'TMT Jabatan',

@@ -26,6 +26,7 @@ class User extends Authenticatable
         'image',
         'nip',
         'pangkat_id',
+        'jabatan',
         'unit_kerja',
         'tmt_jabatan',
         'atasan_id',

@@ -42,7 +42,7 @@
 
         <!-- Save Button -->
         <div class="d-flex align-items-center gap-2">
-            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+            <button type="submit" class="btn btn-outline-primary me-1 mb-1">{{ __('Save') }}</button>
 
         </div>
     </form>

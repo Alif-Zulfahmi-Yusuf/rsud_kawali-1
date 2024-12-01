@@ -32,7 +32,7 @@
                             <div>
                                 @if(!empty($rolePermissions))
                                 @foreach($rolePermissions as $v)
-                                <span class="badge bg-success">{{ $v->name }}</span>
+                                <span class="badge badge-phoenix badge-phoenix-success">{{ $v->name }}</span>
                                 @endforeach
                                 @else
                                 <p>No permissions assigned</p>

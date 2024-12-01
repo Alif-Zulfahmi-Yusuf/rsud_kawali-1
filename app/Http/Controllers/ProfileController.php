@@ -45,6 +45,7 @@ class ProfileController extends Controller
             'email',
             'nip',
             'pangkat_id',
+            'jabatan',
             'unit_kerja',
             'tmt_jabatan',
             'atasan_id'

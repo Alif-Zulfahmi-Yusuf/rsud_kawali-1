@@ -35,7 +35,8 @@
     <div class="card-body">
         <div class="table-responsive">
             <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
-                <a class="btn btn-success" href="#" data-bs-toggle="modal" data-bs-target="#addSkpModal">
+                <a class="btn btn-outline-success me-1 mb-1" href="#" data-bs-toggle="modal"
+                    data-bs-target="#addSkpModal">
                     <i class="fa fa-plus me-1"></i> Add Form Skp
                 </a>
             </div>
@@ -58,22 +59,21 @@
                     <tr data-uuid="{{ $skp->uuid }}">
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $skp->tahun }}</td> <!-- Kolom Tahun -->
-                        <td class="text-center">{{ $skp->user->jabatan }}</td>
-                        <td class="text-center">{{ $skp->user->unit_kerja }}</td>
-                        <td class="text-center">{{ $skp->tanggal_skp }}</td>
-                        <td class="text-center">{{ $skp->tanggal_akhir }}</td>
+                        <td class="text-center">{{ $skp->user->jabatan ?? '-' }}</td>
+                        <td class="text-center">{{ $skp->user->unit_kerja ?? '-' }}</td>
+                        <td class="text-center">{{ $skp->tanggal_skp ?? '-' }}</td>
+                        <td class="text-center">{{ $skp->tanggal_akhir ?? '-' }}</td>
                         <td class="text-center">{{ $skp->user->atasan->name ?? '-' }}</td>
                         <td class="text-center">
                             <span class="badge badge-phoenix 
-                                    {{ 
-                                        $skp->status == 'pending' ? 'badge-phoenix-secondary' : 
-                                        ($skp->status == 'approved' ? 'badge-phoenix-secondary' : 
-                                        ($skp->status == 'revisi' ? 'badge-phoenix-danger' : 'badge-phoenix-secondary')) 
-                                    }}">
+                                {{ 
+                                    $skp->status == 'pending' ? 'badge-phoenix-secondary' : 
+                                    ($skp->status == 'approved' ? 'badge-phoenix-success' : 
+                                    ($skp->status == 'revisi' ? 'badge-phoenix-danger' : 'badge-phoenix-secondary')) 
+                                }}">
                                 {{ ucfirst($skp->status) }}
                             </span>
                         </td>
-
                         <td class="text-center">
                             <div class="btn-reveal-trigger position-static">
                                 <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -96,6 +96,7 @@
                     </tr>
                     @endforeach
                 </tbody>
+
             </table>
         </div>
     </div>
@@ -115,14 +116,14 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-@if(session('status'))
-toastSuccess("{{ session('status') }}");
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
 @endif
 
-@if(session('status'))
+@if(session('error'))
 toastError({
     errors: {
-        message: "{{ session('status') }}"
+        message: "{{ session('error') }}"
     }
 });
 @endif

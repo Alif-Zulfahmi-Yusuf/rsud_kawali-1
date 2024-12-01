@@ -92,6 +92,17 @@
                                     @endif
                                 </div>
 
+                                @can('jabatan-atasan')
+                                <div class="form-group mb-3">
+                                    <label for="jabatan" class="form-label">{{ __('Jabatan') }}</label>
+                                    <input type="text" class="form-control" id="jabatan" name="jabatan"
+                                        value="{{ old('jabatan', $user->jabatan) }}">
+                                    @if($errors->has('jabatan'))
+                                    <div class="text-danger mt-1">{{ $errors->first('unit_kerja') }}</div>
+                                    @endif
+                                </div>
+                                @endcan
+
                                 <div class="form-group mb-3">
                                     <label for="unit_kerja" class="form-label">{{ __('Unit Kerja') }}</label>
                                     <input type="text" class="form-control" id="unit_kerja" name="unit_kerja"
@@ -116,6 +127,7 @@
             </div>
 
             <!-- Card for Atasan Information -->
+            @can('select-atasan')
             <div class="col-md-6">
                 <div class="card mb-4">
                     <div class="card-header">
@@ -123,7 +135,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-3">
-                            <button type="button" class="btn btn-phoenix-secondary me-1 mb-1" id="selectAtasanBtn">
+                            <button type="button" class="btn btn-outline-secondary me-1 mb-1" id="selectAtasanBtn">
                                 {{ __('Select Atasan') }}
                             </button>
                         </div>
@@ -158,11 +170,12 @@
                     </div>
                 </div>
             </div>
+            @endcan
         </div>
 
         <!-- Save Button -->
         <div class="d-flex align-items-center gap-2">
-            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+            <button type="submit" class="btn btn-outline-primary me-1 mb-1">{{ __('Save') }}</button>
         </div>
     </form>
 </section>

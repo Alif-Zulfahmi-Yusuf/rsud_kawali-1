@@ -14,6 +14,7 @@
                         </a>
                     </div>
                     <!-- parent pages-->
+                    @can('data-master')
                     <div class="nav-item-wrapper">
                         <a class="nav-link dropdown-indicator label-1" href="#nv-home" role="button"
                             data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-home">
@@ -70,6 +71,7 @@
                             </ul>
                         </div>
                     </div>
+                    @endcan
                     <div class="nav-item-wrapper">
                         <a class="nav-link dropdown-indicator label-2" href="#nv-perencanaan" role="button"
                             data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-perencanaan">

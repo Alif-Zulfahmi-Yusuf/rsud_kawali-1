@@ -3,14 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Skp;
-use App\Models\User;
-use App\Models\Atasan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use App\Http\Requests\SkpRequest;
 use App\Http\Services\SkpService;
 use App\Models\RencanaHasilKinerja;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class SkpController extends Controller
@@ -27,7 +23,11 @@ class SkpController extends Controller
     }
     public function index()
     {
-        $skps = Skp::with(['user', 'atasan'])->get();
+        // Ambil data SKP berdasarkan ID pengguna yang sedang login
+        $skps = Skp::with(['user.atasan']) // Relasi dengan user dan atasan
+            ->where('user_id', Auth::id()) // Filter berdasarkan pengguna yang login
+            ->get();
+
         return view('backend.skp.index', compact('skps'));
     }
 
@@ -47,10 +47,10 @@ class SkpController extends Controller
         try {
             $this->skpService->store($request->validated(), Auth::user());
 
-            return redirect()->back()->with('status', 'Data SKP berhasil disimpan.');
+            return back()->with('success', 'Data SKP berhasil disimpan.');
         } catch (\Exception $e) {
 
-            return redirect()->back()->with('status', 'Data SKP gagal disimpan. Silakan coba lagi.' . $e->getMessage());
+            return back()->with('error', 'Data SKP gagal disimpan. Silakan coba lagi.' . $e->getMessage());
         }
     }
 

@@ -51,7 +51,7 @@
                         <td>{{ $user->email }}</td>
                         <td>
                             @foreach($user->getRoleNames() as $v)
-                            <span class="badge bg-success">{{ $v }}</span>
+                            <span class="badge badge-phoenix badge-phoenix-success">{{ $v }}</span>
                             @endforeach
                         </td>
                         <td>
@@ -105,8 +105,8 @@
 <script src="{{ asset('/assets/backend/js/user.js') }}"></script>
 
 <script>
-@if(session('status'))
-toastSuccess("{{ session('status') }}");
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
 @endif
 
 @if(session('error'))

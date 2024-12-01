@@ -92,8 +92,8 @@
 <script src="{{ asset('/assets/backend/js/role.js') }}"></script>
 
 <script>
-@if(session('status'))
-toastSuccess("{{ session('status') }}");
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
 @endif
 
 @if(session('error'))

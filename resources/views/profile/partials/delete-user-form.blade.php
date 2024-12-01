@@ -41,7 +41,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"
                         x-on:click="$dispatch('close')">{{ __('Cancel') }}</button>
-                    <button type="submit" class="btn btn-danger">{{ __('Delete Account') }}</button>
+                    <button type="submit" class="btn btn-outline-danger me-1 mb-1">{{ __('Delete Account') }}</button>
                 </div>
             </form>
         </div>

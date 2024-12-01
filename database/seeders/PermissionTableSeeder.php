@@ -22,6 +22,13 @@ class PermissionTableSeeder extends Seeder
             'user-create',
             'user-edit',
             'user-delete',
+            'setting-edit',
+            'rencana-atasan-create',
+            'select-atasan',
+            'rencana-pegawai-create',
+            'data-master',
+            'jabatan-atasan',
+
         ];
 
         foreach ($permissions as $permission) {
