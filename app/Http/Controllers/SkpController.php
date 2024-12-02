@@ -46,16 +46,12 @@ class SkpController extends Controller
     {
         try {
             $this->skpService->store($request->validated(), Auth::user());
-
             return back()->with('success', 'Data SKP berhasil disimpan.');
-            
         } catch (\Exception $e) {
-            // Tangani jika terjadi kesalahan
             Log::error('Gagal menyimpan data SKP', [
                 'error' => $e->getMessage(),
             ]);
-
-            return back()->with('error', 'Data SKP gagal disimpan. Silakan coba lagi.' . $e->getMessage());
+            return back()->with('error', 'Data SKP gagal disimpan. Silakan coba lagi.');
         }
     }
 
