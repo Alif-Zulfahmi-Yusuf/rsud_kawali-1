@@ -1,9 +1,9 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Pangkat')
+@section('title', 'SKP')
 
 @section('header')
-{{ __('Pangkat') }}
+{{ __('SKP') }}
 @endsection
 
 @push('css')
