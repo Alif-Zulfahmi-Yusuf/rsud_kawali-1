@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rencana_indikator_kinerja', function (Blueprint $table) {
+        Schema::create('indikator_pegawai', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
+            $table->foreignId('rencana_kerja_pegawai_id')->constrained('rencana_hasil_kerja_pegawai')->onDelete('cascade');
             $table->foreignId('rencana_kerja_atasan_id')->constrained('rencana_hasil_kerja')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('skp_id')->constrained('skps')->onDelete('cascade');
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rencana_indikator_kinerja');
+        Schema::dropIfExists('indikator_pegawai');
     }
 };

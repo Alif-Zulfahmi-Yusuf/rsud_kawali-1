@@ -12,24 +12,7 @@
                 <form action="{{ route('indikator-kinerja.store') }}" method="POST">
                     @csrf
 
-                    <!-- Rencana Hasil Kerja -->
-                    @can('select-rencana-pegawai')
-                    <div class="mb-3">
-                        <label for="rencana_kerja_pegawai_id" class="form-label">Rencana Hasil Kerja</label>
-                        <select class="form-select" id="rencana_kerja_pegawai_id" name="rencana_kerja_pegawai_id">
-                            <option value="" disabled selected>-- pilih --</option>
-                            @foreach ($skpDetail->rencanaHasilKinerja as $rencanaHasil)
-                            @foreach ($rencanaHasil->rencanaPegawai as $rencanaPegawai)
-                            <option value="{{ $rencanaPegawai->id }}">
-                                {{ $rencanaPegawai->rencana ?? '-' }} -
-                            </option>
-                            @endforeach
-                            @endforeach
-                        </select>
-                    </div>
-                    @endcan
 
-                    @can('select-rencana-atasan')
                     <div class="mb-3">
                         <label for="rencana_kerja_atasan_id" class="form-label">Rencana Hasil Kerja</label>
                         <select class="form-select" id="rencana_kerja_atasan_id" name="rencana_kerja_atasan_id">
@@ -45,7 +28,7 @@
                             @endif
                         </select>
                     </div>
-                    @endcan
+
 
                     <!-- Aspek -->
                     <div class="mb-3">

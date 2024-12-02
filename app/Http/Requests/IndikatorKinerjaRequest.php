@@ -24,7 +24,6 @@ class IndikatorKinerjaRequest extends FormRequest
     public function rules()
     {
         return [
-            'rencana_kerja_pegawai_id' => 'required|exists:rencana_hasil_kerja_pegawai,id', // Validasi jika rencana kerja pegawai ada di database
             'user_id' => 'required|exists:users,id', // Validasi jika user ada di database
             'skp_id' => 'required|exists:skps,id',
             'aspek' => 'required|string|max:255', // Aspek harus ada dan berupa string
@@ -45,8 +44,6 @@ class IndikatorKinerjaRequest extends FormRequest
     public function messages()
     {
         return [
-            'rencana_kerja_pegawai_id.required' => 'Rencana Kerja Pegawai wajib diisi.',
-            'rencana_kerja_pegawai_id.exists' => 'Rencana Kerja Pegawai tidak ditemukan.',
             'user_id.required' => 'User ID wajib diisi.',
             'user_id.exists' => 'User tidak ditemukan.',
             'skp_id.required' => 'SKP tidak ditemukan.',

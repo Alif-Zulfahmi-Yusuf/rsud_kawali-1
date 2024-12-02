@@ -15,7 +15,6 @@ class IndikatorKinerja extends Model
 
     protected $fillable = [
         'uuid',
-        'rencana_kerja_pegawai_id',
         'rencana_kerja_atasan_id',
         'skp_id',
         'user_id',
@@ -42,12 +41,8 @@ class IndikatorKinerja extends Model
         return 'uuid';
     }
 
-    public function rencanaPegawai(): BelongsTo
-    {
-        return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_kerja_pegawai_id');
-    }
 
-    public function rencanaAtasan(): BelongsTo
+    public function rencanaHasilKinerja(): BelongsTo
     {
         return $this->belongsTo(RencanaHasilKinerja::class, 'rencana_kerja_atasan_id');
     }

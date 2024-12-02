@@ -25,7 +25,7 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            'nip' => ['nullable', 'string', 'max:18'],  // Validasi untuk NIP
+            'nip' => ['nullable', 'string', 'max:20', Rule::unique(User::class)->ignore($this->user()->id)],  // Validasi untuk NIP
             'pangkat_id' => ['nullable', 'exists:pangkats,id'],  // Pastikan pangkat_id ada di tabel pangkats
             'jabatan' => ['nullable', 'string', 'max:255'],
             'atasan_id' => ['nullable', 'exists:atasans,id'],  // Pastikan atasan_id ada di tabel atasans

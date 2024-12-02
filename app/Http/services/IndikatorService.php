@@ -29,12 +29,10 @@ class IndikatorService
             }
 
             // Pastikan rencana_kerja_pegawai_id dan rencana_kerja_atasan_id tidak null jika memang harus ada
-            $rencanaKerjaPegawaiId = $data['rencana_kerja_pegawai_id'] ?? null;
             $rencanaKerjaAtasanId = $data['rencana_kerja_atasan_id'] ?? null;
 
             // Simpan data indikator kinerja ke database
             $indikator = IndikatorKinerja::create([
-                'rencana_kerja_pegawai_id' => $rencanaKerjaPegawaiId, // Biarkan null jika tidak ada
                 'rencana_kerja_atasan_id' => $rencanaKerjaAtasanId,   // Biarkan null jika tidak ada
                 'user_id' => $user->id,
                 'skp_id' => $skp->id, // Otomatis diisi berdasarkan SKP aktif

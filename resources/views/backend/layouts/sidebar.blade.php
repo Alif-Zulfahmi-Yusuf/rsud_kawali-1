@@ -72,6 +72,7 @@
                         </div>
                     </div>
                     @endcan
+                    @can('skp-atasan')
                     <div class="nav-item-wrapper">
                         <a class="nav-link dropdown-indicator label-2" href="#nv-perencanaan" role="button"
                             data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-perencanaan">
@@ -100,6 +101,7 @@
                             </ul>
                         </div>
                     </div>
+                    @endcan
                 </li>
             </ul>
         </div>
