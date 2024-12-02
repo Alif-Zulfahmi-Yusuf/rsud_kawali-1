@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('atasan_id')->nullable()->constrained('atasans')->onDelete('cascade');
             $table->string('unit_kerja');
             $table->integer('tahun'); // Tahun SKP
             $table->string('module'); // Module (kuantitatif/kualitatif)
