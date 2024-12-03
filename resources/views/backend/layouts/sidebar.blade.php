@@ -72,9 +72,9 @@
                         </div>
                     </div>
                     @endcan
-                    @can('skp-atasan')
+
                     <div class="nav-item-wrapper">
-                        <a class="nav-link dropdown-indicator label-2" href="#nv-perencanaan" role="button"
+                        <a class="nav-link dropdown-indicator label-1" href="#nv-perencanaan" role="button"
                             data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-perencanaan">
                             <div class="d-flex align-items-center">
                                 <div class="dropdown-indicator-icon-wrapper">
@@ -86,10 +86,11 @@
                                     style="font-size: 6px"></span> -->
                             </div>
                         </a>
-                        <div class="parent-wrapper label-2">
-                            <ul class="nav collapse parent {{ request()->routeIs('skp.*') ? 'show' : '' }}"
+                        <div class="parent-wrapper label-1">
+                            <ul class="nav collapse parent {{ request()->routeIs('skp.*') || request()->routeIs('skp_pegawai.*') ? 'show' : '' }}"
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-perencanaan">
-                                <li class="collapsed-nav-item-title d-none">Perencaan</li>
+                                <li class="collapsed-nav-item-title d-none">Perencaan Kinerja</li>
+                                @can('skp-atasan')
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('skp.*') ? 'active' : '' }}"
                                         href="{{ route('skp.index') }}">
@@ -98,10 +99,20 @@
                                         </div>
                                     </a>
                                 </li>
+                                @endcan
+
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('skp_pegawai.*') ? 'active' : '' }}"
+                                        href="{{ route('skp_pegawai.index') }}">
+                                        <div class="d-flex align-items-center">
+                                            <span class="nav-link-text">SKP</span>
+                                        </div>
+                                    </a>
+                                </li>
+
                             </ul>
                         </div>
                     </div>
-                    @endcan
                 </li>
             </ul>
         </div>

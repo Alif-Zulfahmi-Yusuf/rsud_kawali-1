@@ -1,10 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'SKP')
-
-@section('header')
-{{ __('SKP') }}
-@endsection
+@section('title', 'SKP Pegawai')
 
 @push('css')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -14,7 +10,6 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
 
 @endpush
-
 
 @section('content')
 <div class="row gy-3 mb-6 justify-content-between">
@@ -40,7 +35,7 @@
                     <i class="fa fa-plus me-1"></i> Add Form Skp
                 </a>
             </div>
-            <table id="tableSkp" class="table table-hover table-sm fs-9 mb-0">
+            <table id="tableSkpPegawai" class="table table-hover table-sm fs-9 mb-0">
                 <thead>
                     <tr>
                         <th class="sort border-top text-center">No</th>
@@ -85,13 +80,12 @@
                     </tr>
                     @endforeach
                 </tbody>
-
             </table>
         </div>
     </div>
 </div>
-@include('backend.skp._modal')
 
+@include('backend.skp_pegawai._modal')
 @endsection
 
 @push('js')
@@ -101,7 +95,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
-<script src="{{ asset('/assets/backend/js/skp.js') }}"></script>
+<script src="{{ asset('/assets/backend/js/skp_pegawai.js') }}"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>

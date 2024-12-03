@@ -116,139 +116,85 @@
     const { getColor, getData } = window.phoenix.utils;
     const $chartEl = document.querySelector('.echart-line-chart-example');
     const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
-    const data1 = [1000, 1500, 1250, 1010, 1045, 2000, 1200, 1330, 1000, 1200, 1410, 1200];
-    const data2 = [1200, 1100, 1010, 1200, 1500, 2000, 1300, 1250, 1100, 1000, 1300, 1200];
+    // Data kategori untuk grafik
+    const categories = ['Di bawah Ekspetasi', 'Sesuai Ekspetasi', 'Di atas Ekspetasi'];
+    const data1 = ['Di atas Ekspetasi', 'Sesuai Ekspetasi', 'Di bawah Ekspetasi', 'Di atas Ekspetasi', 'Sesuai Ekspetasi', 'Di atas Ekspetasi', 'Di bawah Ekspetasi', 'Sesuai Ekspetasi', 'Di atas Ekspetasi', 'Di bawah Ekspetasi', 'Sesuai Ekspetasi', 'Di atas Ekspetasi'];
+    const data2 = ['Sesuai Ekspetasi', 'Di bawah Ekspetasi', 'Di atas Ekspetasi', 'Sesuai Ekspetasi', 'Di atas Ekspetasi', 'Sesuai Ekspetasi', 'Di bawah Ekspetasi', 'Di atas Ekspetasi', 'Mendekati Ekspetasi', 'Di bawah Ekspetasi', 'Di atas Ekspetasi', 'Mendekati Ekspetasi'];
 
-    const tooltipFormatter = params => {
-      return `
-    <div>
-        <h6 class="fs-9 text-body-tertiary mb-0">
-          ${params.map(el => {
-        return `<span class="fas fa-circle me-1" style='color:${el.borderColor}'></span>
-            ${el.seriesName} : ${el.value}`;
-      }).join('<br />')}
-        </h6>
-    </div>
-    `;
-    };
+    // Ubah teks menjadi indeks kategori
+    const mapToCategoryIndex = (data) => data.map(item => categories.indexOf(item));
 
     if ($chartEl) {
       const userOptions = getData($chartEl, 'echarts');
       const chart = window.echarts.init($chartEl);
+
       const getDefaultOptions = () => ({
         tooltip: {
           trigger: 'axis',
-          padding: [7, 10],
           backgroundColor: getColor('body-highlight-bg'),
           borderColor: getColor('border-color'),
           textStyle: { color: getColor('light-text-emphasis') },
-          borderWidth: 1,
-          transitionDuration: 0,
-          formatter: tooltipFormatter,
-          axisPointer: {
-            type: 'none'
+          formatter: (params) => {
+            return params.map(item => `
+                        <div>
+                            <span style="color:${item.color}">●</span>
+                            ${item.seriesName}: ${categories[item.data]}
+                        </div>
+                    `).join('');
           }
         },
         legend: {
-          orient: 'horizontal',
-          right: '5%',
-          data: ['Category 1', 'Category 2']
+          data: ['Hasil Kerja', 'Perilaku Kerja']
         },
         xAxis: {
           type: 'category',
           data: months,
-          boundaryGap: false,
-          axisLine: {
-            lineStyle: {
-              color: getColor('tertiary-bg')
-            }
-          },
-          axisTick: { show: false },
-          axisLabel: {
-            color: getColor('quaternary-color'),
-            formatter: value => value.substring(0, 3),
-            margin: 15
-          },
-          splitLine: {
-            show: false
-          }
+          axisLine: { lineStyle: { color: getColor('tertiary-bg') } },
+          axisLabel: { formatter: value => value.substring(0, 3) }
         },
         yAxis: {
-          type: 'value',
-          splitLine: {
-            lineStyle: {
-              type: 'dashed',
-              color: getColor('secondary-bg')
-            }
-          },
-          boundaryGap: false,
-          axisLabel: {
-            show: true,
-            color: getColor('quaternary-color'),
-            margin: 15
-          },
-          axisTick: { show: false },
+          type: 'category',
+          data: categories,
           axisLine: { show: false },
-          min: 600
+          axisLabel: { color: getColor('quaternary-color') }
         },
         series: [
           {
-            name: 'Category 1',
+            name: 'Hasil Kerja',
             type: 'line',
-            data: data1,
-            itemStyle: {
-              color: getColor('body-highlight-bg'),
-              borderColor: getColor('primary'),
-              borderWidth: 2
-            },
+            data: mapToCategoryIndex(data1),
             lineStyle: {
-              color: getColor('primary')
+              color: getColor('primary'),
+              width: 3,   // Lebar garis
+              type: 'dashed'  // Jenis garis: dashed
             },
-            showSymbol: false,
-            symbol: 'circle',
-            symbolSize: 10,
-            smooth: false,
-            hoverAnimation: true
+            itemStyle: { color: getColor('primary') },
+            smooth: true
           },
           {
-            name: 'Category 2',
+            name: 'Perilaku Kerja',
             type: 'line',
-            data: data2,
-            itemStyle: {
-              color: getColor('body-highlight-bg'),
-              borderColor: getColor('success'),
-              borderWidth: 2
-            },
+            data: mapToCategoryIndex(data2),
             lineStyle: {
-              color: getColor('success')
+              color: getColor('success'),
+              width: 2,   // Lebar garis lebih kecil
+              type: 'solid',  // Jenis garis: solid
+              opacity: 0.8    // Transparansi
             },
-            showSymbol: false,
-            symbol: 'circle',
-            symbolSize: 10,
-            smooth: false,
-            hoverAnimation: true
+            itemStyle: { color: getColor('success') },
+            smooth: false // Garis lebih tajam
           }
         ],
-        grid: { right: '3%', left: '10%', bottom: '10%', top: '5%' }
+        grid: { left: '10%', right: '10%', bottom: '10%', top: '10%' }
       });
+
       echartSetOption(chart, userOptions, getDefaultOptions);
     }
   };
-
 
 
 
