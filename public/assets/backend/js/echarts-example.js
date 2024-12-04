@@ -1597,99 +1597,106 @@
   const basicBarChartInit = () => {
     const { getColor, getData } = window.phoenix.utils;
     const $chartEl = document.querySelector('.echart-basic-bar-chart-example');
+
     const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
+      'January', 'February', 'March', 'April', 'May',
+      'June', 'July', 'August', 'September', 'October',
+      'November', 'December'
     ];
-    const data = [
-      1020, 1160, 1300, 958, 1240, 1020, 1409, 1200, 1051, 1120, 1240, 1054
+
+    // Data kategori dan hasil penilaian
+    const categories = ['Di bawah Ekspetasi', 'Sesuai Ekspetasi', 'Di atas Ekspetasi'];
+    const hasilKerjaData = [
+      'Sesuai Ekspetasi', 'Di atas Ekspetasi', 'Di bawah Ekspetasi',
+      'Sesuai Ekspetasi', 'Di bawah Ekspetasi', 'Di atas Ekspetasi',
+      'Di atas Ekspetasi', 'Sesuai Ekspetasi', 'Di bawah Ekspetasi',
+      'Di atas Ekspetasi', 'Sesuai Ekspetasi', 'Di bawah Ekspetasi'
     ];
+    const perilakuKerjaData = [
+      'Di bawah Ekspetasi', 'Sesuai Ekspetasi', 'Di atas Ekspetasi',
+      'Di atas Ekspetasi', 'Sesuai Ekspetasi', 'Di bawah Ekspetasi',
+      'Sesuai Ekspetasi', 'Di atas Ekspetasi', 'Di bawah Ekspetasi',
+      'Di bawah Ekspetasi', 'Di atas Ekspetasi', 'Sesuai Ekspetasi'
+    ];
+
+    // Mengubah data string ke indeks kategori
+    const mapToCategoryIndex = (data) => data.map(item => categories.indexOf(item));
 
     if ($chartEl) {
       const userOptions = getData($chartEl, 'echarts');
       const chart = window.echarts.init($chartEl);
+
       const getDefaultOptions = () => ({
         tooltip: {
           trigger: 'axis',
-          padding: [7, 10],
           backgroundColor: getColor('body-highlight-bg'),
           borderColor: getColor('border-color'),
           textStyle: { color: getColor('light-text-emphasis') },
           borderWidth: 1,
-          formatter: params => tooltipFormatter(params),
-          transitionDuration: 0,
+          formatter: params => {
+            return params.map(item => `
+                        <div>
+                            <span style="color:${item.color}">●</span>
+                            ${item.seriesName}: ${categories[item.data]}
+                        </div>
+                    `).join('');
+          },
           axisPointer: {
-            type: 'none'
+            type: 'shadow'
           }
+        },
+        legend: {
+          data: ['Hasil Kerja', 'Perilaku Kerja'],
+          textStyle: { color: getColor('quaternary-color') }
         },
         xAxis: {
           type: 'category',
           data: months,
           axisLine: {
-            lineStyle: {
-              color: getColor('tertiary-bg'),
-              type: 'solid'
-            }
+            lineStyle: { color: getColor('tertiary-bg') }
           },
-          axisTick: { show: false },
           axisLabel: {
-            color: getColor('quaternary-color'),
             formatter: value => value.substring(0, 3),
+            color: getColor('quaternary-color'),
             margin: 15
-          },
-          splitLine: {
-            show: false
           }
         },
         yAxis: {
-          type: 'value',
-          boundaryGap: true,
-          axisLabel: {
-            show: true,
-            color: getColor('quaternary-color'),
-            margin: 15
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: getColor('secondary-bg')
-            }
-          },
-          axisTick: { show: false },
+          type: 'category',
+          data: categories,
           axisLine: { show: false },
-          min: 600
+          axisLabel: { color: getColor('quaternary-color') }
         },
         series: [
           {
+            name: 'Hasil Kerja',
             type: 'bar',
-            name: 'Total',
-            data,
-            lineStyle: { color: getColor('primary') },
-            itemStyle: {
-              color: getColor('primary'),
-              barBorderRadius: [3, 3, 0, 0]
-            },
-            showSymbol: false,
-            symbol: 'circle',
-            smooth: false,
-            hoverAnimation: true
+            data: mapToCategoryIndex(hasilKerjaData),
+            barWidth: '40%',
+            itemStyle: { color: getColor('primary') }
+          },
+          {
+            name: 'Perilaku Kerja',
+            type: 'bar',
+            data: mapToCategoryIndex(perilakuKerjaData),
+            barWidth: '40%',
+            itemStyle: { color: getColor('success') }
           }
         ],
-        grid: { right: '3%', left: '10%', bottom: '10%', top: '5%' }
+        grid: {
+          left: '10%',
+          right: '10%',
+          bottom: '10%',
+          top: '15%'
+        }
       });
+
       echartSetOption(chart, userOptions, getDefaultOptions);
     }
   };
+
+
+
 
   const horizontalBarChartInit = () => {
     const { getColor, getData } = window.phoenix.utils;

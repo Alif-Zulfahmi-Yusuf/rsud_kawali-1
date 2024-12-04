@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('module'); // Module (kuantitatif/kualitatif)
             $table->date('tanggal_skp'); // Tanggal awal SKP
             $table->date('tanggal_akhir')->nullable();
+            $table->enum('status', ['pending', 'approve', 'revisi'])->default('pending'); // Tanggal akhir otomatis akhir tahun
             $table->timestamps();
         });
     }

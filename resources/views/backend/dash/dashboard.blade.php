@@ -7,10 +7,28 @@
 @endsection
 
 @push('css')
-.echart-line-chart-example {
-width: 100%; /* Lebar penuh */
-min-height: 300px; /* Tinggi minimum */
+<style>
+.echart-basic-bar-chart-example {
+    width: 100%;
+    min-height: 350px;
 }
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.card-body hr {
+    margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+    .echart-basic-bar-chart-example {
+        min-height: 250px;
+    }
+}
+</style>
 @endpush
 
 @section('content')
@@ -32,14 +50,14 @@ min-height: 300px; /* Tinggi minimum */
     </div>
 
     <!-- Row for User Profile and Monthly Performance Chart -->
-    <div class="row mb-4">
+    <div class="row g-4 mb-4">
         <!-- User Profile Card -->
-        <div class="col-12 col-md-3 mb-3 mb-md-0">
+        <div class="col-12 col-lg-4">
             <div class="card shadow-sm text-center border-0">
                 <div class="card-body">
                     <!-- Profile Image -->
                     <img src="{{ Auth::user()->image ? url('storage/' . Auth::user()->image) : url('storage/images/default.png') }}"
-                        alt="User Profile" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
+                        alt="User Profile" class="img-fluid rounded-circle mb-3 profile-img">
 
                     <!-- User Name -->
                     <h5 class="card-title mb-2">{{ Auth::user()->name }}</h5>
@@ -63,15 +81,14 @@ min-height: 300px; /* Tinggi minimum */
             </div>
         </div>
 
-
         <!-- Monthly Performance Chart Card -->
-        <div class="col-12 col-md-9">
-            <div class="card shadow rounded">
-                <div class="card-header">
+        <div class="col-12 col-lg-8">
+            <div class="card shadow-sm rounded">
+                <div class="card-header bg-light">
                     <h6 class="m-0">Rating Kinerja Bulanan</h6>
                 </div>
                 <div class="card-body">
-                    <div class="echart-line-chart-example" style="min-height: 300px;"></div>
+                    <div class="echart-basic-bar-chart-example"></div>
                 </div>
             </div>
         </div>
