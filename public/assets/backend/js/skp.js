@@ -59,7 +59,7 @@ $(document).ready(function () {
         order: [[groupColumn, 'asc']], // Urutkan berdasarkan grup
         paging: true, // Aktifkan pagination
         info: false, // Nonaktifkan informasi jumlah data
-        searching: false, // Nonaktifkan fitur pencarian
+        searching: true, // Nonaktifkan fitur pencarian
         language: {
             emptyTable: "Tidak ada data yang tersedia",
             lengthMenu: "Tampilkan _MENU_ data",

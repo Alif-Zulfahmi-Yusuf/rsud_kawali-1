@@ -41,14 +41,16 @@ class SkpService
         try {
             $user = Auth::user(); // Mendapatkan user yang sedang login
 
-            // Mengambil detail SKP beserta relasi yang diperlukan
+            // Mengambil detail SKP beserta relasi-relasinya
             $skpDetail = Skp::where('uuid', $uuid)
                 ->where('user_id', $user->id) // Filter berdasarkan user ID
                 ->with([
-                    'rencanaHasilKinerja', // Relasi rencana atasan
-                    'rencanaHasilKinerja.indikatorKinerja', // Relasi indikator kinerja
+                    'rencanaHasilKinerja.rencanaPegawai', // Menambahkan relasi rencanaPegawai
+                    'rencanaHasilKinerja.rencanaPegawai.rencanaAtasan', // Relasi rencana atasan
+                    'rencanaHasilKinerja.rencanaPegawai.rencanaAtasan.indikatorKinerja', // Relasi indikator kinerja
                 ])
                 ->firstOrFail(); // Jika data tidak ditemukan, akan memunculkan ModelNotFoundException
+
             return $skpDetail;
         } catch (\Exception $e) {
             // Logging error jika terjadi kesalahan

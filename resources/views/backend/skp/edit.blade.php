@@ -50,6 +50,11 @@
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#modalRencanaPegawai">Rencana Hasil Kerja
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
                                     data-bs-target="#modalIndikator">
                                     Indikator Individu
                                 </a>
@@ -70,20 +75,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Counter manual untuk nomor urut -->
-                        @foreach ($skpDetail->rencanaHasilKinerja ?? [] as $rencana)
-                        @foreach ($rencana->indikatorKinerja ?? [] as $indikator)
-                        <!-- Iterasi indikator -->
+                        @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
+                        <!-- Baris Detail -->
+
+                        @if(!empty($rencana->rencanaPegawai))
+                        @foreach ($rencana->rencanaPegawai as $pegawai)
+                        @foreach ($pegawai->indikatorKinerja as $indikator)
                         <tr>
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td>
                                 <div><strong>Rencana Hasil Kerja:</strong></div>
-                                <div>{{ $rencana->rencana ?? 'Data Rencana Tidak Ada' }}</div>
+                                <div>{{ $pegawai->rencana ?? 'Data Rencana Pegawai Tidak Tersedia' }}</div>
 
+                                <div class="text-muted"><strong>Rencana Hasil Kerja Pimpinan yang Diintervensi:</strong>
+                                </div>
+                                <div class="text-muted">{{ $rencana->rencana }}</div>
                             </td>
+                            <!-- Tetap untuk kolom Rencana -->
                             <td class="text-center">{{ $indikator->aspek }}</td>
                             <td>{{ $indikator->indikator_kinerja }}</td>
-                            <td class="text-center">{{ $indikator->tipe_target }}</td>
+                            <td class="text-center">
+                                {{ $indikator->target_minimum }} - {{ $indikator->target_maksimum }}<br>
+                                {{ $indikator->satuan }}
+                            </td>
                             <td class="text-center">{{ $indikator->report }}</td>
                             <td class="text-center">
                                 <button class="btn btn-sm btn-primary">
@@ -95,6 +109,13 @@
                             </td>
                         </tr>
                         @endforeach
+                        @endforeach
+                        @else
+                        <!-- Jika rencanaPegawai tidak ada -->
+                        <tr>
+                            <td colspan="7" class="text-center">Tidak ada data rencana.</td>
+                        </tr>
+                        @endif
                         @endforeach
                     </tbody>
                 </table>

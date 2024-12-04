@@ -85,7 +85,7 @@
     </div>
 </div>
 
-@include('backend.skp_pegawai._modal')
+
 @endsection
 
 @push('js')

@@ -87,10 +87,10 @@
                             </div>
                         </a>
                         <div class="parent-wrapper label-1">
-                            <ul class="nav collapse parent {{ request()->routeIs('skp.*') || request()->routeIs('skp_pegawai.*') ? 'show' : '' }}"
+                            <ul class="nav collapse parent {{ request()->routeIs('skp.*') || request()->routeIs('skp_atasan.*') ? 'show' : '' }}"
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-perencanaan">
                                 <li class="collapsed-nav-item-title d-none">Perencaan Kinerja</li>
-                                @can('skp-atasan')
+
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('skp.*') ? 'active' : '' }}"
                                         href="{{ route('skp.index') }}">
@@ -99,11 +99,11 @@
                                         </div>
                                     </a>
                                 </li>
-                                @endcan
+
 
                                 <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('skp_pegawai.*') ? 'active' : '' }}"
-                                        href="{{ route('skp_pegawai.index') }}">
+                                    <a class="nav-link {{ request()->routeIs('skp_atasan.*') ? 'active' : '' }}"
+                                        href="{{ route('skp_atasan.index') }}">
                                         <div class="d-flex align-items-center">
                                             <span class="nav-link-text">SKP</span>
                                         </div>

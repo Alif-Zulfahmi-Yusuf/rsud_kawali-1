@@ -85,12 +85,12 @@
                     </tr>
                     @endforeach
                 </tbody>
-
             </table>
         </div>
     </div>
 </div>
 @include('backend.skp._modal')
+
 
 @endsection
 

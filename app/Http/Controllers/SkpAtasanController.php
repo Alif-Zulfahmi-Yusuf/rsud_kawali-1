@@ -3,28 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Services\SkpPegawaiService;
-use App\Models\SkpPegawai;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
-class SkpPegawaiController extends Controller
+class SkpAtasanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    protected $skpPegawaiService;
-
-    public function __construct(SkpPegawaiService $skpPegawaiService)
-    {
-        $this->skpPegawaiService = $skpPegawaiService;
-    }
     public function index()
     {
-        $skps = SkpPegawai::with(['user.atasan']) // Relasi dengan user dan atasan
-            ->where('user_id', Auth::id()) // Filter berdasarkan pengguna yang login
-            ->get();
-        return view('backend.skp_pegawai.index', compact('skps'));
+        return view('backend.skp_atasan.index');
     }
 
     /**

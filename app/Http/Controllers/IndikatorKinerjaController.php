@@ -34,18 +34,20 @@ class IndikatorKinerjaController extends Controller
         try {
             // Validasi input dari form
             $validated = $request->validate([
+                'rencana_kerja_pegawai_id' => 'nullable|exists:rencana_hasil_kerja_pegawai,id',
                 'rencana_kerja_atasan_id' => 'nullable|exists:rencana_hasil_kerja,id', // Validasi rencana_kerja_atasan_id
                 'aspek' => 'required|string|in:kualitas,kuantitas,waktu',
                 'indikator_kinerja' => 'required|string|max:255',
                 'tipe_target' => 'required|string|in:satu_nilai,range_nilai,kualitatif',
                 'target_minimum' => 'required|numeric|min:0',
-                'target_maksimum' => 'required|numeric|min:0',
+                'target_maksimum' => 'nullable|numeric|min:0',
                 'satuan' => 'required|string|max:50',
                 'report' => 'required|string|in:bulanan,triwulan,semesteran,tahunan',
             ]);
 
             // Pastikan key tetap ada meskipun nullable
             $validated['rencana_kerja_atasan_id'] = $validated['rencana_kerja_atasan_id'] ?? null;
+            $validated['rencana_kerja_pegawai_id'] = $validated['rencana_kerja_pegawai_id'] ?? null;
 
             // Simpan data menggunakan service
             $this->indikatorService->create($validated);

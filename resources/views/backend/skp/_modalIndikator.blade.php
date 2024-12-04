@@ -12,6 +12,20 @@
                 <form action="{{ route('indikator-kinerja.store') }}" method="POST">
                     @csrf
 
+                    <div class="mb-3">
+                        <label for="rencana_kerja_id" class="form-label">Rencana Hasil Kerja</label>
+                        <select class="form-select" id="rencana_kerja_pegawai_id" name="rencana_kerja_pegawai_id">
+                            <option value="" selected>-- pilih (optional) --</option>
+                            @foreach ($skpDetail->rencanaHasilKinerja as $rencanaHasil)
+                            @foreach ($rencanaHasil->rencanaPegawai as $rencanaPegawai)
+                            <option value="{{ $rencanaPegawai->id }}">
+                                {{ $rencanaPegawai->rencana ?? '-' }}
+                            </option>
+                            @endforeach
+                            @endforeach
+                        </select>
+                    </div>
+
 
                     <div class="mb-3">
                         <label for="rencana_kerja_atasan_id" class="form-label">Rencana Hasil Kerja</label>
