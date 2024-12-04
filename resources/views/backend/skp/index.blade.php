@@ -60,8 +60,12 @@
                         <td>{{ $skp->tahun }}</td> <!-- Kolom Tahun -->
                         <td class="text-center">{{ $skp->user->jabatan ?? '-' }}</td>
                         <td class="text-center">{{ $skp->user->unit_kerja ?? '-' }}</td>
-                        <td class="text-center">{{ $skp->tanggal_skp ?? '-' }}</td>
-                        <td class="text-center">{{ $skp->tanggal_akhir ?? '-' }}</td>
+                        <td class="text-center">
+                            {{ $skp->tanggal_skp ? \Carbon\Carbon::parse($skp->tanggal_skp)->format('Y M d') : '-' }}
+                        </td>
+                        <td class="text-center">
+                            {{ $skp->tanggal_akhir ? \Carbon\Carbon::parse($skp->tanggal_akhir)->format('Y M d') : '-' }}
+                        </td>
                         <td class="text-center">{{ $skp->user->atasan->name ?? '-' }}</td>
                         <td class="text-center">
                             <div class="btn-reveal-trigger position-static">

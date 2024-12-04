@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var groupColumn = 1; // Kolom kedua (indeks 1) untuk pengelompokan
-    var table = $('#tableSkpPegawai').DataTable({
+    var table = $('#tableSkpAtasan').DataTable({
         columnDefs: [
             { visible: false, targets: groupColumn } // Sembunyikan kolom Tahun
         ],
@@ -15,7 +15,7 @@ $(document).ready(function () {
                 .each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group"><td colspan="9" class="fw-bold bg-light text-center">' + group +
+                            '<tr class="group"><td colspan="8" class="fw-bold bg-light text-center">' + group +
                             '</td></tr>'
                         );
                         last = group;
@@ -50,13 +50,8 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
-    var groupColumn = 1; // Kolom kedua untuk pengelompokan (Rencana Hasil Kerja)
     var table = $('#tableRencana').DataTable({
-        columnDefs: [
-            { orderable: false, targets: [0, 1, 2, 3, 4, 5, 6] }, // Kolom No dan Action tidak dapat diurutkan
-            { visible: false, targets: groupColumn }, // Kolom untuk grup disembunyikan
-        ],
-        order: [[groupColumn, 'asc']], // Urutkan berdasarkan grup
+
         paging: true, // Aktifkan pagination
         info: false, // Nonaktifkan informasi jumlah data
         searching: false, // Nonaktifkan fitur pencarian
@@ -70,43 +65,9 @@ $(document).ready(function () {
                 previous: "Sebelumnya",
             },
         },
-        drawCallback: function (settings) {
-            var api = this.api();
-            var rows = api.rows({ page: 'current' }).nodes();
-            var last = null;
-
-            // Tambahkan baris grup sebelum baris detail
-            api.column(groupColumn, { page: 'current' })
-                .data()
-                .each(function (group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before(
-                            '<tr class="group"><td colspan="7" class="fw-bold bg-light">' + group +
-                            '</td></tr>'
-                        );
-                        last = group;
-                    }
-                });
-
-            // Tambahkan styling khusus untuk baris grup
-            $('.group').css({
-                'background-color': '#f8f9fa',
-                'color': '#495057',
-                'font-weight': 'bold',
-            });
-        },
-    });
-
-    // Event klik pada grup untuk mengurutkan data
-    $('#tableRencana tbody').on('click', 'tr.group', function () {
-        var currentOrder = table.order()[0];
-        if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
-            table.order([groupColumn, 'desc']).draw();
-        } else {
-            table.order([groupColumn, 'asc']).draw();
-        }
     });
 });
+
 
 
 // Fungsi untuk menghapus data dengan konfirmasi SweetAlert
@@ -139,7 +100,7 @@ const deleteData = (e) => {
 
             $.ajax({
                 type: "DELETE",
-                url: `/skp_pegawai/destroy/${uuid}`,
+                url: `/skp_atasan/destroy/${uuid}`,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -148,7 +109,7 @@ const deleteData = (e) => {
                     toastSuccess(response.message); // Menampilkan notifikasi sukses
 
                     // Hapus baris dari DataTable
-                    var table = $('#tableSkp').DataTable();
+                    var table = $('#tableSkpAtasan').DataTable();
                     table.rows().every(function () {
                         var row = this.node();
                         if ($(row).data('uuid') === uuid) {
@@ -175,7 +136,7 @@ const deleteData = (e) => {
 
 // Fungsi untuk menghapus baris dari DataTable
 const removeRowFromTable = (uuid) => {
-    var table = $('#tableSkpPegawai').DataTable();
+    var table = $('#tableSkpAtasan').DataTable();
     table.rows().every(function () {
         var row = this.node();
         if ($(row).data('uuid') === uuid) {

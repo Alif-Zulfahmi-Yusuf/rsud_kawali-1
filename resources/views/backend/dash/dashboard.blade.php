@@ -84,7 +84,7 @@
         <!-- Monthly Performance Chart Card -->
         <div class="col-12 col-lg-8">
             <div class="card shadow-sm rounded">
-                <div class="card-header bg-light">
+                <div class="card-header">
                     <h6 class="m-0">Rating Kinerja Bulanan</h6>
                 </div>
                 <div class="card-body">

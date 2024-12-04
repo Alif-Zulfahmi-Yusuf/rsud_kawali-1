@@ -18,7 +18,6 @@ class Skp extends Model
     protected $fillable = [
         'uuid',
         'user_id',
-        'atasan_id',
         'tahun',
         'module',
         'unit_kerja',
@@ -60,6 +59,11 @@ class Skp extends Model
     public function atasan(): BelongsTo
     {
         return $this->belongsTo(User::class, 'atasan_id');
+    }
+
+    public function skpAtasan(): HasMany
+    {
+        return $this->hasMany(SkpAtasan::class, 'skp_id');
     }
 
     public function rencanaHasilKinerja(): HasMany

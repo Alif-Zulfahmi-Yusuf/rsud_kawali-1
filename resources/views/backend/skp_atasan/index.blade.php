@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'SKP Pegawai')
+@section('title', 'SKP Atasan')
 
 @push('css')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -35,7 +35,7 @@
                     <i class="fa fa-plus me-1"></i> Add Form Skp
                 </a>
             </div>
-            <table id="tableSkpPegawai" class="table table-hover table-sm fs-9 mb-0">
+            <table id="tableSkpAtasan" class="table table-hover table-sm fs-9 mb-0">
                 <thead>
                     <tr>
                         <th class="sort border-top text-center">No</th>
@@ -44,7 +44,6 @@
                         <th class="sort border-top text-center">Unit Kerja</th>
                         <th class="sort border-top text-center">Tanggal Skp</th>
                         <th class="sort border-top text-center">Tanggal Akhir</th>
-                        <th class="sort border-top text-center">Posisi</th>
                         <th class="sort border-top text-center">Action</th>
                     </tr>
                 </thead>
@@ -55,9 +54,13 @@
                         <td>{{ $skp->tahun }}</td> <!-- Kolom Tahun -->
                         <td class="text-center">{{ $skp->user->jabatan ?? '-' }}</td>
                         <td class="text-center">{{ $skp->user->unit_kerja ?? '-' }}</td>
-                        <td class="text-center">{{ $skp->tanggal_skp ?? '-' }}</td>
-                        <td class="text-center">{{ $skp->tanggal_akhir ?? '-' }}</td>
-                        <td class="text-center">{{ $skp->user->atasan->name ?? '-' }}</td>
+                        <td class="text-center">
+                            {{ $skp->tanggal_skp ? \Carbon\Carbon::parse($skp->tanggal_skp)->format('Y M d') : '-' }}
+                        </td>
+                        <td class="text-center">
+                            {{ $skp->tanggal_akhir ? \Carbon\Carbon::parse($skp->tanggal_akhir)->format('Y M d') : '-' }}
+                        </td>
+
                         <td class="text-center">
                             <div class="btn-reveal-trigger position-static">
                                 <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -70,7 +73,7 @@
                                     </svg>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end py-2">
-                                    <a class="dropdown-item" href="{{ route('skp.edit', $skp->uuid) }}">Edit</a>
+                                    <a class="dropdown-item" href="{{ route('skp_atasan.edit', $skp->uuid) }}">Edit</a>
                                     <hr class="dropdown-divider">
                                     <button type="button" class="dropdown-item text-danger delete-button"
                                         onclick="deleteData(this)" data-uuid="{{ $skp->uuid }}">Delete</button>
@@ -84,7 +87,7 @@
         </div>
     </div>
 </div>
-
+@include('backend.skp_atasan._modal')
 
 @endsection
 
@@ -95,7 +98,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
-<script src="{{ asset('/assets/backend/js/skp_pegawai.js') }}"></script>
+<script src="{{ asset('/assets/backend/js/skp_atasan.js') }}"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>

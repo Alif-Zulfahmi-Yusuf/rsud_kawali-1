@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('skp_pegawai', function (Blueprint $table) {
+        Schema::create('skp_atasan', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('atasan_id')->nullable()->constrained('atasans')->onDelete('cascade');
-            $table->foreignId('skp_id')->constrained('skps')->onDelete('cascade');
             $table->string('unit_kerja');
             $table->integer('tahun'); // Tahun SKP
             $table->string('module'); // Module (kuantitatif/kualitatif)
             $table->date('tanggal_skp'); // Tanggal awal SKP
             $table->date('tanggal_akhir')->nullable();
-            $table->enum('status', ['pending', 'approve', 'revisi'])->default('pending'); // Tanggal akhir otomatis akhir tahun
             $table->timestamps();
         });
     }

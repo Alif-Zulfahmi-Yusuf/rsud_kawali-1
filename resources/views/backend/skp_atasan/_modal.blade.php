@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form SKP -->
-                <form action="{{ route('skp_pegawai.store') }}" method="POST">
+                <form action="{{ route('skp_atasan.store') }}" method="POST">
                     @csrf
                     <div class="form-group mb-3">
                         <label for="skp_year" class="form-label">Tahun SKP</label>
