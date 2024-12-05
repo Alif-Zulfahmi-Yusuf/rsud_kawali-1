@@ -114,11 +114,7 @@ toastSuccess("{{ session('success') }}");
 @endif
 
 @if(session('error'))
-toastError({
-    errors: {
-        message: "{{ session('error') }}"
-    }
-});
+toastError("{{ session('error') }}");
 @endif
 </script>
 @endpush

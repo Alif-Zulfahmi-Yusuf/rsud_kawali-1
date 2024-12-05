@@ -26,22 +26,21 @@ const toastSuccess = (message) => {
     Toast.fire({
         icon: 'success',
         title: message
-    })
-}
+    });
+};
 
 const toastError = (message) => {
-    let errorText = message; // Inisialisasi errorText sebagai string error secara default
+    let errorText = message; // Inisialisasi default sebagai string error
 
-    // Cek jika error adalah objek yang mengandung detail errors
+    // Cek apakah pesan berbentuk objek atau string
     if (typeof message === 'object' && message.errors) {
-        errorText = ''; // Reset errorText jika ada detail error
+        errorText = ''; // Reset jika ada detail errors
         for (let key in message.errors) {
-            errorText = message.errors[key][0]; // Ambil pesan error pertama
+            errorText = message.errors[key][0]; // Ambil error pertama
             break;
         }
-    } else if (typeof message === 'object' && message.message) {
-        // Jika error memiliki properti 'message', ambil dari sana
-        errorText = message.message;
+    } else if (typeof message === 'string') {
+        errorText = message;
     }
 
     Toast.fire({
@@ -49,6 +48,7 @@ const toastError = (message) => {
         title: 'Data cannot be saved <br>' + errorText
     });
 };
+
 
 
 const startLoading = (str = 'Please wait...') => {
@@ -60,10 +60,6 @@ const startLoading = (str = 'Please wait...') => {
             Swal.showLoading();
         }
     });
-};
-
-const stopLoading = () => {
-    Swal.close();
 };
 
 
@@ -88,6 +84,12 @@ document.addEventListener('DOMContentLoaded', function () {
         sessionStorage.removeItem('error');
     }
 });
+
+
+const stopLoading = () => {
+    Swal.close();
+};
+
 
 $(document).ready(function () {
     // Trigger the modal when "Select Atasan" button is clicked

@@ -33,6 +33,7 @@ class Skp extends Model
     protected $hidden = [
         'atasan_id',
         'user_id',
+        'skp_atasan_id',
     ];
 
     protected static function boot()
@@ -61,14 +62,16 @@ class Skp extends Model
         return $this->belongsTo(User::class, 'atasan_id');
     }
 
-    public function skpAtasan(): HasMany
+
+    // SKP Atasan memiliki banyak SKP Pegawai
+    public function skpPegawai()
     {
-        return $this->hasMany(SkpAtasan::class, 'skp_id');
+        return $this->hasMany(Skp::class, 'skp_atasan_id');
     }
 
     public function rencanaHasilKinerja(): HasMany
     {
-        return $this->hasMany(RencanaHasilKinerja::class, 'skp_id');
+        return $this->hasMany(RencanaHasilKinerja::class, 'skp_atasan_id');
     }
 
     public function indikatorKinerja(): HasMany

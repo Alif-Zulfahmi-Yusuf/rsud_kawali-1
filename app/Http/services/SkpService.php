@@ -11,10 +11,26 @@ class SkpService
 {
     public function store(array $data, $user): Skp
     {
+        // Pastikan user memiliki atasan
+        if (!$user->atasan_id) {
+            throw new \Exception('Atasan belum ditentukan untuk pengguna ini.');
+        }
+
+        // Ambil SKP Atasan berdasarkan atasan_id dan tahun
+        $skpAtasan = Skp::where('user_id', $user->atasan_id)
+            ->where('tahun', $data['year'])
+            ->first();
+
+        if (!$skpAtasan) {
+            throw new \Exception('SKP atasan untuk tahun ' . $data['year'] . ' tidak ditemukan.');
+        }
+
+        // Buat SKP Pegawai dengan menghubungkan ke SKP Atasan
         return Skp::create([
             'user_id' => $user->id,
             'atasan_id' => $user->atasan_id,
             'unit_kerja' => $user->unit_kerja,
+            'skp_atasan_id' => $skpAtasan->id, // Menghubungkan SKP Pegawai dengan SKP Atasan
             'tahun' => $data['year'],
             'module' => $data['module'],
             'tanggal_skp' => now(),
@@ -22,6 +38,9 @@ class SkpService
             'status' => 'pending',
         ]);
     }
+
+
+
 
     public function selectFirstById($column, $value)
     {

@@ -91,6 +91,7 @@
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-perencanaan">
                                 <li class="collapsed-nav-item-title d-none">Perencaan Kinerja</li>
 
+                                @can('skp-pegawai')
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('skp.*') ? 'active' : '' }}"
                                         href="{{ route('skp.index') }}">
@@ -99,8 +100,9 @@
                                         </div>
                                     </a>
                                 </li>
+                                @endcan
 
-
+                                @can('skp-atasan')
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('skp_atasan.*') ? 'active' : '' }}"
                                         href="{{ route('skp_atasan.index') }}">
@@ -109,7 +111,7 @@
                                         </div>
                                     </a>
                                 </li>
-
+                                @endcan
                             </ul>
                         </div>
                     </div>

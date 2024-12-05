@@ -3,7 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\RencanaHasilKinerja;
-use App\Models\Skp;
+use App\Models\SkpAtasan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Exception;
@@ -17,7 +17,7 @@ class RencanaKerjaAtasanService
             $user = Auth::user();
 
             // Ambil SKP terkait dengan user
-            $skp = Skp::where('user_id', $user->id)->first();
+            $skp = SkpAtasan::where('user_id', $user->id)->first();
 
             if (!$skp) {
                 throw new Exception("SKP tidak ditemukan.");
@@ -27,7 +27,7 @@ class RencanaKerjaAtasanService
             $rencanaHasilKerja = RencanaHasilKinerja::create([
                 'rencana' => $data['rencana_hasil_kerja'], // Gunakan nama field dari form
                 'user_id' => $user->id,
-                'skp_id' => $skp->id,
+                'skp_atasan_id' => $skp->id,
             ]);
 
             return $rencanaHasilKerja;
@@ -48,7 +48,7 @@ class RencanaKerjaAtasanService
 
     public function delete($uuid)
     {
-        $skp = Skp::where('uuid', $uuid)->firstOrFail();
+        $skp = SkpAtasan::where('uuid', $uuid)->firstOrFail();
 
         return $skp->delete();
     }

@@ -26,24 +26,6 @@
                         </select>
                     </div>
 
-
-                    <div class="mb-3">
-                        <label for="rencana_kerja_atasan_id" class="form-label">Rencana Hasil Kerja</label>
-                        <select class="form-select" id="rencana_kerja_atasan_id" name="rencana_kerja_atasan_id">
-                            <option value="" disabled selected>-- pilih --</option>
-                            @if ($skpDetail && $skpDetail->rencanaHasilKinerja)
-                            @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
-                            <option value="{{ $rencana->id }}">
-                                {{ $rencana->rencana ?? '-' }} -
-                            </option>
-                            @endforeach
-                            @else
-                            <option value="" disabled>Tidak ada data rencana hasil kerja atasan.</option>
-                            @endif
-                        </select>
-                    </div>
-
-
                     <!-- Aspek -->
                     <div class="mb-3">
                         <label for="aspek" class="form-label">Aspek</label>

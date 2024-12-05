@@ -36,7 +36,6 @@ class IndikatorService
             // Simpan data indikator kinerja ke database
             $indikator = IndikatorKinerja::create([
                 'rencana_kerja_pegawai_id' => $rencanaKerjaPegawaiId,
-                'rencana_kerja_atasan_id' => $rencanaKerjaAtasanId,   // Biarkan null jika tidak ada
                 'user_id' => $user->id,
                 'skp_id' => $skp->id, // Otomatis diisi berdasarkan SKP aktif
                 'aspek' => $data['aspek'],

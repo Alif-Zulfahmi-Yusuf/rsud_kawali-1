@@ -59,11 +59,12 @@ class SkpAtasan extends Model
     {
         return $this->hasMany(RencanaHasilKinerja::class, 'skp_atasan_id');
     }
-
-    public function indikatorKinerja(): HasMany
+    // Model Skp (untuk Pegawai)
+    public function skpAtasan()
     {
-        return $this->hasMany(IndikatorKinerja::class, 'skp_id');
+        return $this->belongsTo(Skp::class, 'skp_atasan_id'); // Menghubungkan ke SKP Atasan
     }
+
 
     public function atasan(): BelongsTo
     {

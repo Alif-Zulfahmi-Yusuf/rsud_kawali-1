@@ -63,10 +63,10 @@
                         @foreach ($skpDetail->rencanaHasilKinerja as $index => $rencana)
                         <tr>
                             <td class="text-center">{{ $index + 1 }}</td>
-                            <td class="text-center">{{ $rencana->name ?? 'Tidak Ada Nama' }}</td>
+                            <td class="text-center">{{ $rencana->rencana ?? 'Tidak Ada Nama' }}</td>
                             <td class="text-center">
                                 <!-- Contoh Action: Tombol Edit -->
-                                <a href="{{ route('rencana.edit', $rencana->uuid) }}" class="btn btn-warning btn-sm">
+                                <a href="#" class="btn btn-warning btn-sm">
                                     Edit
                                 </a>
                             </td>

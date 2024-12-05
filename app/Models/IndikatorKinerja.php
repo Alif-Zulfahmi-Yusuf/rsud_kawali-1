@@ -15,7 +15,6 @@ class IndikatorKinerja extends Model
 
     protected $fillable = [
         'uuid',
-        'rencana_kerja_atasan_id',
         'rencana_kerja_pegawai_id',
         'skp_id',
         'user_id',

@@ -25,7 +25,7 @@ class RencanaKerjaRequest extends FormRequest
 
         return [
             'rencana' => 'required|unique:rencana_hasil_kerja,rencana,' . $routeUuid . ',uuid| max:255',
-            'skp_id' => 'required',
+            'skp_atasan_id' => 'required',
             'user_id' => 'required',
         ];
     }

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
@@ -93,6 +92,17 @@ class User extends Authenticatable
     public function atasan()
     {
         return $this->belongsTo(Atasan::class, 'atasan_id');
+    }
+
+    // Relasi Atasan ke Pegawai
+    public function pegawai()
+    {
+        return $this->hasMany(User::class, 'atasan_id');
+    }
+
+    public function skpAtasan()
+    {
+        return $this->hasManyThrough(SkpAtasan::class, User::class, 'id', 'user_id', 'atasan_id', 'id');
     }
 
     /**

@@ -17,7 +17,7 @@ class RencanaHasilKinerja extends Model
     protected $fillable = [
         'uuid',
         'user_id',
-        'skp_id',
+        'skp_atasan_id',
         'rencana',
     ];
 
@@ -42,7 +42,7 @@ class RencanaHasilKinerja extends Model
 
     public function skp(): BelongsTo
     {
-        return $this->belongsTo(Skp::class, 'skp_id');
+        return $this->belongsTo(SkpAtasan::class, 'skp_atasan_id');
     }
 
     public function rencanaPegawai(): HasMany

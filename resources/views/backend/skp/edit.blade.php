@@ -44,12 +44,6 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#modalRencana">Rencana Hasil
-                                    Kerja Atasan
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
                                     data-bs-target="#modalRencanaPegawai">Rencana Hasil Kerja
                                 </a>
                             </li>

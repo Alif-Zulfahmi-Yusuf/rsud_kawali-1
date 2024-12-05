@@ -52,9 +52,10 @@ class SkpController extends Controller
             Log::error('Gagal menyimpan data SKP', [
                 'error' => $e->getMessage(),
             ]);
-            return back()->with('error', 'Data SKP gagal disimpan. Silakan coba lagi.');
+            return back()->with('error', $e->getMessage());
         }
     }
+
 
     /**
      * Display the specified resource.
