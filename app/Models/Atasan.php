@@ -16,6 +16,7 @@ class Atasan extends Model
         'jabatan',
         'pangkat_id',
         'unit_kerja',
+        'user_id',
     ];
 
     protected static function boot()
@@ -41,11 +42,21 @@ class Atasan extends Model
         return $this->belongsTo(Pangkat::class);
     }
 
+    public function skpAtasan()
+    {
+        return $this->hasMany(SkpAtasan::class, 'user_id', 'user_id');
+    }
+
     /**
      * Relasi ke user yang menjadi atasan
      */
     public function users()
     {
         return $this->hasMany(User::class, 'atasan_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

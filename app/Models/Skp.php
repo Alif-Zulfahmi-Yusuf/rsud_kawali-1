@@ -18,6 +18,7 @@ class Skp extends Model
     protected $fillable = [
         'uuid',
         'user_id',
+        'atasan_id',  // Menambahkan atasan_id pada $fillable
         'tahun',
         'module',
         'unit_kerja',
@@ -31,8 +32,9 @@ class Skp extends Model
     ];
 
     protected $hidden = [
-        'atasan_id',
+        // Sembunyikan kolom yang tidak diperlukan
         'user_id',
+        'atasan_id',
         'skp_atasan_id',
     ];
 
@@ -62,11 +64,10 @@ class Skp extends Model
         return $this->belongsTo(User::class, 'atasan_id');
     }
 
-
     // SKP Atasan memiliki banyak SKP Pegawai
-    public function skpPegawai()
+    public function skpAtasan()
     {
-        return $this->hasMany(Skp::class, 'skp_atasan_id');
+        return $this->belongsTo(SkpAtasan::class, 'skp_atasan_id', 'id');
     }
 
     public function rencanaHasilKinerja(): HasMany
@@ -87,5 +88,11 @@ class Skp extends Model
     public function scopeByUser(Builder $query, int $userId): Builder
     {
         return $query->where('user_id', $userId);
+    }
+
+    // Menambahkan scope untuk status jika diperlukan
+    public function scopeByStatus(Builder $query, string $status): Builder
+    {
+        return $query->where('status', $status);
     }
 }

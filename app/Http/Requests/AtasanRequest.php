@@ -26,6 +26,7 @@ class AtasanRequest extends FormRequest
 
         return [
             'name' => 'required|unique:atasans,name,' . $routeUuid . ',uuid| max:255',
+            'user_id' => 'required',
             'nip' => 'required | max:255',
             'jabatan' => 'required | max:255',
             'pangkat_id' => 'required',

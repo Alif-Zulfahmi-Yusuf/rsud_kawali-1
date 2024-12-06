@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'crete')
+@section('title', 'Create')
 
 
 @push('css')
@@ -32,6 +32,17 @@
                                 <label for="name"><strong>Name:</strong></label>
                                 <input type="text" name="name" placeholder="Name" class="form-control"
                                     value="{{ old('name') }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="user_id"><strong>Pilih User:</strong></label>
+                                <select class="select-single" name="user_id" required>
+                                    <option value="" disabled selected>Pilih User</option>
+                                    @foreach ($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-12">

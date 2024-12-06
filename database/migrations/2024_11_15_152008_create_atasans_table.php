@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('atasans', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('nip');
             $table->string('name');
             $table->string('jabatan');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Skp;
+use App\Models\SkpAtasan;
 use Illuminate\Http\Request;
 use App\Http\Requests\SkpRequest;
 use App\Http\Services\SkpService;
@@ -25,19 +26,11 @@ class SkpController extends Controller
     public function index()
     {
         // Ambil data SKP berdasarkan ID pengguna yang sedang login
-        $skps = Skp::with(['user.atasan']) // Relasi dengan user dan atasan
+        $skps = Skp::with(['skpAtasan.user']) // Relasi ke SKP Atasan dan user dari SKP Atasan
             ->where('user_id', Auth::id()) // Filter berdasarkan pengguna yang login
             ->get();
 
         return view('backend.skp.index', compact('skps'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -46,20 +39,24 @@ class SkpController extends Controller
     public function store(SkpRequest $request)
     {
         try {
-            $this->skpService->store($request->validated(), Auth::user());
+            // Ambil data yang divalidasi
+            $data = $request->validated();
+
+            // Log data yang diterima dari request
+            Log::info('Data yang diterima untuk SKP:', $data);
+
+            // Panggil service untuk menyimpan SKP
+            $skp = $this->skpService->store($data, Auth::user());
+
             return back()->with('success', 'Data SKP berhasil disimpan.');
         } catch (\Exception $e) {
+            // Log error yang terjadi
             Log::error('Gagal menyimpan data SKP', [
                 'error' => $e->getMessage(),
             ]);
             return back()->with('error', $e->getMessage());
         }
     }
-
-
-    /**
-     * Display the specified resource.
-     */
 
     /**
      * Show the form for editing the specified resource.

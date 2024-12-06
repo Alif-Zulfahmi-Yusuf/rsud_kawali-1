@@ -91,7 +91,7 @@ class User extends Authenticatable
      */
     public function atasan()
     {
-        return $this->belongsTo(Atasan::class, 'atasan_id');
+        return $this->hasOne(Atasan::class, 'user_id', 'atasan_id');
     }
 
     // Relasi Atasan ke Pegawai
@@ -102,9 +102,8 @@ class User extends Authenticatable
 
     public function skpAtasan()
     {
-        return $this->hasManyThrough(SkpAtasan::class, User::class, 'id', 'user_id', 'atasan_id', 'id');
+        return $this->hasMany(SkpAtasan::class, 'user_id', 'atasan_id');
     }
-
     /**
      * Relasi ke pangkat (Pangkat dari pengguna)
      */

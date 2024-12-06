@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Atasan;
 use App\Models\Pangkat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\AtasanRequest;
 use App\Http\Services\AtasanService;
+use Illuminate\Support\Facades\Auth;
 
 class AtasanController extends Controller
 {
@@ -33,8 +35,13 @@ class AtasanController extends Controller
     {
         $pangkats = Pangkat::all();
 
-        return view('backend.atasans.create', compact('pangkats'));
+        // Hanya ambil pengguna dengan role 'atasan'
+        $users = User::role('atasan')->get();
+
+        return view('backend.atasans.create', compact('pangkats', 'users'));
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -44,7 +51,8 @@ class AtasanController extends Controller
         $data = $request->validated();
 
         try {
-            $this->atasanService->create($data);
+            // Tambahkan user_id dari pengguna yang sedang login
+            $this->atasanService->create($data, Auth::user());
 
             return redirect()->route('atasans.index')->with('status', [
                 'message' => 'Data berhasil disimpan.',
@@ -62,10 +70,6 @@ class AtasanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Atasan $atasan)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -75,8 +79,12 @@ class AtasanController extends Controller
         $atasan = $this->atasanService->selectFirstById('uuid', $uuid);
         $pangkats = Pangkat::all();
 
-        return view('backend.atasans.edit', compact('atasan', 'pangkats'));
+        // Hanya ambil pengguna yang memiliki role 'atasan'
+        $users = User::role('atasan')->get();
+
+        return view('backend.atasans.edit', compact('atasan', 'pangkats', 'users'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -89,16 +97,17 @@ class AtasanController extends Controller
             $this->atasanService->update($data, $uuid);
 
             return redirect()->route('atasans.index')->with('status', [
-                'message' => 'Data berhasil di edit.',
+                'message' => 'Data berhasil diperbarui.',
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to update Atasan: ' . $e->getMessage());
+            Log::error('Gagal memperbarui data Atasan: ' . $e->getMessage());
 
             return redirect()->route('atasans.edit', $uuid)->withInput()->withErrors([
-                'error' => 'Data gagal di edit. Silakan coba lagi.',
+                'error' => 'Data gagal diperbarui. Silakan coba lagi.',
             ]);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.

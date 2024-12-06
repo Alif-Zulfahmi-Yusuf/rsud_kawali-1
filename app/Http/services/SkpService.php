@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Skp;
 use App\Models\RencanaHasilKinerja;
+use App\Models\SkpAtasan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,17 +12,26 @@ class SkpService
 {
     public function store(array $data, $user): Skp
     {
-        // Pastikan user memiliki atasan
+        // Pastikan user memiliki atasan_id
         if (!$user->atasan_id) {
             throw new \Exception('Atasan belum ditentukan untuk pengguna ini.');
         }
 
+        Log::info('Mencari SKP Atasan', [
+            'atasan_id' => $user->atasan_id,
+            'tahun' => $data['year']
+        ]);
+
         // Ambil SKP Atasan berdasarkan atasan_id dan tahun
-        $skpAtasan = Skp::where('user_id', $user->atasan_id)
+        $skpAtasan = SkpAtasan::where('user_id', $user->atasan_id)
             ->where('tahun', $data['year'])
             ->first();
 
         if (!$skpAtasan) {
+            Log::warning('SKP Atasan tidak ditemukan', [
+                'atasan_id' => $user->atasan_id,
+                'year' => $data['year']
+            ]);
             throw new \Exception('SKP atasan untuk tahun ' . $data['year'] . ' tidak ditemukan.');
         }
 

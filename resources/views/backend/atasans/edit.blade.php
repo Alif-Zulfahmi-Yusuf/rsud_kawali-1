@@ -37,6 +37,20 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label for="user_id"><strong>Pilih User:</strong></label>
+                                <select class="form-select select-single" name="user_id" required>
+                                    <option value="" disabled>Pilih User</option>
+                                    @foreach ($users as $user)
+                                    <option value="{{ $user->id }}"
+                                        {{ $atasan->user_id == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }} ({{ $user->email }})
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label for="nip"><strong>NIP:</strong></label>
                                 <input type="text" name="nip" class="form-control" required value="{{ $atasan->nip }}">
                             </div>
@@ -48,7 +62,8 @@
                                     <option value="" disabled selected>Pilih Pangkat</option>
                                     @foreach ($pangkats as $pangkat)
                                     <option value="{{ $pangkat->id }}"
-                                        {{ $atasan->pangkat_id == $pangkat->id ? 'selected' : '' }}>{{ $pangkat->name }}
+                                        {{ $atasan->pangkat_id == $pangkat->id ? 'selected' : '' }}>
+                                        {{ $pangkat->name }}
                                     </option>
                                     @endforeach
                                 </select>
