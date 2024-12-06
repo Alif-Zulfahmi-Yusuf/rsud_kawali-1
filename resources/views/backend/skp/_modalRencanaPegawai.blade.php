@@ -15,20 +15,15 @@
                     <div class="form-group mb-3">
                         <label for="rencana_atasan" class="form-label">Rencana Atasan</label>
                         <select class="form-select" id="rencana_atasan" name="rencana_atasan_id" required>
-                            <option value="" selected>Pilih Rencana Atasan</option>
 
-                            @if ($skpDetail && $skpDetail->rencanaHasilKinerja)
-                            @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
+                            <option value="" selected>Pilih Rencana Atasan</option>
+                            @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja as $rencana)
                             <option value="{{ $rencana->id }}">
-                                {{ $rencana->rencana ?? '-' }} -
+                                {{ $rencana->rencana ?? '-' }}
                             </option>
                             @endforeach
-                            @else
-                            <option value="" disabled>Tidak ada data rencana hasil kerja atasan.</option>
-                            @endif
                         </select>
                     </div>
-
                     <!-- Rencana Hasil Kerja -->
                     <div class="form-group mb-3">
                         <label for="rencana_hasil_kerja" class="form-label">Rencana Hasil Kerja</label>

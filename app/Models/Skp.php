@@ -19,6 +19,7 @@ class Skp extends Model
         'uuid',
         'user_id',
         'atasan_id',  // Menambahkan atasan_id pada $fillable
+        'skp_atasan_id',
         'tahun',
         'module',
         'unit_kerja',

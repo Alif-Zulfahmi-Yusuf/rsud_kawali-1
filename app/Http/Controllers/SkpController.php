@@ -66,6 +66,7 @@ class SkpController extends Controller
         try {
             // Mendapatkan detail SKP menggunakan service
             $skpDetail = $this->skpService->getSkpDetail($uuid);
+            // Sebelum mengirim data ke view
 
             // Menampilkan view edit dengan data SKP
             return view('backend.skp.edit', compact('skpDetail'));
@@ -74,7 +75,6 @@ class SkpController extends Controller
             abort(404, $e->getMessage());
         }
     }
-
 
 
     /**

@@ -91,7 +91,7 @@ class User extends Authenticatable
      */
     public function atasan()
     {
-        return $this->hasOne(Atasan::class, 'user_id', 'atasan_id');
+        return $this->belongsTo(Atasan::class, 'atasan_id', 'id');
     }
 
     // Relasi Atasan ke Pegawai

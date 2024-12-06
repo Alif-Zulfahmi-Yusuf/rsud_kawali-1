@@ -12,6 +12,7 @@
     href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
+
 @endpush
 
 
@@ -37,7 +38,7 @@
             <div class="table-responsive">
                 <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
+                        <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <i class="fa fa-plus me-1"></i> Add Action
                         </button>
@@ -149,7 +150,6 @@
 </form>
 @endsection
 
-@include('backend.skp._modalRencana')
 @include('backend.skp._modalRencanaPegawai')
 @include('backend.skp._modalIndikator')
 
@@ -172,4 +172,5 @@ toastSuccess("{{ session('success') }}");
 toastError("{{ session('error') }}"); // Mengirim string error
 @endif
 </script>
+
 @endpush

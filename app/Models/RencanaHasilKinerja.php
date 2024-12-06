@@ -45,18 +45,20 @@ class RencanaHasilKinerja extends Model
         return $this->belongsTo(SkpAtasan::class, 'skp_atasan_id');
     }
 
+    public function rencanaHasilKinerja()
+    {
+        return $this->hasMany(RencanaHasilKinerja::class, 'rencana_atasan_id');
+    }
+
+
     public function rencanaPegawai(): HasMany
     {
         return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'rencana_atasan_id', 'id');
     }
 
+
     public function indikatorKinerja(): HasMany
     {
         return $this->hasMany(IndikatorKinerja::class, 'rencana_kerja_atasan_id', 'id');
-    }
-
-    public function rencanaAtasan(): HasMany
-    {
-        return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'rencana_atasan_id', 'id');
     }
 }

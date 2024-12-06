@@ -51,8 +51,8 @@ class AtasanController extends Controller
         $data = $request->validated();
 
         try {
-            // Tambahkan user_id dari pengguna yang sedang login
-            $this->atasanService->create($data, Auth::user());
+            // Panggil service untuk menyimpan data Atasan, tanpa menambahkan Auth::user()
+            $this->atasanService->create($data);
 
             return redirect()->route('atasans.index')->with('status', [
                 'message' => 'Data berhasil disimpan.',
@@ -65,6 +65,7 @@ class AtasanController extends Controller
             ]);
         }
     }
+
 
 
     /**

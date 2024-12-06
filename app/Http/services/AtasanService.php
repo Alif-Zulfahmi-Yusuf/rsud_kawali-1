@@ -9,11 +9,8 @@ use Illuminate\Support\Str;
 class AtasanService
 {
 
-    public function create($data, $user)
+    public function create($data)
     {
-        // Tambahkan user_id dari pengguna yang sedang login ke data sebelum disimpan
-        $data['user_id'] = $user->id;
-
         return Atasan::create($data);
     }
 

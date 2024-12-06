@@ -31,11 +31,6 @@ class RencanaHasilKinerjaPegawai extends Model
         });
     }
 
-    public function getRouteKeyName()
-    {
-        return 'uuid';
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -43,7 +38,12 @@ class RencanaHasilKinerjaPegawai extends Model
 
     public function rencanaAtasan(): BelongsTo
     {
-        return $this->belongsTo(RencanaHasilKinerja::class, 'rencana_atasan_id');
+        return $this->belongsTo(RencanaHasilKinerja::class, 'rencana_atasan_id', 'id');
+    }
+
+    public function rencanaPegawai(): HasMany
+    {
+        return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'rencana_atasan_id', 'id');
     }
 
     public function skp(): BelongsTo
