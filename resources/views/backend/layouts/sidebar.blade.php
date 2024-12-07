@@ -29,7 +29,7 @@
                             </div>
                         </a>
                         <div class="parent-wrapper label-1">
-                            <ul class="nav collapse parent {{ request()->routeIs('users.*') || request()->routeIs('roles.*') || request()->routeIs('pangkat.*') || request()->routeIs('atasans.*') ? 'show' : '' }}"
+                            <ul class="nav collapse parent {{ request()->routeIs('users.*') || request()->routeIs('roles.*') || request()->routeIs('pangkat.*') || request()->routeIs('atasans.*') || request()->routeIs('perilaku.*') ? 'show' : '' }}"
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-home">
                                 <li class="collapsed-nav-item-title d-none">Data Master</li>
                                 <li class="nav-item">
@@ -65,6 +65,14 @@
                                         href="{{ route('atasans.index') }}">
                                         <div class="d-flex align-items-center">
                                             <span class="nav-link-text">Data Atasan</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('perilaku.*') ? 'active' : '' }}"
+                                        href="{{ route('perilaku.index') }}">
+                                        <div class="d-flex align-items-center">
+                                            <span class="nav-link-text">Data Perilaku</span>
                                         </div>
                                     </a>
                                 </li>

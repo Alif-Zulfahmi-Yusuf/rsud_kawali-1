@@ -48,7 +48,7 @@ class RencanaHasilKinerjaPegawai extends Model
 
     public function skp(): BelongsTo
     {
-        return $this->belongsTo(Skp::class);
+        return $this->belongsTo(Skp::class, 'skp_id');
     }
 
     public function indikatorKinerja(): HasMany

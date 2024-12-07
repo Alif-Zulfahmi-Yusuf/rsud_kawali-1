@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SkpAtasanController;
 use App\Http\Controllers\RencanaKerjaController;
+use App\Http\Controllers\PerilakuKerjaController;
 use App\Http\Controllers\IndikatorKinerjaController;
 use App\Http\Controllers\RencanaKerjaPegawaiController;
 
@@ -47,6 +48,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('rencana-kerja', RencanaKerjaController::class);
     Route::resource('rencana-pegawai', RencanaKerjaPegawaiController::class);
     Route::resource('indikator-kinerja', IndikatorKinerjaController::class);
+
+    Route::resource('perilaku', PerilakuKerjaController::class);
+    Route::delete('/perilaku/destroy/{uuid}', [PerilakuKerjaController::class, 'destroy'])->name('perilaku.destroy');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

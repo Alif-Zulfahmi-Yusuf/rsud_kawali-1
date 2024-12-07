@@ -15,15 +15,17 @@
                     <div class="form-group mb-3">
                         <label for="rencana_pegawai" class="form-label">Rencana Pegawai</label>
                         <select class="form-select" id="rencana_pegawai" name="rencana_kerja_pegawai_id" required>
-                            <option value="" selected>Pilih Rencana Pegawai</option>
-                            @forelse ($skpDetail->rencanaHasilKinerja as $rencana)
-                            @foreach ($rencana->rencanaPegawai as $rencanaPegawai)
+                            <option value="" selected>Pilih Rencana</option>
+                            @forelse ($skpDetail->rencanaHasilKinerja as $rencanaHasil)
+                            @forelse ($rencanaHasil->rencanaPegawai as $rencanaPegawai)
                             <option value="{{ $rencanaPegawai->id }}">
                                 {{ $rencanaPegawai->rencana ?? '-' }}
                             </option>
-                            @endforeach
                             @empty
-                            <option value="" disabled>Tidak ada rencana pegawai yang tersedia.</option>
+                            <option value="" disabled>Tidak ada rencana pegawai untuk rencana hasil kerja ini.</option>
+                            @endforelse
+                            @empty
+                            <option value="" disabled>Tidak ada rencana hasil kerja yang tersedia.</option>
                             @endforelse
                         </select>
                     </div>

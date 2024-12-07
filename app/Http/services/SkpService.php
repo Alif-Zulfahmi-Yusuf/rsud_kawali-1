@@ -84,21 +84,25 @@ class SkpService
         try {
             $user = Auth::user(); // Mendapatkan user yang sedang login
 
-            // Membuat query builder tanpa mengeksekusi query
+            // Membuat query builder untuk mendapatkan detail SKP
             $skpDetail = Skp::where('uuid', $uuid)
                 ->where('user_id', $user->id)
                 ->with([
-                    'rencanaHasilKinerja.rencanaPegawai',
+                    'rencanaHasilKinerja.rencanaPegawai' => function ($query) {
+                        // Filter rencanaPegawai jika diperlukan
+                        $query->orderBy('created_at', 'desc'); // Contoh: urutkan berdasarkan waktu pembuatan
+                    },
                     'rencanaHasilKinerja.rencanaPegawai.indikatorKinerja',
                     'skpAtasan' => function ($query) use ($user) {
                         $query->where('user_id', $user->atasan_id); // Filter berdasarkan atasan user
                     },
                     'skpAtasan.rencanaHasilKinerja',
                 ])
-                ->firstOrFail(); // Mengambil data pertama atau gagal jika tidak ada data yang ditemukan
+                ->firstOrFail(); // Ambil data pertama atau gagal jika tidak ditemukan
 
             return $skpDetail;
         } catch (\Exception $e) {
+            // Log error jika terjadi masalah
             Log::error('Gagal mendapatkan detail SKP', [
                 'uuid' => $uuid,
                 'user_id' => $user->id,
