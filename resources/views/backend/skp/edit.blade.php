@@ -30,6 +30,21 @@
         </div>
     </div>
 </div>
+
+<div class="card shadow rounded-lg mb-4" style="max-width:20rem;">
+    <div class="card-body">
+        <h5 class="card-title">Pegawai yang di nilai</h5>
+        <ul>
+            <li>{{ Auth::user()->name }}</li>
+            <li>{{ Auth::user()->nip }}</li>
+            <li>{{ Auth::user()->unit_kerja }}</li>
+            <li>{{ Auth::user()->pangkat->name }}</li>
+        </ul>
+
+    </div>
+</div>
+
+
 <form action="{{ route('skp.update', $skpDetail->uuid) }}" method="POST">
     @csrf
     @method('PUT')
