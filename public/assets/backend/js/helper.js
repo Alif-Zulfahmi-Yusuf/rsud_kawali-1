@@ -51,10 +51,9 @@ const toastError = (message) => {
 
 
 
-const startLoading = (str = 'Please wait...') => {
+const startLoading = () => {
     Swal.fire({
-        title: 'Loading!',
-        text: str,
+        title: "Processing...",
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
@@ -62,6 +61,9 @@ const startLoading = (str = 'Please wait...') => {
     });
 };
 
+const stopLoading = () => {
+    Swal.close(); // Menutup indikator loading
+};
 
 
 function showSuccessMessage() {
@@ -85,10 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-
-const stopLoading = () => {
-    Swal.close();
-};
 
 
 $(document).ready(function () {

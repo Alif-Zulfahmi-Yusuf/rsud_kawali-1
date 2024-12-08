@@ -40,23 +40,27 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('skp', SkpController::class);
     Route::delete('/skp/destroy/{uuid}', [SkpController::class, 'destroy'])->name('skp.destroy');
 
-
+    // bagian skp atasan
     Route::resource('skp_atasan', SkpAtasanController::class);
     Route::delete('/skp_atasan/destroy/{uuid}', [SkpAtasanController::class, 'destroy'])->name('skp_atasan.destroy');
 
-
+    // bagian Rencana Kerja
     Route::resource('rencana-kerja', RencanaKerjaController::class);
     Route::resource('rencana-pegawai', RencanaKerjaPegawaiController::class);
     Route::resource('indikator-kinerja', IndikatorKinerjaController::class);
 
+    // route perilaku
     Route::resource('perilaku', PerilakuKerjaController::class);
     Route::delete('/perilaku/destroy/{uuid}', [PerilakuKerjaController::class, 'destroy'])->name('perilaku.destroy');
+    Route::post('/perilaku/update', [PerilakuKerjaController::class, 'update'])->name('perilaku.update');
 
 
+    // bagian profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // bagian setting
     Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
     Route::patch('/settings', [SettingController::class, 'update'])->name('settings.update');
     Route::delete('/settings', [SettingController::class, 'destroy'])->name('settings.destroy');

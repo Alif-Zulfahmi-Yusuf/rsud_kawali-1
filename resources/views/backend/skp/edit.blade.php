@@ -31,18 +31,63 @@
     </div>
 </div>
 
-<div class="card shadow rounded-lg mb-4" style="max-width:20rem;">
-    <div class="card-body">
-        <h5 class="card-title">Pegawai yang di nilai</h5>
-        <ul>
-            <li>{{ Auth::user()->name }}</li>
-            <li>{{ Auth::user()->nip }}</li>
-            <li>{{ Auth::user()->unit_kerja }}</li>
-            <li>{{ Auth::user()->pangkat->name }}</li>
-        </ul>
-
+<div class="row gy-3 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow rounded-lg">
+            <div class="card-body">
+                <h5 class="card-title text-center">Pegawai yang Dinilai</h5>
+                <table class="table table-sm table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <td><strong>Nama</strong></td>
+                            <td>: {{ Auth::user()->name }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NIP</strong></td>
+                            <td>: {{ Auth::user()->nip }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Unit Kerja</strong></td>
+                            <td>: {{ Auth::user()->unit_kerja }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pangkat</strong></td>
+                            <td>: {{ Auth::user()->pangkat->name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow rounded-lg">
+            <div class="card-body">
+                <h5 class="card-title text-center">Atasan Penilai</h5>
+                <table class="table table-sm table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <td><strong>Nama</strong></td>
+                            <td>: {{ Auth::user()->atasan->name }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NIP</strong></td>
+                            <td>: {{ Auth::user()->atasan->nip }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Unit Kerja</strong></td>
+                            <td>: {{ Auth::user()->atasan->unit_kerja }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pangkat</strong></td>
+                            <td>: {{ Auth::user()->atasan->pangkat->name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+
 
 
 <form action="{{ route('skp.update', $skpDetail->uuid) }}" method="POST">
@@ -179,13 +224,15 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-@if(session('success'))
-toastSuccess("{{ session('success') }}");
-@endif
+$(document).ready(function() {
+    @if(session('success'))
+    toastSuccess("{{ session('success') }}");
+    @endif
 
-@if(session('error'))
-toastError("{{ session('error') }}"); // Mengirim string error
-@endif
+    @if(session('error'))
+    toastError("{{ session('error') }}");
+    @endif
+});
 </script>
 
 @endpush

@@ -111,35 +111,6 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-function uploadToSkp(id) {
-    Swal.fire({
-        title: "Konfirmasi",
-        text: "Apakah Anda yakin ingin mengupload data ini ke SKP?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Ya, Upload",
-        cancelButtonText: "Batal",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: `/skp/upload-from-atasan/${id}`,
-                type: "POST",
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr("content"),
-                },
-                success: function(response) {
-                    toastSuccess(response.success);
-                    // Refresh atau update tabel
-                    location.reload();
-                },
-                error: function(xhr) {
-                    toastError("Gagal mengupload data.");
-                },
-            });
-        }
-    });
-}
-
 @if(session('success'))
 toastSuccess("{{ session('success') }}");
 @endif
