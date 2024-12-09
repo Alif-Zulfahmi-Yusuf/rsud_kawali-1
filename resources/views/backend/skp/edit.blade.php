@@ -31,27 +31,30 @@
     </div>
 </div>
 
-<div class="row gy-3 mb-4">
+<div class="row gy-4 mb-5">
+    <!-- Card Pegawai yang Dinilai -->
     <div class="col-md-6">
-        <div class="card shadow rounded-lg">
+        <div class="card shadow border-0 rounded-lg">
+            <div class="card-header text-white text-center rounded-top">
+                <h5 class="mb-0"><i class="fas fa-user-check me-2"></i>Pegawai yang Dinilai</h5>
+            </div>
             <div class="card-body">
-                <h5 class="card-title text-center">Pegawai yang Dinilai</h5>
                 <table class="table table-sm table-borderless mb-0">
                     <tbody>
                         <tr>
-                            <td><strong>Nama</strong></td>
+                            <td><strong><i class="fas fa-user me-2 text-primary"></i>Nama</strong></td>
                             <td>: {{ Auth::user()->name }}</td>
                         </tr>
                         <tr>
-                            <td><strong>NIP</strong></td>
+                            <td><strong><i class="fas fa-id-badge me-2 text-primary"></i>NIP</strong></td>
                             <td>: {{ Auth::user()->nip }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Unit Kerja</strong></td>
+                            <td><strong><i class="fas fa-building me-2 text-primary"></i>Unit Kerja</strong></td>
                             <td>: {{ Auth::user()->unit_kerja }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Pangkat</strong></td>
+                            <td><strong><i class="fas fa-layer-group me-2 text-primary"></i>Pangkat</strong></td>
                             <td>: {{ Auth::user()->pangkat->name }}</td>
                         </tr>
                     </tbody>
@@ -59,26 +62,30 @@
             </div>
         </div>
     </div>
+
+    <!-- Card Atasan Penilai -->
     <div class="col-md-6">
-        <div class="card shadow rounded-lg">
+        <div class="card shadow border-0 rounded-lg">
+            <div class="card-header  text-white text-center rounded-top">
+                <h5 class="mb-0"><i class="fas fa-user-tie me-2"></i>Atasan Penilai</h5>
+            </div>
             <div class="card-body">
-                <h5 class="card-title text-center">Atasan Penilai</h5>
                 <table class="table table-sm table-borderless mb-0">
                     <tbody>
                         <tr>
-                            <td><strong>Nama</strong></td>
+                            <td><strong><i class="fas fa-user me-2 text-success"></i>Nama</strong></td>
                             <td>: {{ Auth::user()->atasan->name }}</td>
                         </tr>
                         <tr>
-                            <td><strong>NIP</strong></td>
+                            <td><strong><i class="fas fa-id-badge me-2 text-success"></i>NIP</strong></td>
                             <td>: {{ Auth::user()->atasan->nip }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Unit Kerja</strong></td>
+                            <td><strong><i class="fas fa-building me-2 text-success"></i>Unit Kerja</strong></td>
                             <td>: {{ Auth::user()->atasan->unit_kerja }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Pangkat</strong></td>
+                            <td><strong><i class="fas fa-layer-group me-2 text-success"></i>Pangkat</strong></td>
                             <td>: {{ Auth::user()->atasan->pangkat->name }}</td>
                         </tr>
                     </tbody>
@@ -87,9 +94,6 @@
         </div>
     </div>
 </div>
-
-
-
 <form action="{{ route('skp.update', $skpDetail->uuid) }}" method="POST">
     @csrf
     @method('PUT')
@@ -130,10 +134,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($skpDetail->rencanaHasilKinerja as $rencana)
-                        <!-- Baris Detail -->
-
-                        @if(!empty($rencana->rencanaPegawai))
+                        @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja as $rencana)
+                        @if ($rencana->rencanaPegawai->isNotEmpty())
                         @foreach ($rencana->rencanaPegawai as $pegawai)
                         @foreach ($pegawai->indikatorKinerja as $indikator)
                         <tr>
@@ -141,12 +143,10 @@
                             <td>
                                 <div><strong>Rencana Hasil Kerja:</strong></div>
                                 <div>{{ $pegawai->rencana ?? 'Data Rencana Pegawai Tidak Tersedia' }}</div>
-
                                 <div class="text-muted"><strong>Rencana Hasil Kerja Pimpinan yang Diintervensi:</strong>
                                 </div>
                                 <div class="text-muted">{{ $rencana->rencana }}</div>
                             </td>
-                            <!-- Tetap untuk kolom Rencana -->
                             <td class="text-center">{{ $indikator->aspek }}</td>
                             <td>{{ $indikator->indikator_kinerja }}</td>
                             <td class="text-center">
@@ -166,7 +166,6 @@
                         @endforeach
                         @endforeach
                         @else
-                        <!-- Jika rencanaPegawai tidak ada -->
                         <tr>
                             <td colspan="7" class="text-center">Tidak ada data rencana.</td>
                         </tr>
@@ -185,26 +184,33 @@
                     <thead>
                         <tr>
                             <th class="text-center" colspan="3">PERILAKU KERJA / BEHAVIOUR</th>
-                            <th></th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($categories as $category)
                         <tr>
-                            <td>1.</td>
-                            <td>Ukuran keberhasilan/ Indikator Kinerja dan Target:
-                                Memahami dan memenuhi kebutuhan masyarakat
-                                Ramah, cekatan, solutif, dan dapat diandalkan
-                                Melakukan perbaikan tiada henti</td>
+                            <td colspan="3" class="fw-bold bg-light">{{ $category->name }}</td>
+                        </tr>
+                        @foreach ($category->perilakus as $perilaku)
+                        <tr>
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td class="">
+                                <h6>Ukuran keberhasilan/ Indikator Kinerja dan Target:</h6>
+                                {{ $perilaku->name }}
+                            </td>
                             <td>
-                                <textarea name="" id="" class="form-control"></textarea>
+                                <h6>Ekspektasi Khusus Pimpinan/ Leader:</h6>
+                                <textarea class="form-control" name="" id=""></textarea>
                             </td>
                         </tr>
+                        @endforeach
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
     <hr>
     <button type="submit" class="btn btn-phoenix-secondary me-1 mb-1">Simpan</button>
 </form>

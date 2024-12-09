@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Skp;
+use App\Models\Perilaku;
 use App\Models\SkpAtasan;
 use Illuminate\Http\Request;
+use App\Models\CategoryPerilaku;
 use App\Http\Requests\SkpRequest;
 use App\Http\Services\SkpService;
 use App\Models\RencanaHasilKinerja;
@@ -66,15 +68,27 @@ class SkpController extends Controller
         try {
             // Mendapatkan detail SKP menggunakan service
             $skpDetail = $this->skpService->getSkpDetail($uuid);
-            // Sebelum mengirim data ke view
 
-            // Menampilkan view edit dengan data SKP
-            return view('backend.skp.edit', compact('skpDetail'));
+            // Mendapatkan semua kategori yang memiliki perilakus
+            $categories = CategoryPerilaku::with('perilakus')
+                ->whereHas('perilakus') // Hanya ambil kategori yang memiliki perilakus
+                ->get();
+
+            // Menampilkan view edit dengan data SKP dan kategori perilaku
+            return view('backend.skp.edit', compact('skpDetail', 'categories'));
         } catch (\RuntimeException $e) {
+            // Log error jika data tidak ditemukan
+            Log::error('Gagal menampilkan data SKP untuk edit', [
+                'uuid' => $uuid,
+                'error' => $e->getMessage(),
+            ]);
+
             // Tangani jika data tidak ditemukan
             abort(404, $e->getMessage());
         }
     }
+
+
 
 
     /**

@@ -50,7 +50,6 @@ class RencanaHasilKinerja extends Model
         return $this->hasMany(RencanaHasilKinerja::class, 'rencana_atasan_id');
     }
 
-
     public function rencanaPegawai(): HasMany
     {
         return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'rencana_atasan_id', 'id');

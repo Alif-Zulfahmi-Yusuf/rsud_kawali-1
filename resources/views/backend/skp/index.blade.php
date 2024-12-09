@@ -68,7 +68,17 @@
                             {{ $skp->tanggal_akhir ? \Carbon\Carbon::parse($skp->tanggal_akhir)->format('Y M d') : '-' }}
                         </td>
                         <td class="text-center">{{ $skp->user->atasan->name ?? '-' }}</td>
-                        <td class="text-center">{{ $skp->status ?? '-' }}</td>
+                        <td class="text-center">
+                            @if ($skp->status === 'pending')
+                            <span class="badge badge-phoenix badge-phoenix-warning">Pending</span>
+                            @elseif ($skp->status === 'approve')
+                            <span class="badge badge-phoenix badge-phoenix-success">Approve</span>
+                            @elseif ($skp->status === 'revisi')
+                            <span class="badge badge-phoenix badge-phoenix-danger">Revisi</span>
+                            @else
+                            <span class="badge bg-secondary">-</span>
+                            @endif
+                        </td>
                         <td class="text-center">
                             <div class="btn-reveal-trigger position-static">
                                 <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -81,7 +91,11 @@
                                     </svg>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end py-2">
-                                    <a class="dropdown-item" href="{{ route('skp.edit', $skp->uuid) }}">Edit</a>
+                                    <a class="dropdown-item {{ $skp->status === 'approve' ? 'disabled' : '' }}"
+                                        href="{{ $skp->status === 'approve' ? '#' : route('skp.edit', $skp->uuid) }}"
+                                        {{ $skp->status === 'approve' ? 'aria-disabled=true' : '' }}>
+                                        Edit
+                                    </a>
                                     <hr class="dropdown-divider">
                                     <button type="button" class="dropdown-item text-danger delete-button"
                                         onclick="deleteData(this)" data-uuid="{{ $skp->uuid }}">Delete</button>

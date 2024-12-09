@@ -84,19 +84,35 @@ class SkpService
         try {
             $user = Auth::user(); // Mendapatkan user yang sedang login
 
-            // Membuat query builder untuk mendapatkan detail SKP
+            // Mendapatkan detail SKP beserta relasi yang terkait
             $skpDetail = Skp::where('uuid', $uuid)
-                ->where('user_id', $user->id)
+                ->where('user_id', $user->id) // Filter berdasarkan user yang sedang login
                 ->with([
-                    'rencanaHasilKinerja.rencanaPegawai' => function ($query) {
-                        // Filter rencanaPegawai jika diperlukan
-                        $query->orderBy('created_at', 'desc'); // Contoh: urutkan berdasarkan waktu pembuatan
+                    // Relasi Rencana Hasil Kerja
+                    'rencanaHasilKinerja' => function ($query) {
+                        $query->orderBy('created_at', 'desc'); // Urutkan berdasarkan waktu pembuatan
                     },
-                    'rencanaHasilKinerja.rencanaPegawai.indikatorKinerja',
+                    // Relasi Rencana Pegawai
+                    'rencanaHasilKinerja.rencanaPegawai' => function ($query) use ($user) {
+                        $query->where('user_id', $user->id) // Filter rencana pegawai berdasarkan user
+                            ->orderBy('created_at', 'desc');
+                    },
+                    // Relasi Indikator Kinerja melalui Rencana Pegawai
+                    'rencanaHasilKinerja.rencanaPegawai.indikatorKinerja' => function ($query) use ($user) {
+                        $query->where('user_id', $user->id)
+                            ->orderBy('created_at', 'desc'); // Urutkan indikator berdasarkan waktu pembuatan
+                    },
+                    // Relasi SKP Atasan
                     'skpAtasan' => function ($query) use ($user) {
-                        $query->where('user_id', $user->atasan_id); // Filter berdasarkan atasan user
+                        $query->where('user_id', $user->atasan_id) // Filter berdasarkan atasan
+                            ->orderBy('created_at', 'desc');
                     },
+                    // Rencana Hasil Kerja milik Atasan
                     'skpAtasan.rencanaHasilKinerja',
+                    // Rencana Pegawai milik Atasan
+                    'skpAtasan.rencanaHasilKinerja.rencanaPegawai',
+                    // Indikator Kinerja melalui Rencana Pegawai Atasan
+                    'skpAtasan.rencanaHasilKinerja.rencanaPegawai.indikatorKinerja',
                 ])
                 ->firstOrFail(); // Ambil data pertama atau gagal jika tidak ditemukan
 
