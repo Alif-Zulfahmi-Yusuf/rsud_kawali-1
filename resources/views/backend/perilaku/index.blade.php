@@ -72,7 +72,6 @@
 </div>
 
 @include('backend.perilaku._modalAdd')
-@include('backend.perilaku._modalEdit')
 @endsection
 
 @push('js')

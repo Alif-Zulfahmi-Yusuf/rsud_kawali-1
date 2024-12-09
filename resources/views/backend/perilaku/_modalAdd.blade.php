@@ -8,6 +8,7 @@
             <div class="modal-body">
                 <form action="{{ route('perilaku.store') }}" method="POST">
                     @csrf
+
                     <div class="form-group mb-3">
                         <label for="category" class="form-label">Category</label>
                         <select class="form-select" id="category" name="category_perilaku_id" required>

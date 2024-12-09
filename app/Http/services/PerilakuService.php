@@ -14,17 +14,12 @@ class PerilakuService
         return Perilaku::create($data);
     }
 
-    public function update($data, $uuid)
+    public function update(array $data, string $uuid)
     {
-        // Log untuk memeriksa data yang diterima
-        Log::info($data);
+        // Temukan perilaku berdasarkan UUID
+        $perilaku = Perilaku::where('uuid', $uuid)->firstOrFail();
 
-        // Pastikan uuid ada di dalam data
-        if (!isset($data['uuid'])) {
-            throw new \Exception('UUID tidak ditemukan dalam data.');
-        }
-
-        $perilaku = Perilaku::where('uuid', $data['uuid'])->firstOrFail();
+        // Lakukan pembaruan data
         $perilaku->update([
             'category_perilaku_id' => $data['category_perilaku_id'],
             'name' => $data['name'],
@@ -32,6 +27,7 @@ class PerilakuService
 
         return $perilaku;
     }
+
 
 
 

@@ -80,19 +80,22 @@ class PerilakuKerjaController extends Controller
     public function update(PerilakuRequest $request, string $uuid)
     {
         try {
-            // Log untuk memeriksa data yang diterima
-            Log::info($request->all());
+            // Gabungkan data validasi dengan UUID dari parameter route
+            $validated = array_merge($request->validated(), ['uuid' => $uuid]);
 
-            // Pastikan uuid ada di dalam data yang dikirimkan
-            $validated = $request->validated();
+            // Log data yang divalidasi untuk debugging
+            Log::info('Data yang divalidasi:', $validated);
+
+            // Panggil service untuk memperbarui data
             $this->perilakuService->update($validated, $uuid);
 
-            return redirect()->back()->with('success', 'Perilaku berhasil diperbarui.');
+            return redirect()->route('perilaku.index')->with('success', 'Perilaku berhasil diperbarui.');
         } catch (\Exception $e) {
             Log::error('Terjadi kesalahan saat memperbarui perilaku: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui perilaku. Silakan coba lagi.');
+            return redirect()->route('perilaku.edit', $uuid)->with('error', 'Terjadi kesalahan saat memperbarui perilaku. Silakan coba lagi.');
         }
     }
+
 
 
 

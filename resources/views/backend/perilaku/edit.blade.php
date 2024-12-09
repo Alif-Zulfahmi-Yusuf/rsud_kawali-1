@@ -54,18 +54,22 @@
 
 
 @push('js')
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
-@if(session('status'))
-// Pastikan session('status') adalah string, bukan array
-let statusMessage = @json(session('status'));
-if (typeof statusMessage === 'object') {
-    statusMessage = statusMessage.message || 'Unknown status';
-}
-toastSuccess(statusMessage);
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
+
+@if(session('error'))
+toastError({
+    errors: {
+        message: "{{ session('error') }}"
+    }
+});
 @endif
 </script>
 @endpush

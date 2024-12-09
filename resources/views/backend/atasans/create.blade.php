@@ -78,10 +78,10 @@
                             </div>
                         </div>
                         <div class="col-md-12 text-center">
-                            <button type="submit" class="btn btn-primary btn-sm mt-2 mb-3">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm mt-2 mb-3">
                                 <i class="fa-solid fa-floppy-disk"></i> Submit
                             </button>
-                            <a class="btn btn-primary btn-sm mb-2" href="{{ route('atasans.index') }}"><i
+                            <a class="btn btn-outline-danger btn-sm mb-2" href="{{ route('atasans.index') }}"><i
                                     class="fa fa-arrow-left"></i>
                                 Back</a>
                         </div>
