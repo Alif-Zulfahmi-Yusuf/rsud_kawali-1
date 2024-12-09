@@ -116,6 +116,8 @@ class SkpService
                 ])
                 ->firstOrFail(); // Ambil data pertama atau gagal jika tidak ditemukan
 
+            // Jika diperlukan, Anda dapat menambahkan logika lain untuk memanipulasi data indikator atau relasi lainnya
+
             return $skpDetail;
         } catch (\Exception $e) {
             // Log error jika terjadi masalah

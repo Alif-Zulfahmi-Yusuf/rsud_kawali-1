@@ -74,11 +74,11 @@ class IndikatorService
         }
     }
 
-    public function update(string $id, array $data)
+    public function update(string $uuid, array $data)
     {
         try {
-            // Temukan indikator kinerja berdasarkan ID
-            $indikator = IndikatorKinerja::findOrFail($id);
+            // Temukan indikator kinerja berdasarkan UUID
+            $indikator = IndikatorKinerja::findOrFail($uuid);
 
             // Update data indikator kinerja
             $indikator->update([

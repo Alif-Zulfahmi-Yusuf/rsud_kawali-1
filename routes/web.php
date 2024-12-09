@@ -50,7 +50,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     // bagian indikator
     Route::resource('indikator-kinerja', IndikatorKinerjaController::class);
-    Route::delete('/indikator-kinerja/destroy/{uuid}', [PerilakuKerjaController::class, 'destroy'])->name('indikator-kinerja.destroy');
+    Route::delete('/indikator-kinerja/destroy/{uuid}', [IndikatorKinerjaController::class, 'destroy'])->name('indikator-kinerja.destroy');
+    Route::put('/indikator-kinerja/{uuid}', [IndikatorKinerjaController::class, 'update'])->name('indikator-kinerja.update');
 
     // route perilaku
     Route::resource('perilaku', PerilakuKerjaController::class);

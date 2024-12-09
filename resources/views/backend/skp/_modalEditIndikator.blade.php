@@ -11,7 +11,7 @@
                 <!-- Form Edit Indikator -->
                 <form id="formEditIndikator" action="#" method="POST">
                     @csrf
-
+                    @method('PUT')
                     <input type="hidden" name="indikator_id" id="editIndikatorId">
 
                     <div class="form-group mb-3">
@@ -94,7 +94,7 @@
 
                     <!-- Tombol Submit -->
                     <div class="d-flex justify-content-end mt-3">
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" class="btn btn-outline-secondary">Update</button>
                     </div>
                 </form>
             </div>

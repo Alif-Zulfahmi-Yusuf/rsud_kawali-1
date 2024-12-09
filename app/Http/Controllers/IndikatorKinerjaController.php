@@ -91,6 +91,7 @@ class IndikatorKinerjaController extends Controller
     {
         try {
             $data = $request->validate([
+                'rencana_kerja_pegawai_id' => 'required|exists:rencana_kerja_pegawai,id',
                 'aspek' => 'required|string|max:255',
                 'indikator_kinerja' => 'required|string',
                 'tipe_target' => 'required|in:quantitative,qualitative',
@@ -104,6 +105,7 @@ class IndikatorKinerjaController extends Controller
 
             return redirect()->back()->with('success', 'Indikator Kinerja berhasil diperbarui.');
         } catch (\Exception $e) {
+
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }

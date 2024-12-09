@@ -186,6 +186,7 @@ const removeRowFromTable = (uuid) => {
 }
 
 const openEditIndikatorModal = (uuid, rencanaPegawaiId, aspek, indikatorKinerja, tipeTarget, targetMinimum, targetMaximum, satuan, report) => {
+    console.log(`UUID indikator: ${uuid}`); // Menampilkan UUID indikator di console untuk verifikasi
     // Isi data ke dalam form edit
     $('#edit-uuid').val(uuid);
     $('#editRencanaPegawai').val(rencanaPegawaiId);
@@ -200,6 +201,7 @@ const openEditIndikatorModal = (uuid, rencanaPegawaiId, aspek, indikatorKinerja,
     // Tampilkan modal
     $('#modalEditIndikator').modal('show');
 };
+
 
 // Menangani pengiriman form edit
 $('#formEditIndikator').submit(function (e) {
@@ -216,7 +218,7 @@ $('#formEditIndikator').submit(function (e) {
     const report = $('#editReport').val();
 
     $.ajax({
-        type: "POST", // Ganti dengan PUT sesuai resource Laravel
+        type: "PUT", // Ganti dengan PUT sesuai resource Laravel
         url: `/indikator-kinerja/${uuid}`, // Gunakan UUID di URL
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

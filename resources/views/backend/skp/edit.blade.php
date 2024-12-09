@@ -135,7 +135,6 @@
                     </thead>
                     <tbody>
                         @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja as $rencana)
-                        @if ($rencana->rencanaPegawai->isNotEmpty())
                         @foreach ($rencana->rencanaPegawai as $pegawai)
                         @foreach ($pegawai->indikatorKinerja as $indikator)
                         <tr>
@@ -166,6 +165,7 @@
                                         onclick="openEditIndikatorModal('{{ $indikator->uuid }}', '{{ $indikator->rencana_kerja_pegawai_id }}', '{{ $indikator->aspek }}', '{{ $indikator->indikator_kinerja }}', '{{ $indikator->tipe_target }}', '{{ $indikator->target_minimum }}', '{{ $indikator->target_maksimum }}', '{{ $indikator->satuan }}', '{{ $indikator->report }}')">
                                         Edit
                                     </a>
+
                                     <div class="dropdown-divider"></div>
                                     <button type="button" class="dropdown-item text-danger delete-button"
                                         onclick="deleteData(this)" data-uuid="{{ $indikator->uuid }}">Delete</button>
@@ -174,13 +174,9 @@
                         </tr>
                         @endforeach
                         @endforeach
-                        @else
-                        <tr>
-                            <td colspan="7" class="text-center">Tidak ada data rencana.</td>
-                        </tr>
-                        @endif
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -221,7 +217,7 @@
     </div>
 
     <hr>
-    <button type="submit" class="btn btn-phoenix-secondary me-1 mb-1">Simpan</button>
+    <button type="submit" class="btn btn-outline-secondary me-1 mb-1">Simpan</button>
 </form>
 @endsection
 
