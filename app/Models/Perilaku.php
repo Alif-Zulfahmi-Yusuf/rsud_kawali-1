@@ -13,6 +13,7 @@ class Perilaku extends Model
     protected $table = 'perilakus';
 
     protected $fillable = [
+        'uuid',
         'category_perilaku_id',
         'name',
     ];

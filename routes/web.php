@@ -47,12 +47,15 @@ Route::group(['middleware' => ['auth']], function () {
     // bagian Rencana Kerja
     Route::resource('rencana-kerja', RencanaKerjaController::class);
     Route::resource('rencana-pegawai', RencanaKerjaPegawaiController::class);
+
+    // bagian indikator
     Route::resource('indikator-kinerja', IndikatorKinerjaController::class);
+    Route::delete('/indikator-kinerja/destroy/{uuid}', [PerilakuKerjaController::class, 'destroy'])->name('indikator-kinerja.destroy');
 
     // route perilaku
     Route::resource('perilaku', PerilakuKerjaController::class);
+    Route::put('/perilaku/update/{uuid}', [PerilakuKerjaController::class, 'update'])->name('perilaku.update');
     Route::delete('/perilaku/destroy/{uuid}', [PerilakuKerjaController::class, 'destroy'])->name('perilaku.destroy');
-    Route::post('/perilaku/update', [PerilakuKerjaController::class, 'update'])->name('perilaku.update');
 
 
     // bagian profile

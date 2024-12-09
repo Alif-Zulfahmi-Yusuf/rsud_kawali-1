@@ -101,6 +101,7 @@ class AtasanController extends Controller
                 'message' => 'Data berhasil diperbarui.',
             ]);
         } catch (\Exception $e) {
+
             Log::error('Gagal memperbarui data Atasan: ' . $e->getMessage());
 
             return redirect()->route('atasans.edit', $uuid)->withInput()->withErrors([

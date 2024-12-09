@@ -31,43 +31,6 @@ $(document).ready(function () {
     });
 });
 
-const openEditModal = (uuid, categoryPerilakuId, name) => {
-    $('#edit-uuid').val(uuid);
-    $('#edit-category').val(categoryPerilakuId);
-    $('#edit-perilaku').val(name);
-    $('#editPerilakuModal').modal('show');
-};
-
-$('#editPerilakuForm').submit(function (e) {
-    e.preventDefault();
-
-    const uuid = $('#edit-uuid').val();
-    const categoryPerilakuId = $('#edit-category').val();
-    const name = $('#edit-perilaku').val();
-
-    $.ajax({
-        type: "POST",
-        url: `/perilaku/update`, // Sesuaikan dengan route update
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        data: {
-            uuid: uuid,
-            category_perilaku_id: categoryPerilakuId,
-            name: name
-        },
-        success: function (response) {
-            toastSuccess(response.message); // Notifikasi sukses
-            $('#editPerilakuModal').modal('hide');
-            // Reload data dari server
-            location.reload();
-        },
-        error: function (xhr) {
-            toastError(xhr.responseJSON.message); // Notifikasi error
-        }
-    });
-});
-
 
 // Fungsi untuk menghapus data dengan konfirmasi SweetAlert
 const deleteData = (e) => {

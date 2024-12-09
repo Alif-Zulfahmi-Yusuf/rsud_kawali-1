@@ -14,7 +14,6 @@ class PerilakuRequest extends FormRequest
     public function rules()
     {
         return [
-            'uuid' => 'required|exists:perilakus,uuid',
             'category_perilaku_id' => 'required|exists:category_perilakus,id',
             'name' => 'required|string|max:255',
         ];

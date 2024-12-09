@@ -77,11 +77,14 @@ class PangkatController extends Controller
     public function update(PangkatRequest $request, string $uuid)
     {
         try {
+
             $this->pangkatService->update($request->validated(), $uuid);
 
             return redirect()->route('pangkat.index')->with('status', 'Data berhasil di edit.');
         } catch (\Exception $e) {
+
             Log::error('Failed to update Pangkat: ' . $e->getMessage());
+
             return redirect()->route('pangkat.index')->with('status', 'Data gagal di edit. Silakan coba lagi.');
         }
     }

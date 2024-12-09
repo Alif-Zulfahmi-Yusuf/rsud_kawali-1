@@ -155,12 +155,21 @@
                             </td>
                             <td class="text-center">{{ $indikator->report }}</td>
                             <td class="text-center">
-                                <button class="btn btn-sm btn-primary">
-                                    <i class="fa fa-edit"></i>
+                                <button
+                                    class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
+                                    type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fas fa-ellipsis-h fs-10"></span>
                                 </button>
-                                <button class="btn btn-sm btn-danger">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                <div class="dropdown-menu dropdown-menu-end py-2">
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditIndikator"
+                                        onclick="openEditIndikatorModal('{{ $indikator->uuid }}', '{{ $indikator->rencana_kerja_pegawai_id }}', '{{ $indikator->aspek }}', '{{ $indikator->indikator_kinerja }}', '{{ $indikator->tipe_target }}', '{{ $indikator->target_minimum }}', '{{ $indikator->target_maksimum }}', '{{ $indikator->satuan }}', '{{ $indikator->report }}')">
+                                        Edit
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <button type="button" class="dropdown-item text-danger delete-button"
+                                        onclick="deleteData(this)" data-uuid="{{ $indikator->uuid }}">Delete</button>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
@@ -216,6 +225,7 @@
 </form>
 @endsection
 
+@include('backend.skp._modalEditIndikator')
 @include('backend.skp._modalRencanaPegawai')
 @include('backend.skp._modalIndikator')
 

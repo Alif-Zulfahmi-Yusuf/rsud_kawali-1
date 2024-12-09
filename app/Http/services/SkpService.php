@@ -14,7 +14,7 @@ class SkpService
     {
         // Pastikan user memiliki atasan_id yang valid
         if (!$user->atasan_id) {
-            throw new \Exception('Atasan belum ditentukan untuk pengguna ini.');
+            throw new \Exception('User belum memilih atasan.');
         }
 
         Log::info('Mencari SKP Atasan', [
@@ -49,7 +49,7 @@ class SkpService
                 'atasan_id' => $atasan->user_id,
                 'year' => $data['year']
             ]);
-            throw new \Exception('SKP atasan untuk tahun ' . $data['year'] . ' tidak ditemukan.');
+            throw new \Exception('Atasan belum membuat Skp untuk tahun ' . $data['year'] . '.');
         }
 
         // Buat SKP Pegawai dengan menghubungkan ke SKP Atasan

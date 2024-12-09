@@ -60,36 +60,42 @@ class PerilakuKerjaController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(PerilakuRequest $request, PerilakuService $perilakuService)
+    public function edit(string $uuid)
+    {
+        // Cari perilaku berdasarkan UUID
+        $perilaku = $this->perilakuService->selectFirstById('uuid', $uuid);
+
+        $categories = CategoryPerilaku::all(); // Ambil semua kategori perilaku untuk dropdown
+
+        return view('backend.perilaku.edit', compact('perilaku', 'categories'));
+    }
+
+
+
+    public function update(PerilakuRequest $request, string $uuid)
     {
         try {
-            $perilakuService->update($request->validated());
+            // Log untuk memeriksa data yang diterima
+            Log::info($request->all());
 
-            return response()->json(['message' => 'Perilaku berhasil diperbarui.'], 200);
+            // Pastikan uuid ada di dalam data yang dikirimkan
+            $validated = $request->validated();
+            $this->perilakuService->update($validated, $uuid);
+
+            return redirect()->back()->with('success', 'Perilaku berhasil diperbarui.');
         } catch (\Exception $e) {
-            log('error', 'Terjadi kesalahan saat memperbarui perilaku: ' . $e->getMessage());
-            return response()->json(['message' => 'Terjadi kesalahan saat memperbarui perilaku. '], 500);
+            Log::error('Terjadi kesalahan saat memperbarui perilaku: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui perilaku. Silakan coba lagi.');
         }
     }
+
+
+
 
 
     /**

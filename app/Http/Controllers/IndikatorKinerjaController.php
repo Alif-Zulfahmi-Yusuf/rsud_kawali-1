@@ -87,10 +87,27 @@ class IndikatorKinerjaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $uuid)
     {
-        //
+        try {
+            $data = $request->validate([
+                'aspek' => 'required|string|max:255',
+                'indikator_kinerja' => 'required|string',
+                'tipe_target' => 'required|in:quantitative,qualitative',
+                'target_minimum' => 'required|numeric',
+                'target_maksimum' => 'required|numeric',
+                'satuan' => 'required|string|max:255',
+                'report' => 'nullable|string',
+            ]);
+
+            $this->indikatorService->update($uuid, $data);
+
+            return redirect()->back()->with('success', 'Indikator Kinerja berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.

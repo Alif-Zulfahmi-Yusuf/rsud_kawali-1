@@ -9,6 +9,7 @@
             <div class="modal-body">
                 <form id="editPerilakuForm" action="#" method="POST">
                     @csrf
+                    @method('PATCH')
                     <input type="hidden" name="uuid" id="edit-uuid">
                     <div class="form-group mb-3">
                         <label for="category" class="form-label">Category</label>

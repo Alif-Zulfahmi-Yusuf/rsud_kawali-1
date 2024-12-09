@@ -53,9 +53,7 @@
                                     <span class="fas fa-ellipsis-h fs-10"></span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end py-2">
-                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                        data-bs-target="#editPerilakuModal"
-                                        onclick="openEditModal('{{ $perilaku->uuid }}', '{{ $perilaku->category_perilaku_id }}', '{{ $perilaku->name }}')">
+                                    <a class="dropdown-item" href="{{ route('perilaku.edit', $perilaku->uuid) }}">
                                         Edit
                                     </a>
                                     <div class="dropdown-divider"></div>

@@ -73,4 +73,33 @@ class IndikatorService
             throw new Exception('Gagal menyimpan Indikator Kinerja: ' . $e->getMessage());
         }
     }
+
+    public function update(string $id, array $data)
+    {
+        try {
+            // Temukan indikator kinerja berdasarkan ID
+            $indikator = IndikatorKinerja::findOrFail($id);
+
+            // Update data indikator kinerja
+            $indikator->update([
+                'aspek' => $data['aspek'],
+                'indikator_kinerja' => $data['indikator_kinerja'],
+                'tipe_target' => $data['tipe_target'],
+                'target_minimum' => $data['target_minimum'],
+                'target_maksimum' => $data['target_maksimum'],
+                'satuan' => $data['satuan'],
+                'report' => $data['report'],
+            ]);
+
+            return $indikator;
+        } catch (\Exception $e) {
+            // Log error jika terjadi masalah
+            Log::error('Gagal memperbarui Indikator Kinerja', [
+                'error' => $e->getMessage(),
+                'data' => $data,
+            ]);
+
+            throw new Exception('Gagal memperbarui Indikator Kinerja: ' . $e->getMessage());
+        }
+    }
 }
