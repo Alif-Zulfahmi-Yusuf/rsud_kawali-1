@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('atasans', AtasanController::class);
     Route::delete('/atasans/destroy/{uuid}', [AtasanController::class, 'destroy'])->name('atasans.destroy');
 
+    
     // bagian skp
     Route::resource('skp', SkpController::class);
     Route::delete('/skp/destroy/{uuid}', [SkpController::class, 'destroy'])->name('skp.destroy');
@@ -48,10 +49,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('rencana-kerja', RencanaKerjaController::class);
     Route::resource('rencana-pegawai', RencanaKerjaPegawaiController::class);
 
+    
     // bagian indikator
+    Route::put('/indikator-kinerja/{uuid}', [IndikatorKinerjaController::class, 'update'])->name('indikator-kinerja.update');
     Route::resource('indikator-kinerja', IndikatorKinerjaController::class);
     Route::delete('/indikator-kinerja/destroy/{uuid}', [IndikatorKinerjaController::class, 'destroy'])->name('indikator-kinerja.destroy');
-    Route::put('/indikator-kinerja/{uuid}', [IndikatorKinerjaController::class, 'update'])->name('indikator-kinerja.update');
+    
 
     // route perilaku
     Route::resource('perilaku', PerilakuKerjaController::class);

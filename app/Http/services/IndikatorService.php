@@ -74,32 +74,38 @@ class IndikatorService
         }
     }
 
-    public function update(string $uuid, array $data)
-    {
-        try {
-            // Temukan indikator kinerja berdasarkan UUID
-            $indikator = IndikatorKinerja::findOrFail($uuid);
+    // public function update(string $uuid, array $data)
+    // {
+    //     try {
+    //         // Temukan indikator kinerja berdasarkan UUID
+    //         $indikator = IndikatorKinerja::findOrFail($uuid);
 
-            // Update data indikator kinerja
-            $indikator->update([
-                'aspek' => $data['aspek'],
-                'indikator_kinerja' => $data['indikator_kinerja'],
-                'tipe_target' => $data['tipe_target'],
-                'target_minimum' => $data['target_minimum'],
-                'target_maksimum' => $data['target_maksimum'],
-                'satuan' => $data['satuan'],
-                'report' => $data['report'],
-            ]);
+    //         // Update data indikator kinerja
+    //         $indikator->update([
+    //             'aspek' => $data['aspek'],
+    //             'indikator_kinerja' => $data['indikator_kinerja'],
+    //             'tipe_target' => $data['tipe_target'],
+    //             'target_minimum' => $data['target_minimum'],
+    //             'target_maksimum' => $data['target_maksimum'],
+    //             'satuan' => $data['satuan'],
+    //             'report' => $data['report'],
+    //         ]);
 
-            return $indikator;
-        } catch (\Exception $e) {
-            // Log error jika terjadi masalah
-            Log::error('Gagal memperbarui Indikator Kinerja', [
-                'error' => $e->getMessage(),
-                'data' => $data,
-            ]);
+    //         return $indikator;
+    //     } catch (\Exception $e) {
+    //         // Log error jika terjadi masalah
+    //         Log::error('Gagal memperbarui Indikator Kinerja', [
+    //             'error' => $e->getMessage(),
+    //             'data' => $data,
+    //         ]);
 
-            throw new Exception('Gagal memperbarui Indikator Kinerja: ' . $e->getMessage());
-        }
+    //         throw new Exception('Gagal memperbarui Indikator Kinerja: ' . $e->getMessage());
+    //     }
+    // }
+
+    public function update(string $uuid){
+        $indikator = IndikatorKinerja::where('uuid', $uuid)->first();
+
+        dd($indikator);
     }
 }

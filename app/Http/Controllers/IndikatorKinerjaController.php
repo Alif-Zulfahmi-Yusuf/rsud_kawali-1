@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Services\IndikatorService;
 use App\Http\Requests\IndikatorKinerjaRequest;
+use App\Models\IndikatorKinerja;
 
 class IndikatorKinerjaController extends Controller
 {
@@ -89,25 +90,22 @@ class IndikatorKinerjaController extends Controller
      */
     public function update(Request $request, $uuid)
     {
-        try {
             $data = $request->validate([
-                'rencana_kerja_pegawai_id' => 'required|exists:rencana_kerja_pegawai,id',
+                'rencana_kerja_pegawai_id' => 'required|exists:rencana_hasil_kerja_pegawai,id',
                 'aspek' => 'required|string|max:255',
                 'indikator_kinerja' => 'required|string',
-                'tipe_target' => 'required|in:quantitative,qualitative',
+                'tipe_target' => 'required|string',
                 'target_minimum' => 'required|numeric',
-                'target_maksimum' => 'required|numeric',
+                'target_maksimum' => 'nullable|numeric',
                 'satuan' => 'required|string|max:255',
                 'report' => 'nullable|string',
             ]);
 
-            $this->indikatorService->update($uuid, $data);
+            $darsim = IndikatorKinerja::where('uuid', $uuid)->first();
+
+            $darsim->update($data);
 
             return redirect()->back()->with('success', 'Indikator Kinerja berhasil diperbarui.');
-        } catch (\Exception $e) {
-
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
     }
 
 

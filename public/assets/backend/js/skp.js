@@ -217,6 +217,8 @@ $('#formEditIndikator').submit(function (e) {
     const satuan = $('#editSatuan').val();
     const report = $('#editReport').val();
 
+    console.log(`UUID indikator: ${uuid}`);
+
     $.ajax({
         type: "PUT", // Ganti dengan PUT sesuai resource Laravel
         url: `/indikator-kinerja/${uuid}`, // Gunakan UUID di URL
