@@ -90,30 +90,48 @@ class IndikatorKinerjaController extends Controller
      */
     public function update(Request $request, $uuid)
     {
-        $data = $request->validate([
-            'rencana_kerja_pegawai_id' => 'required|exists:rencana_hasil_kerja_pegawai,id',
-            'aspek' => 'required|string|max:255',
-            'indikator_kinerja' => 'required|string',
-            'tipe_target' => 'required|string',
-            'target_minimum' => 'required|numeric',
-            'target_maksimum' => 'nullable|numeric',
-            'satuan' => 'required|string|max:255',
-            'report' => 'nullable|string',
-        ]);
+        try {
+            $data = $request->validate([
+                'rencana_kerja_pegawai_id' => 'required|exists:rencana_hasil_kerja_pegawai,id',
+                'aspek' => 'required|string|max:255',
+                'indikator_kinerja' => 'required|string',
+                'tipe_target' => 'required|string',
+                'target_minimum' => 'required|numeric',
+                'target_maksimum' => 'nullable|numeric',
+                'satuan' => 'required|string|max:255',
+                'report' => 'nullable|string',
+            ]);
 
-        $darsim = IndikatorKinerja::where('uuid', $uuid)->first();
+            $indikator = IndikatorKinerja::where('uuid', $uuid)->first();
 
-        $darsim->update($data);
+            if (!$indikator) {
+                throw new \Exception('Indikator Kinerja tidak ditemukan.');
+            }
 
-        return redirect()->back()->with('success', 'Indikator Kinerja berhasil diperbarui.');
+            $indikator->update($data);
+
+            return redirect()->back()->with('success', 'Indikator Kinerja berhasil diperbarui.');
+        } catch (\Exception $e) {
+            Log::error('Gagal memperbarui Indikator Kinerja', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $uuid)
     {
-        //
+        $result = $this->indikatorService->delete($uuid);
+
+        if ($result) {
+            return response()->json(['message' => 'Item successfully deleted.']);
+        }
+
+        return response()->json(['message' => 'Failed to delete the item.'], 500);
     }
 }

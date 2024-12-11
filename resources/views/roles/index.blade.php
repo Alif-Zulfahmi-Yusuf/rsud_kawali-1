@@ -24,7 +24,7 @@
         <div class="table-responsive">
             <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
                 @can('role-create')
-                <a class="btn btn-success" href="{{ route('roles.create') }}">
+                <a class="btn btn-phoenix-success me-1 mb-1" href="{{ route('roles.create') }}">
                     <i class="fa fa-plus me-1"></i>Create New Role
                 </a>
                 @endcan

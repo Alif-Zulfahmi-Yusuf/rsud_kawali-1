@@ -81,6 +81,7 @@
                     </div>
                     @endcan
 
+                    <!-- perencanaan kinerja -->
                     <div class="nav-item-wrapper">
                         <a class="nav-link dropdown-indicator label-1" href="#nv-perencanaan" role="button"
                             data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-perencanaan">
@@ -123,6 +124,51 @@
                             </ul>
                         </div>
                     </div>
+                    <!-- end perencanaan kinerja -->
+                    <!-- validasi data -->
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link dropdown-indicator label-1" href="#nv-validasi" role="button"
+                            data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-validasi">
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown-indicator-icon-wrapper">
+                                    <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                </div>
+
+                                <span class="nav-link-icon"><span data-feather="check-square"></span></span>
+                                <span class="nav-link-text">Validasi Data</span>
+                                <!-- <span class="fa-solid fa-circle text-info ms-1 new-page-indicator"
+                                    style="font-size: 6px"></span> -->
+                            </div>
+                        </a>
+                        <div class="parent-wrapper label-1">
+                            <ul class="nav collapse parent {{ request()->routeIs('validasi.*') || request()->routeIs('skp_atasan.*') ? 'show' : '' }}"
+                                data-bs-parent="#navbarVerticalCollapse" id="nv-validasi">
+                                <li class="collapsed-nav-item-title d-none">Validasi Data</li>
+
+
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('validasi.*') ? 'active' : '' }}"
+                                        href="{{ route('validasi.index') }}">
+                                        <div class="d-flex align-items-center">
+                                            <span class="nav-link-text">SKP</span>
+                                        </div>
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('skp_atasan.*') ? 'active' : '' }}"
+                                        href="{{ route('skp_atasan.index') }}">
+                                        <div class="d-flex align-items-center">
+                                            <span class="nav-link-text">SKP</span>
+                                        </div>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end validasi data -->
                 </li>
             </ul>
         </div>

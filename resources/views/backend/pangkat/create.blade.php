@@ -44,11 +44,11 @@
                                 <input type="text" name="name" placeholder="Name" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-12 text-center">
-                            <button type="submit" class="btn btn-primary btn-sm mt-2 mb-3">
+                        <div class="col-md-12 text-center mt-3">
+                            <button type="submit" class="btn btn-phoenix-secondary me-1 mb-1">
                                 <i class="fa-solid fa-floppy-disk"></i> Submit
                             </button>
-                            <a class="btn btn-primary btn-sm mb-2" href="{{ route('pangkat.index') }}"><i
+                            <a class="btn btn-phoenix-danger me-1 mb-1" href="{{ route('pangkat.index') }}"><i
                                     class="fa fa-arrow-left"></i>
                                 Back</a>
                         </div>

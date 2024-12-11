@@ -45,12 +45,20 @@ class RencanaKerjaAtasanService
     }
 
 
+    public function update($uuid, array $data)
+    {
+        $rencana = RencanaHasilKinerja::where('uuid', $uuid)->firstOrFail();
+
+        return $rencana->update($data);
+    }
+
+
 
     public function delete($uuid)
     {
-        $skp = SkpAtasan::where('uuid', $uuid)->firstOrFail();
+        $rencana = RencanaHasilKinerja::where('uuid', $uuid)->firstOrFail();
 
-        return $skp->delete();
+        return $rencana->delete();
     }
 
     // Tambahkan fungsi untuk mendapatkan data detail

@@ -94,38 +94,37 @@ class User extends Authenticatable
         return $this->belongsTo(Atasan::class, 'atasan_id', 'id');
     }
 
-    // Relasi Atasan ke Pegawai
+
     public function pegawai()
     {
         return $this->hasMany(User::class, 'atasan_id');
     }
 
-    public function skpAtasan()
-    {
-        return $this->hasMany(SkpAtasan::class, 'user_id', 'atasan_id');
-    }
-    /**
-     * Relasi ke pangkat (Pangkat dari pengguna)
-     */
     public function pangkat()
     {
         return $this->belongsTo(Pangkat::class, 'pangkat_id');
     }
+    public function skpAtasan()
+    {
+        return $this->hasMany(SkpAtasan::class);
+    }
 
-    // Relasi ke Rencana Hasil Kinerja
-    public function rencanaHasilKinerja()
+    public function skps()
+    {
+        return $this->hasMany(Skp::class);
+    }
+
+    public function rencanaHasilKerja()
     {
         return $this->hasMany(RencanaHasilKinerja::class);
     }
 
-    // Relasi ke Rencana Hasil Kinerja Pegawai
-    public function rencanaHasilKinerjaPegawai()
+    public function rencanaHasilKerjaPegawai()
     {
         return $this->hasMany(RencanaHasilKinerjaPegawai::class);
     }
 
-    // Relasi ke Indikator Kinerja
-    public function indikatorKinerja()
+    public function rencanaIndikatorKinerja()
     {
         return $this->hasMany(IndikatorKinerja::class);
     }

@@ -22,7 +22,7 @@
                         <label for="perilaku" class="form-label">Perilaku</label>
                         <input type="text" name="name" id="perilaku" class="form-control" required>
                     </div>
-                    <button type="submit" class="btn btn-outline-secondary">Save</button>
+                    <button type="submit" class="btn btn-phoenix-secondary me-1 mb-1">Save</button>
                 </form>
             </div>
         </div>

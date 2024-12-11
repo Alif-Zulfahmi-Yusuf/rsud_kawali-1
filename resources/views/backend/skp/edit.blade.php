@@ -134,25 +134,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja as $rencana)
-                        @foreach ($rencana->rencanaPegawai as $pegawai)
-                        @foreach ($pegawai->indikatorKinerja as $indikator)
-                        <tr>
+                        @if($skpDetail->skpAtasan)
+                        @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja ?? [] as $rencana)
+                        @foreach ($rencana->rencanaPegawai ?? [] as $pegawai)
+                        @foreach ($pegawai->indikatorKinerja ?? [] as $indikator)
+                        <tr data-uuid="{{ $indikator->uuid }}">
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td>
                                 <div><strong>Rencana Hasil Kerja:</strong></div>
                                 <div>{{ $pegawai->rencana ?? 'Data Rencana Pegawai Tidak Tersedia' }}</div>
                                 <div class="text-muted"><strong>Rencana Hasil Kerja Pimpinan yang Diintervensi:</strong>
                                 </div>
-                                <div class="text-muted">{{ $rencana->rencana }}</div>
+                                <div class="text-muted">{{ $rencana->rencana ?? 'Data Rencana Tidak Tersedia' }}</div>
                             </td>
-                            <td class="text-center">{{ $indikator->aspek }}</td>
-                            <td>{{ $indikator->indikator_kinerja }}</td>
+                            <td class="text-center">{{ $indikator->aspek ?? '-' }}</td>
+                            <td>{{ $indikator->indikator_kinerja ?? '-' }}</td>
                             <td class="text-center">
-                                {{ $indikator->target_minimum }} - {{ $indikator->target_maksimum }}<br>
-                                {{ $indikator->satuan }}
+                                {{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
+                                {{ $indikator->satuan ?? '-' }}
                             </td>
-                            <td class="text-center">{{ $indikator->report }}</td>
+                            <td class="text-center">{{ $indikator->report ?? '-' }}</td>
                             <td class="text-center">
                                 <button
                                     class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
@@ -165,7 +166,6 @@
                                         onclick="openEditIndikatorModal('{{ $indikator->uuid }}', '{{ $indikator->rencana_kerja_pegawai_id }}', '{{ $indikator->aspek }}', '{{ $indikator->indikator_kinerja }}', '{{ $indikator->tipe_target }}', '{{ $indikator->target_minimum }}', '{{ $indikator->target_maksimum }}', '{{ $indikator->satuan }}', '{{ $indikator->report }}')">
                                         Edit
                                     </a>
-
                                     <div class="dropdown-divider"></div>
                                     <button type="button" class="dropdown-item text-danger delete-button"
                                         onclick="deleteData(this)" data-uuid="{{ $indikator->uuid }}">Delete</button>
@@ -175,8 +175,12 @@
                         @endforeach
                         @endforeach
                         @endforeach
+                        @else
+                        <tr>
+                            <td colspan="7" class="text-center">Data SKP Atasan Tidak Tersedia</td>
+                        </tr>
+                        @endif
                     </tbody>
-
                 </table>
             </div>
         </div>
@@ -205,7 +209,7 @@
                             </td>
                             <td>
                                 <h6>Ekspektasi Khusus Pimpinan/ Leader:</h6>
-                                <textarea class="form-control" name="" id=""></textarea>
+                                <textarea class="form-control" name="" id="" disabled></textarea>
                             </td>
                         </tr>
                         @endforeach
@@ -222,7 +226,8 @@
 @endsection
 
 // Modal Edit Indikator
-<form action="{{ route('indikator-kinerja.update', $indikator->uuid) }}" method="post">
+<form action="{{ isset($indikator) ? route('indikator-kinerja.update', $indikator->uuid ?? '') : '#' }}" method="post">
+
     @csrf
     @method('PUT')
     <div class="modal fade" id="modalEditIndikator" tabindex="-1" data-bs-backdrop="static"
@@ -340,15 +345,15 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        @if(session('success'))
-        toastSuccess("{{ session('success') }}");
-        @endif
+$(document).ready(function() {
+    @if(session('success'))
+    toastSuccess("{{ session('success') }}");
+    @endif
 
-        @if(session('error'))
-        toastError("{{ session('error') }}");
-        @endif
-    });
+    @if(session('error'))
+    toastError("{{ session('error') }}");
+    @endif
+});
 </script>
 
 @endpush

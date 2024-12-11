@@ -7,8 +7,7 @@
             <h2>Create New Role</h2>
         </div>
         <div class="pull-right">
-            <a class="btn btn-primary btn-sm mb-2" href="{{ route('roles.index') }}"><i class="fa fa-arrow-left"></i>
-                Back</a>
+
         </div>
     </div>
 </div>
@@ -52,10 +51,13 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                            <button type="submit" class="btn btn-primary btn-sm mb-3"><i
+                        <div class="col-xs-12 col-sm-12 col-md-12 text-center mt-3">
+                            <button type="submit" class="btn btn-phoenix-secondary me-1 mb-1"><i
                                     class="fa-solid fa-floppy-disk"></i>
                                 Submit</button>
+                            <a class="btn btn-phoenix-danger me-1 mb-1" href="{{ route('roles.index') }}"><i
+                                    class="fa fa-arrow-left"></i>
+                                Back</a>
                         </div>
                     </div>
                 </form>

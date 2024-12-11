@@ -50,21 +50,6 @@ class SkpAtasan extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function skp()
-    {
-        return $this->belongsTo(Skp::class, 'skp_id');
-    }
-
-    public function rencanaHasilKinerja(): HasMany
-    {
-        return $this->hasMany(RencanaHasilKinerja::class, 'skp_atasan_id');
-    }
-    // Model Skp (untuk Pegawai)
-    public function skpAtasan()
-    {
-        return $this->belongsTo(Skp::class, 'skp_atasan_id'); // Menghubungkan ke SKP Atasan
-    }
-
     public function atasan(): BelongsTo
     {
         return $this->belongsTo(User::class, 'atasan_id');
@@ -83,5 +68,21 @@ class SkpAtasan extends Model
     public function scopeByUser(Builder $query, int $userId): Builder
     {
         return $query->where('user_id', $userId);
+    }
+
+    public function skp()
+    {
+        return $this->belongsTo(Skp::class, 'skp_id');
+    }
+
+    public function rencanaHasilKinerja()
+    {
+        return $this->hasMany(RencanaHasilKinerja::class);
+    }
+
+    // Model Skp (untuk Pegawai)
+    public function skpAtasan()
+    {
+        return $this->belongsTo(Skp::class, 'skp_atasan_id'); // Menghubungkan ke SKP Atasan
     }
 }

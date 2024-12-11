@@ -31,8 +31,8 @@
     <div class="card-body">
         <div class="table-responsive">
             <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
-                <a class="btn btn-success" href="{{ route('atasans.create') }}">
-                    <i class="fa fa-plus me-1"></i> Add Atasan
+                <a class="btn btn-phoenix-success me-1 mb-1" href="{{ route('atasans.create') }}">
+                    <i class="fa fa-plus me-1"></i> New Atasan
                 </a>
             </div>
             <table id="tableAtasan" class="table table-hover table-sm fs-9 mb-0">

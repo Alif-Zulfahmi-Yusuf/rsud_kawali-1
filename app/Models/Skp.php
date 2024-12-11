@@ -60,31 +60,28 @@ class Skp extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function atasan(): BelongsTo
+
+    // SKP Atasan memiliki banyak SKP Pegawai
+    public function atasan()
     {
         return $this->belongsTo(User::class, 'atasan_id');
     }
 
-    // SKP Atasan memiliki banyak SKP Pegawai
     public function skpAtasan()
     {
-        return $this->belongsTo(SkpAtasan::class, 'skp_atasan_id', 'id');
+        return $this->belongsTo(SkpAtasan::class, 'skp_atasan_id');
     }
 
-    public function rencanaHasilKinerja(): HasMany
+    public function rencanaPegawai()
     {
-        return $this->hasMany(RencanaHasilKinerja::class, 'skp_atasan_id');
+        return $this->hasMany(RencanaHasilKinerjaPegawai::class);
     }
 
-    public function indikatorKinerja(): HasMany
+    public function rencanaIndikatorKinerja()
     {
-        return $this->hasMany(IndikatorKinerja::class, 'skp_id');
+        return $this->hasMany(IndikatorKinerja::class);
     }
 
-    public function rencanaPegawai(): HasMany
-    {
-        return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'skp_id');
-    }
 
     public function scopeByYear(Builder $query, int $year): Builder
     {

@@ -35,29 +35,23 @@ class RencanaHasilKinerja extends Model
         return 'uuid';
     }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function skp(): BelongsTo
+    public function skpAtasan()
     {
         return $this->belongsTo(SkpAtasan::class, 'skp_atasan_id');
     }
 
-    public function rencanaHasilKinerja()
+    public function user()
     {
-        return $this->hasMany(RencanaHasilKinerja::class, 'rencana_atasan_id');
+        return $this->belongsTo(User::class);
     }
 
-    public function rencanaPegawai(): HasMany
+    public function rencanaPegawai()
     {
-        return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'rencana_atasan_id', 'id');
+        return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'rencana_atasan_id');
     }
 
-
-    public function indikatorKinerja(): HasMany
+    public function rencanaIndikatorKinerja()
     {
-        return $this->hasMany(IndikatorKinerja::class, 'rencana_kerja_atasan_id', 'id');
+        return $this->hasMany(IndikatorKinerja::class, 'rencana_atasan_id');
     }
 }

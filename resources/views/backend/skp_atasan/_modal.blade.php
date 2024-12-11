@@ -31,7 +31,7 @@
                         </select>
                     </div>
                     <!-- Tombol Submit -->
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-phoenix-secondary me-1 mb-1">Save</button>
                 </form>
             </div>
         </div>

@@ -10,6 +10,7 @@ use App\Http\Controllers\AtasanController;
 use App\Http\Controllers\PangkatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ValidasiController;
 use App\Http\Controllers\SkpAtasanController;
 use App\Http\Controllers\RencanaKerjaController;
 use App\Http\Controllers\PerilakuKerjaController;
@@ -36,7 +37,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('atasans', AtasanController::class);
     Route::delete('/atasans/destroy/{uuid}', [AtasanController::class, 'destroy'])->name('atasans.destroy');
 
-    
+
     // bagian skp
     Route::resource('skp', SkpController::class);
     Route::delete('/skp/destroy/{uuid}', [SkpController::class, 'destroy'])->name('skp.destroy');
@@ -45,16 +46,20 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('skp_atasan', SkpAtasanController::class);
     Route::delete('/skp_atasan/destroy/{uuid}', [SkpAtasanController::class, 'destroy'])->name('skp_atasan.destroy');
 
-    // bagian Rencana Kerja
+    // bagian Rencana Kerja Atasan
+    Route::put('/rencana-kerja/{uuid}', [RencanaKerjaController::class, 'update'])->name('rencana-kerja.update');
     Route::resource('rencana-kerja', RencanaKerjaController::class);
+    Route::delete('/rencana-kerja/destroy/{uuid}', [RencanaKerjaController::class, 'destroy'])->name('rencana-kerja.destroy');
+
+    // bagian Rencana Kerja Pegawai
     Route::resource('rencana-pegawai', RencanaKerjaPegawaiController::class);
 
-    
+
     // bagian indikator
     Route::put('/indikator-kinerja/{uuid}', [IndikatorKinerjaController::class, 'update'])->name('indikator-kinerja.update');
     Route::resource('indikator-kinerja', IndikatorKinerjaController::class);
     Route::delete('/indikator-kinerja/destroy/{uuid}', [IndikatorKinerjaController::class, 'destroy'])->name('indikator-kinerja.destroy');
-    
+
 
     // route perilaku
     Route::resource('perilaku', PerilakuKerjaController::class);
@@ -71,6 +76,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
     Route::patch('/settings', [SettingController::class, 'update'])->name('settings.update');
     Route::delete('/settings', [SettingController::class, 'destroy'])->name('settings.destroy');
+
+    // bagian validasi 
+    Route::resource('validasi', ValidasiController::class);
 });
 
 require __DIR__ . '/auth.php';

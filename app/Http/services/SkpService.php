@@ -22,16 +22,18 @@ class SkpService
             'tahun' => $data['year']
         ]);
 
-        // Ambil data atasan berdasarkan atasan_id yang ada di users
-        $atasan = Atasan::where('user_id', $user->atasan_id)->first();
 
-        // Jika tidak ada data atasan, maka tampilkan pesan error
+        // Ambil data atasan berdasarkan atasan_id di tabel users (mengacu ke id di tabel atasans)
+        $atasan = Atasan::find($user->atasan_id);
+
+        // Jika data atasan tidak ditemukan, tampilkan error
         if (!$atasan) {
             Log::warning('Atasan tidak ditemukan', [
                 'atasan_id' => $user->atasan_id
             ]);
             throw new \Exception('Atasan dengan ID ' . $user->atasan_id . ' tidak ditemukan.');
         }
+
 
         // Cari SKP Atasan berdasarkan ID atasan dan tahun
         $skpAtasan = SkpAtasan::where('user_id', $atasan->user_id)
@@ -88,31 +90,10 @@ class SkpService
             $skpDetail = Skp::where('uuid', $uuid)
                 ->where('user_id', $user->id) // Filter berdasarkan user yang sedang login
                 ->with([
-                    // Relasi Rencana Hasil Kerja
-                    'rencanaHasilKinerja' => function ($query) {
-                        $query->orderBy('created_at', 'desc'); // Urutkan berdasarkan waktu pembuatan
-                    },
-                    // Relasi Rencana Pegawai
-                    'rencanaHasilKinerja.rencanaPegawai' => function ($query) use ($user) {
-                        $query->where('user_id', $user->id) // Filter rencana pegawai berdasarkan user
-                            ->orderBy('created_at', 'desc');
-                    },
-                    // Relasi Indikator Kinerja melalui Rencana Pegawai
-                    'rencanaHasilKinerja.rencanaPegawai.indikatorKinerja' => function ($query) use ($user) {
-                        $query->where('user_id', $user->id)
-                            ->orderBy('created_at', 'desc'); // Urutkan indikator berdasarkan waktu pembuatan
-                    },
-                    // Relasi SKP Atasan
-                    'skpAtasan' => function ($query) use ($user) {
-                        $query->where('user_id', $user->atasan_id) // Filter berdasarkan atasan
-                            ->orderBy('created_at', 'desc');
-                    },
-                    // Rencana Hasil Kerja milik Atasan
-                    'skpAtasan.rencanaHasilKinerja',
-                    // Rencana Pegawai milik Atasan
-                    'skpAtasan.rencanaHasilKinerja.rencanaPegawai',
-                    // Indikator Kinerja melalui Rencana Pegawai Atasan
+
                     'skpAtasan.rencanaHasilKinerja.rencanaPegawai.indikatorKinerja',
+                    'skpAtasan.rencanaHasilKinerja',
+                    'rencanaPegawai'
                 ])
                 ->firstOrFail(); // Ambil data pertama atau gagal jika tidak ditemukan
 

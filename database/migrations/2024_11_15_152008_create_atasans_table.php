@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('atasans', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
+            $table->foreignId('pangkat_id')->nullable()->constrained('pangkats')->onDelete('set null');
             $table->string('nip');
             $table->string('name');
-            $table->string('jabatan');
-            $table->foreignId('pangkat_id')->nullable()->constrained('pangkats')->onDelete('set null');
             $table->string('unit_kerja');
+            $table->string('jabatan');
             $table->timestamps();
         });
     }

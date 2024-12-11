@@ -27,7 +27,7 @@
         <div class="table-responsive">
             <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
                 @can('user-create')
-                <a class="btn btn-success" href="{{ route('users.create') }}">
+                <a class="btn btn-phoenix-success me-1 mb-1" href="{{ route('users.create') }}">
                     <i class="fa fa-plus me-1"></i>Create New User
                 </a>
                 @endcan

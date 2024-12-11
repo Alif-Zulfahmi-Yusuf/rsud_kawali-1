@@ -108,6 +108,13 @@ class IndikatorService
 
         $indikator = IndikatorKinerja::where('uuid', $uuid)->first();
 
-        dd($indikator);
+        return $indikator;
+    }
+
+    public function delete($uuid)
+    {
+        $indikator = IndikatorKinerja::where('uuid', $uuid)->firstOrFail();
+
+        return $indikator->delete();
     }
 }

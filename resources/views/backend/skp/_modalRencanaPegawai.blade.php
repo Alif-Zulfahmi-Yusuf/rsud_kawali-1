@@ -15,13 +15,18 @@
                     <div class="form-group mb-3">
                         <label for="rencana_atasan" class="form-label">Rencana Atasan</label>
                         <select class="form-select" id="rencana_atasan" name="rencana_atasan_id" required>
-
                             <option value="" selected>Pilih Rencana Atasan</option>
+                            @if($skpDetail->skpAtasan && $skpDetail->skpAtasan->rencanaHasilKinerja->isNotEmpty())
                             @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja as $rencana)
                             <option value="{{ $rencana->id }}">
                                 {{ $rencana->rencana ?? '-' }}
                             </option>
                             @endforeach
+                            @else
+                            <option value="" disabled>
+                                Tidak ada rencana hasil kinerja tersedia
+                            </option>
+                            @endif
                         </select>
                     </div>
                     <!-- Rencana Hasil Kerja -->

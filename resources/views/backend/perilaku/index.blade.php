@@ -26,7 +26,8 @@
     <div class="card-body">
         <div class="table-responsive">
             <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
-                <a class="btn btn-outline-success" href="#" data-bs-toggle="modal" data-bs-target="#addPerilakuModal">
+                <a class="btn btn-phoenix-success me-1 mb-1" href="#" data-bs-toggle="modal"
+                    data-bs-target="#addPerilakuModal">
                     <i class="fa fa-plus me-1"></i> Add Perilaku
                 </a>
             </div>

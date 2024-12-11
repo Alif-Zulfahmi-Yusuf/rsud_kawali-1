@@ -43,8 +43,8 @@
                         <input type="text" name="name" id="edit-perilaku" value="{{ $perilaku->name }}"
                             class="form-control" required>
                     </div>
-                    <button type="submit" class="btn btn-outline-secondary">Save</button>
-                    <a href="{{ route('perilaku.index') }}" class="btn btn-outline-danger">Cancel</a>
+                    <button type="submit" class="btn btn-phoenix-secondary me-1 mb-1">Save</button>
+                    <a href="{{ route('perilaku.index') }}" class="btn btn-phoenix-danger me-1 mb-1">Cancel</a>
                 </form>
             </div>
         </div>

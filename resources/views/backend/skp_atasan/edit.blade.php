@@ -29,6 +29,7 @@
         </div>
     </div>
 </div>
+
 <form action="{{ route('skp_atasan.update', $skpDetail->uuid) }}" method="POST">
     @csrf
     @method('PUT')
@@ -37,8 +38,8 @@
             <div class="table-responsive">
                 <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                        <button type="button" class="btn btn-phoenix-secondary me-1 mb-1 dropdown-toggle"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa fa-plus me-1"></i> Add Action
                         </button>
                         <ul class="dropdown-menu">
@@ -61,14 +62,26 @@
                     </thead>
                     <tbody>
                         @foreach ($skpDetail->rencanaHasilKinerja as $index => $rencana)
-                        <tr>
+                        <tr data-uuid="{{ $rencana->uuid }}">
                             <td class="text-center">{{ $index + 1 }}</td>
                             <td class="text-center">{{ $rencana->rencana ?? 'Tidak Ada Nama' }}</td>
                             <td class="text-center">
-                                <!-- Contoh Action: Tombol Edit -->
-                                <a href="#" class="btn btn-warning btn-sm">
-                                    Edit
-                                </a>
+                                <button
+                                    class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
+                                    type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fas fa-ellipsis-h fs-10"></span>
+                                </button>
+                                <!-- Button Edit -->
+                                <div class="dropdown-menu dropdown-menu-end py-2">
+                                    <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalEdit"
+                                        onclick="openEditIndikatorModal('{{ $rencana->uuid }}', '{{ $rencana->rencana }}')">
+                                        Edit
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <button type="button" class="dropdown-item text-danger delete-button"
+                                        onclick="deleteDataRencana(this)"
+                                        data-uuid="{{ $rencana->uuid }}">Delete</button>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
@@ -81,6 +94,33 @@
 </form>
 @endsection
 
+<!-- modal edit -->
+<form action="{{ isset($rencana) ? route('rencana-kerja.update', $rencana->uuid) : '#' }}" method="POST">
+    @csrf
+    @method('PUT')
+    <div class="modal fade" id="modalEdit" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editSkpModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSkpModalLabel">Form Edit Rencana Hasil Kerja Atasan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="rencana_hasil_kerja_id" id="edit_rencana_hasil_kerja_id">
+
+                    <div class="form-group mb-3">
+                        <label for="edit_rencana_hasil_kerja" class="form-label">Rencana Hasil Kerja</label>
+                        <input type="text" name="rencana" id="edit_rencana_hasil_kerja" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-phoenix-secondary me-1 mb-1">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- @include('backend.skp_atasan._modalEdit') -->
 @include('backend.skp_atasan._modalRencana')
 
 @push('js')
@@ -104,5 +144,4 @@ toastError({
 });
 @endif
 </script>
-
 @endpush
