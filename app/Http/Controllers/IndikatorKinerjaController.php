@@ -90,22 +90,22 @@ class IndikatorKinerjaController extends Controller
      */
     public function update(Request $request, $uuid)
     {
-            $data = $request->validate([
-                'rencana_kerja_pegawai_id' => 'required|exists:rencana_hasil_kerja_pegawai,id',
-                'aspek' => 'required|string|max:255',
-                'indikator_kinerja' => 'required|string',
-                'tipe_target' => 'required|string',
-                'target_minimum' => 'required|numeric',
-                'target_maksimum' => 'nullable|numeric',
-                'satuan' => 'required|string|max:255',
-                'report' => 'nullable|string',
-            ]);
+        $data = $request->validate([
+            'rencana_kerja_pegawai_id' => 'required|exists:rencana_hasil_kerja_pegawai,id',
+            'aspek' => 'required|string|max:255',
+            'indikator_kinerja' => 'required|string',
+            'tipe_target' => 'required|string',
+            'target_minimum' => 'required|numeric',
+            'target_maksimum' => 'nullable|numeric',
+            'satuan' => 'required|string|max:255',
+            'report' => 'nullable|string',
+        ]);
 
-            $darsim = IndikatorKinerja::where('uuid', $uuid)->first();
+        $darsim = IndikatorKinerja::where('uuid', $uuid)->first();
 
-            $darsim->update($data);
+        $darsim->update($data);
 
-            return redirect()->back()->with('success', 'Indikator Kinerja berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Indikator Kinerja berhasil diperbarui.');
     }
 
 

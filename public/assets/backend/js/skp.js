@@ -221,7 +221,7 @@ $('#formEditIndikator').submit(function (e) {
 
     $.ajax({
         type: "PUT", // Ganti dengan PUT sesuai resource Laravel
-        url: `/indikator-kinerja/${uuid}`, // Gunakan UUID di URL
+        url: `/indikator-kinerja/${uuid}/update`, // Gunakan UUID di URL
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },

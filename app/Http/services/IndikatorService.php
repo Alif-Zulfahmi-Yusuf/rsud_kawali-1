@@ -103,7 +103,9 @@ class IndikatorService
     //     }
     // }
 
-    public function update(string $uuid){
+    public function update(string $uuid)
+    {
+
         $indikator = IndikatorKinerja::where('uuid', $uuid)->first();
 
         dd($indikator);

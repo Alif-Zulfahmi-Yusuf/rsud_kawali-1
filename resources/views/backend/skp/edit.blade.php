@@ -221,18 +221,19 @@
 </form>
 @endsection
 
-<form action="{{ route('indikator-kinerja.update', '91c97c50-3314-4c7b-b7e7-28aa02a3af4e') }}" method="post">
+// Modal Edit Indikator
+<form action="{{ route('indikator-kinerja.update', $indikator->uuid) }}" method="post">
     @csrf
     @method('PUT')
     <div class="modal fade" id="modalEditIndikator" tabindex="-1" data-bs-backdrop="static"
-    aria-labelledby="modalEditIndikatorLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalEditIndikatorLabel">Edit Indikator Kinerja</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+        aria-labelledby="modalEditIndikatorLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditIndikatorLabel">Edit Indikator Kinerja</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
                     <input type="hidden" name="indikator_id" id="editIndikatorId">
 
                     <div class="form-group mb-3">
@@ -317,10 +318,10 @@
                     <div class="d-flex justify-content-end mt-3">
                         <button type="submit" class="btn btn-outline-secondary">Update</button>
                     </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </form>
 
 
@@ -339,15 +340,15 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-$(document).ready(function() {
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+    $(document).ready(function() {
+        @if(session('success'))
+        toastSuccess("{{ session('success') }}");
+        @endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}");
-    @endif
-});
+        @if(session('error'))
+        toastError("{{ session('error') }}");
+        @endif
+    });
 </script>
 
 @endpush
