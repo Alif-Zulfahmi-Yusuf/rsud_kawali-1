@@ -23,6 +23,9 @@ return new class extends Migration
             $table->date('tanggal_skp'); // Tanggal awal SKP
             $table->date('tanggal_akhir')->nullable();
             $table->enum('status', ['pending', 'approve', 'revisi'])->default('pending'); // Tanggal akhir otomatis akhir tahun
+            $table->boolean('is_submitted')->default(false);
+            $table->date('submitted_at')->nullable();
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

@@ -96,8 +96,24 @@ class SkpController extends Controller
      */
     public function update(Request $request, string $uuid)
     {
-        //
+        // Validasi data (jika ada)
+        $request->validate([
+            // Tambahkan aturan validasi jika diperlukan
+        ]);
+
+        // Cari SKP berdasarkan UUID
+        $skp = Skp::where('uuid', $uuid)->firstOrFail();
+
+        // Ubah status pengajuan dan waktu pengajuan
+        $skp->status = 'pending'; // Status awal setelah diajukan
+        $skp->is_submitted = 1;   // Tandai sebagai telah diajukan
+        $skp->submitted_at = now(); // Catat waktu pengajuan
+        $skp->save();
+
+        // Berikan notifikasi sukses ke pengguna
+        return redirect()->route('skp.index')->with('success', 'SKP berhasil diajukan!');
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -94,7 +94,7 @@
         </div>
     </div>
 </div>
-<form action="{{ route('skp.update', $skpDetail->uuid) }}" method="POST">
+<form id="form-skp" action="{{ route('skp.update', $skpDetail->uuid) }}" method="POST">
     @csrf
     @method('PUT')
     <div class="card shadow rounded-lg mb-4">
@@ -219,10 +219,15 @@
             </div>
         </div>
     </div>
-
     <hr>
-    <button type="submit" class="btn btn-outline-secondary me-1 mb-1">Simpan</button>
+    @if (!$skpDetail->is_submitted)
+    <button type="button" class="btn btn-phoenix-secondary me-1 mb-1" onclick="confirmSubmit()">Ajukan SKP</button>
+    @else
+    <p class="text-success">SKP telah diajukan pada {{ $skpDetail->submitted_at->format('d-m-Y H:i') }}</p>
+    @endif
+
 </form>
+
 @endsection
 
 // Modal Edit Indikator
@@ -354,6 +359,21 @@ $(document).ready(function() {
     toastError("{{ session('error') }}");
     @endif
 });
+
+function confirmSubmit() {
+    Swal.fire({
+        title: 'Ajukan SKP?',
+        text: "Anda tidak dapat mengubah data setelah diajukan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, ajukan!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('form-skp').submit();
+        }
+    });
+}
 </script>
 
 @endpush
