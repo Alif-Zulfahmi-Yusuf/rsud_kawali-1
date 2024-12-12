@@ -23,11 +23,9 @@ class ValidasiService
         try {
             $user = Auth::user(); // Mendapatkan user yang sedang login
 
-            // Mendapatkan detail SKP beserta relasi yang terkait
+            // Mendapatkan detail SKP beserta relasi yang terkait tanpa filter user_id
             $skpDetail = Skp::where('uuid', $uuid)
-                ->where('atasan_id', $user->atasan_id) // Filter berdasarkan atasan_id
                 ->with([
-
                     'skpAtasan.rencanaHasilKinerja.rencanaPegawai.indikatorKinerja',
                     'skpAtasan.rencanaHasilKinerja',
                     'rencanaPegawai'

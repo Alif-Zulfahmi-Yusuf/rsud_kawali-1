@@ -82,7 +82,6 @@ class SkpController extends Controller
                 'uuid' => $uuid,
                 'error' => $e->getMessage(),
             ]);
-
             // Tangani jika data tidak ditemukan
             abort(404, $e->getMessage());
         }

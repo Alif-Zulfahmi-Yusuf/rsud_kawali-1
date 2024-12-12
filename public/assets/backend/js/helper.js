@@ -45,7 +45,7 @@ const toastError = (message) => {
 
     Toast.fire({
         icon: 'error',
-        title: 'Data cannot be saved <br>' + errorText
+        title: 'Error <br>' + errorText
     });
 };
 

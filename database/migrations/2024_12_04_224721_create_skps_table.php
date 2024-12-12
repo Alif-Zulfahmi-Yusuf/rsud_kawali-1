@@ -26,6 +26,7 @@ return new class extends Migration
             $table->boolean('is_submitted')->default(false);
             $table->date('submitted_at')->nullable();
             $table->string('keterangan')->nullable();
+            $table->string('keterangan_revisi')->nullable();
             $table->timestamps();
         });
     }

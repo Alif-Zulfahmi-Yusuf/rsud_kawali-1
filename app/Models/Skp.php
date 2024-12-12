@@ -18,18 +18,23 @@ class Skp extends Model
     protected $fillable = [
         'uuid',
         'user_id',
-        'atasan_id',  // Menambahkan atasan_id pada $fillable
+        'atasan_id',
         'skp_atasan_id',
         'tahun',
         'module',
         'unit_kerja',
         'tanggal_skp',
         'tanggal_akhir',
+        'status',
+        'keterangan',
+        'is_submitted',
+
     ];
 
     protected $casts = [
         'tanggal_skp' => 'datetime',
         'tanggal_akhir' => 'datetime',
+        'submitted_at' => 'datetime',
     ];
 
     protected $hidden = [
@@ -67,6 +72,8 @@ class Skp extends Model
         return $this->belongsTo(User::class, 'atasan_id');
     }
 
+
+
     public function skpAtasan()
     {
         return $this->belongsTo(SkpAtasan::class, 'skp_atasan_id');
@@ -74,7 +81,7 @@ class Skp extends Model
 
     public function rencanaPegawai()
     {
-        return $this->hasMany(RencanaHasilKinerjaPegawai::class);
+        return $this->hasMany(RencanaHasilKinerjaPegawai::class, 'skp_id');
     }
 
     public function rencanaIndikatorKinerja()

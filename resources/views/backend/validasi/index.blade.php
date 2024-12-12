@@ -11,9 +11,6 @@
 @endpush
 
 
-
-
-
 @section('content')
 <div class="row gy-3 mb-4 justify-content-between align-items-center">
     <div class="col-md-9 col-auto">
@@ -39,12 +36,12 @@
                     <tr>
                         <th class="text-center" width="5%">No</th>
                         <th>Tahun</th>
-                        <th>NIP / Nama</th>
-                        <th>GOL</th>
-                        <th>JABATAN</th>
-                        <th>UNIT KERJA</th>
-                        <th>TANGGAL SKP</th>
-                        <th>STATUS</th>
+                        <th class="text-center">NIP / Nama</th>
+                        <th class="text-center" width="5%">GOL</th>
+                        <th class="text-center">JABATAN</th>
+                        <th class="text-center">UNIT KERJA</th>
+                        <th class="text-center">TANGGAL SKP</th>
+                        <th class="text-center">STATUS</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -95,7 +92,17 @@
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
 <script src="{{ asset('/assets/backend/js/validasi.js') }}"></script>
 
+<script>
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
+
+@if(session('error'))
+toastError("{{ session('error') }}");
+@endif
+</script>
 @endpush
