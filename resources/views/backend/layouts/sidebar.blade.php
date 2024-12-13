@@ -141,7 +141,7 @@
                             </div>
                         </a>
                         <div class="parent-wrapper label-1">
-                            <ul class="nav collapse parent {{ request()->routeIs('validasi.*') || request()->routeIs('skp_atasan.*') ? 'show' : '' }}"
+                            <ul class="nav collapse parent {{ request()->routeIs('validasi.*') ? 'show' : '' }}"
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-validasi">
                                 <li class="collapsed-nav-item-title d-none">Validasi Data</li>
 
@@ -154,17 +154,6 @@
                                         </div>
                                     </a>
                                 </li>
-
-
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('skp_atasan.*') ? 'active' : '' }}"
-                                        href="{{ route('skp_atasan.index') }}">
-                                        <div class="d-flex align-items-center">
-                                            <span class="nav-link-text">SKP</span>
-                                        </div>
-                                    </a>
-                                </li>
-
                             </ul>
                         </div>
                     </div>

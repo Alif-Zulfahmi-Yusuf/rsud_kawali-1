@@ -190,7 +190,7 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-body">
                 <h5 class="mb-5 text-center">Perilaku Kerja (BerAKHLAK)</h5>
                 <div class="table-responsive">
@@ -217,8 +217,8 @@
                                 </td>
                                 <td class="align-middle" width="45%">
                                     <h6 class="fw-bold mb-2">Ekspektasi Khusus Pimpinan/Leader:</h6>
-                                    <textarea class="form-control" rows="3"
-                                        placeholder="Masukkan ekspektasi..."></textarea>
+                                    <textarea class="form-control" rows="3" placeholder="Masukkan ekspektasi..."
+                                        readonly></textarea>
                                 </td>
                             </tr>
                             @endforeach
@@ -227,8 +227,8 @@
                 </div>
             </div>
         </div>
-        <hr>
-        <div class="card">
+
+        <div class="card mb-3">
             <div class="card-body">
                 <h5 class="mb-5">Catatan</h5>
                 <div class="form-group mb-3">
@@ -246,6 +246,15 @@
                 @endif
             </div>
         </div>
+
+        @if ($skpDetail->status === 'revisi')
+        <div class="card">
+            <div class="card-body">
+                <h5 class="mb-5">History Review</h5>
+                <p>{{ $skpDetail->keterangan_revisi ?? 'Tidak ada keterangan revisi tersedia.' }}</p>
+            </div>
+        </div>
+        @endif
     </form>
 </div>
 
