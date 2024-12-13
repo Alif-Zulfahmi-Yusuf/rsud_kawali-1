@@ -95,7 +95,7 @@
 
                     <!-- Tombol Submit -->
                     <div class="d-flex justify-content-end mt-3">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-outline-secondary">Save</button>
                     </div>
                 </form>
             </div>

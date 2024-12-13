@@ -192,7 +192,7 @@
         </div>
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="mb-5 text-center">Perilaku Kerja (BerAKHLAK)</h5>
+                <h5 class="mb-5">Perilaku Kerja (BerAKHLAK)</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-sm fs-9 mb-0">
                         <thead class="table-dark">
@@ -246,12 +246,20 @@
                 @endif
             </div>
         </div>
-
         @if ($skpDetail->status === 'revisi')
-        <div class="card">
+        <div class="card border-danger">
             <div class="card-body">
-                <h5 class="mb-5">History Review</h5>
-                <p>{{ $skpDetail->keterangan_revisi ?? 'Tidak ada keterangan revisi tersedia.' }}</p>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h5 class="mb-0 text-danger">History Review</h5>
+                    <span class="badge bg-danger text-white">Revisi</span>
+                </div>
+                <p class="mb-2">
+                    {{ $skpDetail->atasan->name ?? 'Data Atasan Tidak Tersedia' }}
+                </p>
+                <p class="mb-0">
+                    <strong>Keterangan Revisi:</strong><br>
+                    {{ $skpDetail->keterangan_revisi ?? 'Tidak ada keterangan revisi tersedia.' }}
+                </p>
             </div>
         </div>
         @endif

@@ -34,12 +34,12 @@
                     <table id="tableReview" class="table table-bordered table-sm fs-8 mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th width="5%" class="text-center">No</th>
-                                <th width="30%">Rencana Hasil Kerja Pimpinan yang Diintervensi</th>
-                                <th width="30%">Rencana Hasil Kerja</th>
-                                <th width="15%">Aspek</th>
-                                <th width="35%">Indikator Kinerja Individu</th>
-                                <th width="15%">Target</th>
+                                <th width="2%" class="text-center">No</th>
+                                <th width="25%">Rencana Hasil Kerja Pimpinan yang Diintervensi</th>
+                                <th width="20%">Rencana Hasil Kerja</th>
+                                <th width="5%">Aspek</th>
+                                <th width="25%">Indikator Kinerja Individu</th>
+                                <th width="5%">Target</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,9 +61,9 @@
                                 @if (!$loop->first)
                             <tr>
                                 @endif
-                                <td>{{ $indikator->aspek ?? '-' }}</td>
+                                <td class="align-middle text-center">{{ $indikator->aspek ?? '-' }}</td>
                                 <td>{{ $indikator->indikator_kinerja ?? '-' }}</td>
-                                <td>
+                                <td class="align-middle text-center">
                                     {{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
                                     {{ $indikator->satuan ?? '-' }}
                                 </td>
@@ -79,7 +79,7 @@
         </div>
         <div class="card shadow rounded-lg mb-4">
             <div class="card-body">
-                <h5 class="mb-5 text-center">Perilaku Kerja (BerAKHLAK)</h5>
+                <h5 class="mb-5">Perilaku Kerja (BerAKHLAK)</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-sm fs-9 mb-0">
                         <thead class="table-dark">

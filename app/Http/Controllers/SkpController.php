@@ -98,6 +98,7 @@ class SkpController extends Controller
         // Validasi data (jika ada)
         $request->validate([
             // Tambahkan aturan validasi jika diperlukan
+            'keterangan' => 'nullable|string',
         ]);
 
         // Cari SKP berdasarkan UUID
@@ -107,6 +108,7 @@ class SkpController extends Controller
         $skp->status = 'pending'; // Status awal setelah diajukan
         $skp->is_submitted = 1;   // Tandai sebagai telah diajukan
         $skp->submitted_at = now(); // Catat waktu pengajuan
+        $skp->keterangan = $request->input('keterangan'); // Simpan keterangan
         $skp->save();
 
         // Berikan notifikasi sukses ke pengguna
