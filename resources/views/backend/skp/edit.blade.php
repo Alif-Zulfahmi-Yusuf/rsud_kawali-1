@@ -192,32 +192,35 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <h5 class="mb-5">Perilaku Kerja (BerAKHLAK)</h5>
+                <h5 class="mb-5 text-center">Perilaku Kerja (BerAKHLAK)</h5>
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm fs-9 mb-0">
-                        <thead>
+                    <table class="table table-bordered table-sm fs-9 mb-0">
+                        <thead class="table-dark">
                             <tr>
                                 <th class="text-center" colspan="3">PERILAKU KERJA / BEHAVIOUR</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($categories as $category)
-                            <tr>
-                                <td colspan="3" class="fw-bold bg-light">{{ $category->name }}</td>
+                            <tr class="bg-light">
+                                <td colspan="3" class="fw-bold text-start">{{ $category->name }}</td>
                             </tr>
-                            @foreach ($category->perilakus as $perilaku)
                             <tr>
-                                <td class="text-center">{{ $loop->iteration }}</td>
-                                <td class="">
-                                    <h6>Ukuran keberhasilan/ Indikator Kinerja dan Target:</h6>
-                                    {{ $perilaku->name }}
+                                <td class="text-center align-middle" width="5%">{{ $loop->iteration }}</td>
+                                <td class="align-middle" width="50%">
+                                    <h6 class="fw-bold mb-2">Ukuran Keberhasilan/Indikator Kinerja dan Target:</h6>
+                                    <ul class="mb-0">
+                                        @foreach ($category->perilakus as $perilaku)
+                                        <li>{{ $perilaku->name }}</li>
+                                        @endforeach
+                                    </ul>
                                 </td>
-                                <td>
-                                    <h6>Ekspektasi Khusus Pimpinan/ Leader:</h6>
-                                    <textarea class="form-control" name="" id="" disabled></textarea>
+                                <td class="align-middle" width="45%">
+                                    <h6 class="fw-bold mb-2">Ekspektasi Khusus Pimpinan/Leader:</h6>
+                                    <textarea class="form-control" rows="3"
+                                        placeholder="Masukkan ekspektasi..."></textarea>
                                 </td>
                             </tr>
-                            @endforeach
                             @endforeach
                         </tbody>
                     </table>
@@ -229,9 +232,13 @@
             <div class="card-body">
                 <h5 class="mb-5">Catatan</h5>
                 <div class="form-group mb-3">
-                    <textarea name="keterangan" id="catatan" class="form-control" style="height: 150px;"></textarea>
+                    <textarea name="keterangan" id="catatan" class="form-control" style="height: 150px;"
+                        placeholder="Masukkan Alasan revisi jika diperlukan..."></textarea>
                 </div>
-                @if (!$skpDetail->is_submitted)
+                @if ($skpDetail->status === 'revisi')
+                <button type="button" class="btn btn-phoenix-danger me-1 mb-1" onclick="confirmSubmit()">Ajukan
+                    Revisi</button>
+                @elseif (!$skpDetail->is_submitted)
                 <button type="button" class="btn btn-phoenix-secondary me-1 mb-1" onclick="confirmSubmit()">Ajukan
                     SKP</button>
                 @else

@@ -35,9 +35,9 @@
     <div class="card-body">
         <div class="table-responsive">
             <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
-                <a class="btn btn-outline-success me-1 mb-1" href="#" data-bs-toggle="modal"
+                <a class="btn btn-phoenix-success me-1 mb-1" href="#" data-bs-toggle="modal"
                     data-bs-target="#addSkpModal">
-                    <i class="fa fa-plus me-1"></i> Add Form Skp
+                    <i class="fa fa-plus me-1"></i> New Form Skp
                 </a>
             </div>
             <table id="tableSkp" class="table table-hover table-sm fs-9 mb-0">

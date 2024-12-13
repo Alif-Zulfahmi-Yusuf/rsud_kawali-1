@@ -31,33 +31,84 @@
         <div class="card shadow rounded-lg mb-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
-                        <thead>
+                    <table id="tableReview" class="table table-bordered table-sm fs-8 mb-0">
+                        <thead class="table-dark">
                             <tr>
                                 <th width="5%" class="text-center">No</th>
                                 <th width="30%">Rencana Hasil Kerja Pimpinan yang Diintervensi</th>
                                 <th width="30%">Rencana Hasil Kerja</th>
                                 <th width="15%">Aspek</th>
-                                <th width="35%">Indikator Individu</th>
+                                <th width="35%">Indikator Kinerja Individu</th>
                                 <th width="15%">Target</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja ?? [] as $rencana)
-                            @foreach ($rencana->rencanaPegawai ?? [] as $pegawai)
-                            @foreach ($pegawai->indikatorKinerja ?? [] as $indikator)
                             <tr>
-                                <td class="text-center align-middle">{{ $loop->iteration }}</td>
-                                <td>{{ $rencana->rencana ?? 'Data Rencana Tidak Tersedia' }}</td>
-                                <td>{{ $pegawai->rencana ?? 'Data Rencana Pegawai Tidak Tersedia' }}</td>
+                                <td class="align-middle text-center"
+                                    rowspan="{{ $rencana->rencanaPegawai->sum(fn($pegawai) => $pegawai->indikatorKinerja->count()) }}">
+                                    {{ $loop->iteration }}
+                                </td>
+                                <td class="align-middle"
+                                    rowspan="{{ $rencana->rencanaPegawai->sum(fn($pegawai) => $pegawai->indikatorKinerja->count()) }}">
+                                    {{ $rencana->rencana ?? 'Data Rencana Tidak Tersedia' }}
+                                </td>
+                                @foreach ($rencana->rencanaPegawai ?? [] as $pegawai)
+                                <td class="align-middle" rowspan="{{ $pegawai->indikatorKinerja->count() }}">
+                                    {{ $pegawai->rencana ?? 'Data Rencana Pegawai Tidak Tersedia' }}
+                                </td>
+                                @foreach ($pegawai->indikatorKinerja ?? [] as $indikator)
+                                @if (!$loop->first)
+                            <tr>
+                                @endif
                                 <td>{{ $indikator->aspek ?? '-' }}</td>
                                 <td>{{ $indikator->indikator_kinerja ?? '-' }}</td>
-                                <td>{{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
+                                <td>
+                                    {{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
                                     {{ $indikator->satuan ?? '-' }}
                                 </td>
                             </tr>
                             @endforeach
                             @endforeach
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow rounded-lg mb-4">
+            <div class="card-body">
+                <h5 class="mb-5 text-center">Perilaku Kerja (BerAKHLAK)</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm fs-9 mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-center" colspan="3">PERILAKU KERJA / BEHAVIOUR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($categories as $category)
+                            <tr class="bg-light">
+                                <td colspan="3" class="fw-bold text-start">{{ $category->name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center align-middle" width="5%">{{ $loop->iteration }}</td>
+                                <td class="align-middle" width="50%">
+                                    <h6 class="fw-bold mb-2">Ukuran Keberhasilan/Indikator Kinerja dan Target:</h6>
+                                    <ul class="mb-0">
+                                        @foreach ($category->perilakus as $perilaku)
+                                        <li>{{ $perilaku->name }}</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td class="align-middle" width="45%">
+                                    <h6 class="fw-bold mb-2">Ekspektasi Khusus Pimpinan/Leader:</h6>
+                                    <textarea class="form-control" rows="3"
+                                        placeholder="Masukkan ekspektasi..."></textarea>
+                                </td>
+                            </tr>
+
                             @endforeach
                         </tbody>
                     </table>
