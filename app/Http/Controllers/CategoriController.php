@@ -25,7 +25,7 @@ class CategoriController extends Controller
     {
         $categories = CategoryPerilaku::all();
 
-        return view('backend.categori.index', compact('categories'));
+        return view('backend.category.index', compact('categories'));
     }
 
     /**
@@ -33,7 +33,7 @@ class CategoriController extends Controller
      */
     public function create()
     {
-        return view('backend.categori.create');
+        return view('backend.category.create');
     }
 
     /**
@@ -65,7 +65,7 @@ class CategoriController extends Controller
     {
         $categories = $categoryService->selectFirstById('uuid', $uuid);
 
-        return view('backend.categori.edit', compact('categories'));
+        return view('backend.category.edit', compact('categories'));
     }
 
     /**
