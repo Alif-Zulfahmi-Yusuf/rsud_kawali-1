@@ -139,7 +139,7 @@
                             @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja ?? [] as $rencana)
                             @foreach ($rencana->rencanaPegawai ?? [] as $pegawai)
                             @foreach ($pegawai->indikatorKinerja ?? [] as $indikator)
-                            <tr data-uuid="{{ $indikator->uuid }}">
+                            <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>
                                     <div><strong>Rencana Hasil Kerja:</strong></div>
@@ -150,7 +150,8 @@
                                     <div class="text-muted">{{ $rencana->rencana ?? 'Data Rencana Tidak Tersedia' }}
                                     </div>
                                 </td>
-                                <td class="text-center">{{ $indikator->aspek ?? '-' }}</td>
+                                <td data-uuid="{{ $indikator->uuid }}" class="text-center">
+                                    {{ $indikator->aspek ?? '-' }}</td>
                                 <td>{{ $indikator->indikator_kinerja ?? '-' }}</td>
                                 <td class="text-center">
                                     {{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
@@ -172,7 +173,7 @@
                                         </a>
                                         <div class="dropdown-divider"></div>
                                         <button type="button" class="dropdown-item text-danger delete-button"
-                                            onclick="deleteData(this)"
+                                            onclick="deleteDataIndikator(this)"
                                             data-uuid="{{ $indikator->uuid }}">Delete</button>
                                     </div>
                                 </td>

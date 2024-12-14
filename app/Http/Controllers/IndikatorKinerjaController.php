@@ -22,11 +22,6 @@ class IndikatorKinerjaController extends Controller
         $this->indikatorService = $indikatorService;
     }
 
-    public function index()
-    {
-        //
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -65,29 +60,6 @@ class IndikatorKinerjaController extends Controller
     }
 
 
-    /**
-     * Store a newly created resource in storage.
-     */
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $uuid)
     {
         try {
@@ -119,7 +91,6 @@ class IndikatorKinerjaController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

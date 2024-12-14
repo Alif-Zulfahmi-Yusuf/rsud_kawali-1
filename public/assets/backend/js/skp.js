@@ -213,7 +213,7 @@ const deleteDataIndikator = (e) => {
 
             $.ajax({
                 type: "DELETE",
-                url: `/indikator-kinerja/${uuid}/destroy`,
+                url: `/indikator-kinerja/destroy${uuid}`,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },

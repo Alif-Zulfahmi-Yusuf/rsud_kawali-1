@@ -10,6 +10,7 @@ use App\Http\Controllers\AtasanController;
 use App\Http\Controllers\PangkatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\CategoriController;
 use App\Http\Controllers\ValidasiController;
 use App\Http\Controllers\SkpAtasanController;
 use App\Http\Controllers\RencanaKerjaController;
@@ -65,6 +66,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('perilaku', PerilakuKerjaController::class);
     Route::put('/perilaku/update/{uuid}', [PerilakuKerjaController::class, 'update'])->name('perilaku.update');
     Route::delete('/perilaku/destroy/{uuid}', [PerilakuKerjaController::class, 'destroy'])->name('perilaku.destroy');
+
+    // route category
+    Route::resource('category', CategoriController::class);
+    Route::delete('/category/destroy/{uuid}', [CategoriController::class, 'destroy'])->name('category.destroy');
 
 
     // bagian profile
