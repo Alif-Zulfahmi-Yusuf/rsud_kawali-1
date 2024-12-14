@@ -103,6 +103,6 @@ class IndikatorKinerjaController extends Controller
             return response()->json(['message' => 'Item successfully deleted.']);
         }
 
-        return response()->json(['message' => 'Failed to delete the item.'], 500);
+        return response()->json(['message' => 'Data not found or failed to delete.'], 404);
     }
 }

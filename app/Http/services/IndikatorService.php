@@ -84,8 +84,12 @@ class IndikatorService
 
     public function delete($uuid)
     {
-        $indikator = IndikatorKinerja::where('uuid', $uuid)->firstOrFail();
-
-        return $indikator->delete();
+        try {
+            $indikator = IndikatorKinerja::where('uuid', $uuid)->firstOrFail();
+            return $indikator->delete();
+        } catch (\Exception $e) {
+            Log::error("Error deleting indikator: " . $e->getMessage());
+            return false; // Jika gagal, kembalikan false
+        }
     }
 }

@@ -208,12 +208,12 @@ const deleteDataIndikator = (e) => {
         showCancelButton: true,
         showCloseButton: true
     }).then((result) => {
-        if (result.isConfirmed) { // Jika pengguna mengonfirmasi penghapusan
-            startLoading(); // Menampilkan loading indikator (pastikan fungsi ini sudah diimplementasi)
+        if (result.isConfirmed) {
+            startLoading(); // Menampilkan indikator loading (pastikan ini sudah diimplementasikan)
 
             $.ajax({
                 type: "DELETE",
-                url: `/indikator-kinerja/destroy${uuid}`,
+                url: `/indikator-kinerja/destroy/${uuid}`, // Perbaiki URL
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -222,14 +222,8 @@ const deleteDataIndikator = (e) => {
                     toastSuccess(response.message); // Menampilkan notifikasi sukses
 
                     // Hapus baris dari DataTable
-                    var table = $('#tableRencana').DataTable();
-                    table.rows().every(function () {
-                        var row = this.node();
-                        if ($(row).data('uuid') === uuid) {
-                            table.row(row).remove();  // Hapus baris dari tabel
-                        }
-                    });
-                    table.draw(); // Redraw tabel untuk memperbarui tampilan
+                    var table = $('#tableRencana').DataTable(); // Pastikan DataTable sudah diinisialisasi
+                    table.rows(`[data-uuid="${uuid}"]`).remove().draw(); // Hapus baris dan redraw tabel
                 },
                 error: function (xhr, status, error) {
                     stopLoading(); // Menghentikan loading indikator jika ada error
@@ -244,7 +238,8 @@ const deleteDataIndikator = (e) => {
             });
         }
     });
-}
+};
+
 
 
 // Fungsi untuk menghapus baris dari DataTable

@@ -139,7 +139,7 @@
                             @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja ?? [] as $rencana)
                             @foreach ($rencana->rencanaPegawai ?? [] as $pegawai)
                             @foreach ($pegawai->indikatorKinerja ?? [] as $indikator)
-                            <tr>
+                            <tr data-uuid="{{ $indikator->uuid }}">
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>
                                     <div><strong>Rencana Hasil Kerja:</strong></div>
@@ -150,8 +150,9 @@
                                     <div class="text-muted">{{ $rencana->rencana ?? 'Data Rencana Tidak Tersedia' }}
                                     </div>
                                 </td>
-                                <td data-uuid="{{ $indikator->uuid }}" class="text-center">
-                                    {{ $indikator->aspek ?? '-' }}</td>
+                                <td class="text-center">
+                                    {{ $indikator->aspek ?? '-' }}
+                                </td>
                                 <td>{{ $indikator->indikator_kinerja ?? '-' }}</td>
                                 <td class="text-center">
                                     {{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
