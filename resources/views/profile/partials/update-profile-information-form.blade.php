@@ -78,7 +78,7 @@
 
                                 <div class="form-group mb-3">
                                     <label for="pangkat" class="form-label">{{ __('Pangkat') }}</label>
-                                    <select class="form-select select-single" id="pangkat" name="pangkat_id">
+                                    <select class="form-select" id="pangkat" name="pangkat_id">
                                         <option value="" disabled selected>{{ __('Select Pangkat') }}</option>
                                         @foreach ($pangkats as $pangkat)
                                         <option value="{{ $pangkat->id }}"

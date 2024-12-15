@@ -7,11 +7,15 @@
 @endsection
 
 @push('css')
+<!-- data table -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
+
+<!-- select 2 -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @endpush
 
@@ -376,7 +380,6 @@
 </form>
 
 
-<!-- @include('backend.skp._modalEditIndikator') -->
 @include('backend.skp._modalRencanaPegawai')
 @include('backend.skp._modalIndikator')
 
@@ -391,30 +394,30 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-$(document).ready(function() {
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+    $(document).ready(function() {
+        @if(session('success'))
+        toastSuccess("{{ session('success') }}");
+        @endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}");
-    @endif
-});
-
-function confirmSubmit() {
-    Swal.fire({
-        title: 'Ajukan SKP?',
-        text: "Anda tidak dapat mengubah data setelah diajukan!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, ajukan!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('form-skp').submit();
-        }
+        @if(session('error'))
+        toastError("{{ session('error') }}");
+        @endif
     });
-}
+
+    function confirmSubmit() {
+        Swal.fire({
+            title: 'Ajukan SKP?',
+            text: "Anda tidak dapat mengubah data setelah diajukan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, ajukan!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-skp').submit();
+            }
+        });
+    }
 </script>
 
 @endpush

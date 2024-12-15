@@ -16,6 +16,7 @@ use App\Http\Controllers\SkpAtasanController;
 use App\Http\Controllers\RencanaKerjaController;
 use App\Http\Controllers\PerilakuKerjaController;
 use App\Http\Controllers\IndikatorKinerjaController;
+use App\Http\Controllers\KegiatanHarianController;
 use App\Http\Controllers\RencanaKerjaPegawaiController;
 
 
@@ -84,6 +85,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     // bagian validasi 
     Route::resource('validasi', ValidasiController::class);
+
+    Route::resource('harian-pegawai', KegiatanHarianController::class);
 });
 
 require __DIR__ . '/auth.php';

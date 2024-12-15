@@ -318,4 +318,36 @@ $('#formEditIndikator').submit(function (e) {
 
 });
 
+$(document).ready(function () {
+    $('#skp_year').select2({
+        theme: "bootstrap-5",
+        placeholder: "Pilih Tahun",
+        allowClear: true,
+    });
+});
+
+$(document).ready(function () {
+    $('#rencana_atasan').select2({
+        theme: "bootstrap-5",
+        placeholder: "Pilih Rencana",
+        allowClear: true,
+    });
+});
+
+$(document).ready(function () {
+    $('#rencana_pegawai').select2({
+        theme: "bootstrap-5",
+        placeholder: "Pilih Rencana",
+        allowClear: true,
+    });
+});
+
+$(document).ready(function () {
+    $('#editRencanaPegawai').select2({
+        theme: "bootstrap-5",
+        placeholder: "Pilih Rencana",
+        allowClear: true,
+    });
+});
+
 

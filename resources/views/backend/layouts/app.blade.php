@@ -48,22 +48,23 @@
         id="user-style-rtl">
     <link href="{{ asset('assets/backend/css/user.min.css') }}" type="text/css" rel="stylesheet"
         id="user-style-default">
+    <link href="{{ asset('assets/backend/vendors/choices/choices.min.css') }}" rel="stylesheet">
 
     @stack('css')
     <script>
-    var phoenixIsRTL = window.config.config.phoenixIsRTL;
-    if (phoenixIsRTL) {
-        var linkDefault = document.getElementById('style-default');
-        var userLinkDefault = document.getElementById('user-style-default');
-        linkDefault.setAttribute('disabled', true);
-        userLinkDefault.setAttribute('disabled', true);
-        document.querySelector('html').setAttribute('dir', 'rtl');
-    } else {
-        var linkRTL = document.getElementById('style-rtl');
-        var userLinkRTL = document.getElementById('user-style-rtl');
-        linkRTL.setAttribute('disabled', true);
-        userLinkRTL.setAttribute('disabled', true);
-    }
+        var phoenixIsRTL = window.config.config.phoenixIsRTL;
+        if (phoenixIsRTL) {
+            var linkDefault = document.getElementById('style-default');
+            var userLinkDefault = document.getElementById('user-style-default');
+            linkDefault.setAttribute('disabled', true);
+            userLinkDefault.setAttribute('disabled', true);
+            document.querySelector('html').setAttribute('dir', 'rtl');
+        } else {
+            var linkRTL = document.getElementById('style-rtl');
+            var userLinkRTL = document.getElementById('user-style-rtl');
+            linkRTL.setAttribute('disabled', true);
+            userLinkRTL.setAttribute('disabled', true);
+        }
     </script>
 
 </head>
@@ -100,17 +101,17 @@
             </footer>
         </div>
         <script>
-        var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
-        var navbarTop = document.querySelector('.navbar-top');
-        if (navbarTopStyle === 'darker') {
-            navbarTop.setAttribute('data-navbar-appearance', 'darker');
-        }
+            var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
+            var navbarTop = document.querySelector('.navbar-top');
+            if (navbarTopStyle === 'darker') {
+                navbarTop.setAttribute('data-navbar-appearance', 'darker');
+            }
 
-        var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
-        var navbarVertical = document.querySelector('.navbar-vertical');
-        if (navbarVertical && navbarVerticalStyle === 'darker') {
-            navbarVertical.setAttribute('data-navbar-appearance', 'darker');
-        }
+            var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+            var navbarVertical = document.querySelector('.navbar-vertical');
+            if (navbarVertical && navbarVerticalStyle === 'darker') {
+                navbarVertical.setAttribute('data-navbar-appearance', 'darker');
+            }
         </script>
     </main>
     <!-- ===============================================-->
@@ -201,6 +202,7 @@
     <script src="{{ asset('assets/backend/vendors/prism/prism.js') }}"></script>
     <script src="{{ asset('assets/backend/js/phoenix.js') }}"></script>
     <script src="{{ asset('assets/backend/js/projectmanagement-dashboard.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendors/choices/choices.min.js') }}"></script>
 
     @stack('js')
 

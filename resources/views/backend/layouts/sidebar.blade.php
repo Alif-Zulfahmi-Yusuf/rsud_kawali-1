@@ -89,6 +89,40 @@
                     </div>
                     @endcan
 
+                    <!-- validasi data -->
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link dropdown-indicator label-1" href="#nv-pengukuran" role="button"
+                            data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-pengukuran">
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown-indicator-icon-wrapper">
+                                    <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                </div>
+
+                                <span class="nav-link-icon"><span data-feather="tag"></span></span>
+                                <span class="nav-link-text">Pengukuran Kinerja</span>
+                                <!-- <span class="fa-solid fa-circle text-info ms-1 new-page-indicator"
+                                    style="font-size: 6px"></span> -->
+                            </div>
+                        </a>
+                        <div class="parent-wrapper label-1">
+                            <ul class="nav collapse parent {{ request()->routeIs('harian-pegawai.*') ? 'show' : '' }}"
+                                data-bs-parent="#navbarVerticalCollapse" id="nv-pengukuran">
+                                <li class="collapsed-nav-item-title d-none">Pengukuran Kinerja</li>
+
+
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('harian-pegawai.*') ? 'active' : '' }}"
+                                        href="{{ route('harian-pegawai.index') }}">
+                                        <div class="d-flex align-items-center">
+                                            <span class="nav-link-text">Kegiatan Harian </span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end validasi data -->
+
                     <!-- perencanaan kinerja -->
                     <div class="nav-item-wrapper">
                         <a class="nav-link dropdown-indicator label-1" href="#nv-perencanaan" role="button"
@@ -133,6 +167,7 @@
                         </div>
                     </div>
                     <!-- end perencanaan kinerja -->
+
                     <!-- validasi data -->
                     <div class="nav-item-wrapper">
                         <a class="nav-link dropdown-indicator label-1" href="#nv-validasi" role="button"

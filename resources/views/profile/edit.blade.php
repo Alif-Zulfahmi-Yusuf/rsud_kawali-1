@@ -7,13 +7,15 @@
 @endsection
 
 @push('css')
+<!-- datatables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+
+<!-- select2 -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
-<!-- CSS Styling -->
-
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="{{ asset('assets/backend/vendors/choices/choices.min.css') }}" rel="stylesheet" />
 @endpush
 
 @section('content')
@@ -96,50 +98,50 @@
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
 
 <script>
-@if(session('status'))
-statusMessage = @json(session('status'));
-if (typeof statusMessage === 'object') {
-    statusMessage = statusMessage.message || 'Unknown status';
-}
-toastSuccess(statusMessage);
-@endif
+    @if(session('status'))
+    statusMessage = @json(session('status'));
+    if (typeof statusMessage === 'object') {
+        statusMessage = statusMessage.message || 'Unknown status';
+    }
+    toastSuccess(statusMessage);
+    @endif
 
-$(document).ready(function() {
-    // Inisialisasi DataTable pada modal
-    window.tablePangkat = $('#atasanTable').DataTable({
-        language: {
-            emptyTable: "No data available in table",
-            info: "Showing _START_ to _END_ of _TOTAL_ entries",
-            infoEmpty: "Showing 0 to 0 of 0 entries",
-            lengthMenu: "Show _MENU_ entries",
-            search: "Search:",
-            paginate: {
-                first: "First",
-                last: "Last",
-                next: "Next",
-                previous: "Previous"
+    $(document).ready(function() {
+        // Inisialisasi DataTable pada modal
+        window.tablePangkat = $('#atasanTable').DataTable({
+            language: {
+                emptyTable: "No data available in table",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                lengthMenu: "Show _MENU_ entries",
+                search: "Search:",
+                paginate: {
+                    first: "First",
+                    last: "Last",
+                    next: "Next",
+                    previous: "Previous"
+                }
             }
-        }
+        });
+
+        // Ketika tombol Pilih ditekan
+        $('.select-atasan').on('click', function() {
+            var id = $(this).data('id');
+            var name = $(this).data('name');
+            var pangkat = $(this).data('pangkat');
+            var unitKerja = $(this).data('unit-kerja');
+            var jabatan = $(this).data('jabatan');
+
+            // Set nilai pada form input yang terkait
+            $('#atasan_id_input').val(id);
+            $('#atasan_name').val(name);
+            $('#atasan_pangkat').val(pangkat);
+            $('#atasan_unit_kerja').val(unitKerja);
+            $('#atasan_jabatan').val(jabatan);
+
+            // Tutup modal setelah memilih
+            $('#atasanModal').modal('hide');
+        });
     });
-
-    // Ketika tombol Pilih ditekan
-    $('.select-atasan').on('click', function() {
-        var id = $(this).data('id');
-        var name = $(this).data('name');
-        var pangkat = $(this).data('pangkat');
-        var unitKerja = $(this).data('unit-kerja');
-        var jabatan = $(this).data('jabatan');
-
-        // Set nilai pada form input yang terkait
-        $('#atasan_id_input').val(id);
-        $('#atasan_name').val(name);
-        $('#atasan_pangkat').val(pangkat);
-        $('#atasan_unit_kerja').val(unitKerja);
-        $('#atasan_jabatan').val(jabatan);
-
-        // Tutup modal setelah memilih
-        $('#atasanModal').modal('hide');
-    });
-});
 </script>
 @endpush

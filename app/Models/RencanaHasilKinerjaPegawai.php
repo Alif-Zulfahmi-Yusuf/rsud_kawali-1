@@ -51,6 +51,11 @@ class RencanaHasilKinerjaPegawai extends Model
         return $this->hasMany(IndikatorKinerja::class, 'rencana_kerja_pegawai_id');
     }
 
+    public function kegiatanHarian()
+    {
+        return $this->hasMany(KegiatanHarian::class, 'rencana_kerja_pegawai_id');
+    }
+
     public function getIndikatorWithDetails()
     {
         return $this->indikatorKinerja()->with('user');

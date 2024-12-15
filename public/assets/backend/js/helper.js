@@ -7,18 +7,13 @@ let Toast = Swal.mixin({
 
 
 $(document).ready(function () {
-    // Inisialisasi Select2
-    $('.select-single').select2({
-        theme: "bootstrap-5", // Gunakan tema Bootstrap 5
-        width: '100%', // Menyesuaikan lebar dengan elemen induk
-        dropdownCssClass: 'bg-body text-body border fs--1', // Ukuran font lebih kecil pada dropdown
-        placeholder: $(this).data('placeholder'), // Placeholder dari atribut data-placeholder
-        containerCssClass: 'fs--1', // Ukuran font lebih kecil
-        selectionCssClass: 'form-control form-control-sm py-0', // Memperkecil ukuran input select
-        allowClear: true // Menambahkan opsi untuk menghapus pilihan
+    $('#pangkat').select2({
+        theme: "bootstrap-5",
+        placeholder: "Pilih opsi",
+        allowClear: true,
+        dropdownCssClass: 'select2-dropdown-phoenix'
     });
 });
-
 
 
 
