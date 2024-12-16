@@ -28,14 +28,19 @@ class KegiatanHarianController extends Controller
     {
         $user = Auth::user();
 
+        // Ambil data rencana kerja pegawai untuk user yang sedang login
         $rencanaKerjaPegawai = RencanaHasilKinerjaPegawai::where('user_id', $user->id)->get();
-        $kegiatanHarian = KegiatanHarian::where('user_id', $user->id)
-            ->orderBy('tanggal', 'desc')
+
+        // Ambil data kegiatan harian hanya untuk user yang sedang login
+        $kegiatanHarian = KegiatanHarian::with(['user.pangkat'])
+            ->where('user_id', $user->id) // Filter berdasarkan user_id
+            ->orderBy('tanggal', 'desc') // Urutkan berdasarkan tanggal terbaru
             ->get();
 
         // Kembalikan data ke view
         return view('backend.harian.index', compact('rencanaKerjaPegawai', 'kegiatanHarian'));
     }
+
 
 
     /**
@@ -49,22 +54,20 @@ class KegiatanHarianController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(HarianPegawaiRequest $request): RedirectResponse
+    public function store(Request $request, KegiatanService $service)
     {
         try {
-            // Cek tombol yang diklik untuk menentukan draft atau review
+            $data = $request->all();
             $isDraft = $request->has('is_draft');
 
-            // Panggil service untuk menyimpan data
-            $this->kegiatanService->saveKegiatanHarian($request->all(), $isDraft);
+            $kegiatanHarian = $service->saveKegiatanHarian($data, $isDraft);
 
-            return redirect()->back()->with('success', 'Kegiatan harian berhasil disimpan!');
+            return redirect()->back()->with('success', 'Kegiatan Harian berhasil disimpan.');
         } catch (\Exception $e) {
-            Log::error('Gagal menyimpan kegiatan harian', [
-                'error' => $e->getMessage(),
+            Log::error('Gagal menyimpan Kegiatan Harian.', [
+                'error' => $e->getMessage()
             ]);
-
-            return redirect()->back()->with('error', 'Gagal menyimpan kegiatan harian. Silakan coba lagi!');
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 

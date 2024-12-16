@@ -53,13 +53,22 @@
                     @foreach ($kegiatanHarian as $kegiatan)
                     <tr data-uuid="{{ $kegiatan->uuid }}">
                         <th scope="row" class="text-center">{{ $loop->iteration }}</th>
-                        <td>{{ $kegiatan->pegawai->name }}</td>
-                        <td>{{ $kegiatan->pegawai->golongan }}</td>
-                        <td>{{ $kegiatan->tanggal }}</td>
+                        <td class="text-center">
+                            {{ $kegiatan->user->name }}
+                            <br>
+                            {{ $kegiatan->user->nip }}
+                        </td>
+                        <td class="text-center">{{ $kegiatan->user->pangkat->name }}</td>
+                        <td class="text-center">
+                            {{ $kegiatan->tanggal ? \Carbon\Carbon::parse($kegiatan->tanggal)->format('Y M d') : '-' }}
+                        </td>
                         <td>{{ $kegiatan->uraian }}</td>
-                        <td class="text-center">{{ $kegiatan->qty }}</td>
-                        <td class="text-center">{{ $kegiatan->biaya }}</td>
-                        <td class="text-center">{{ $kegiatan->waktu }}</td>
+                        <td class="text-center">{{ $kegiatan->jumlah }}</td>
+                        <td class="text-center">{{ number_format($kegiatan->biaya, 0, ',', '.') }} Rp</td>
+                        <td class="text-center">
+                            {{ \Carbon\Carbon::parse($kegiatan->waktu_mulai)->format('H:i') }} sd
+                            {{ \Carbon\Carbon::parse($kegiatan->waktu_selesai)->format('H:i') }}
+                        </td>
                         <td class="text-center">
                             @if ($kegiatan->status == 'pending')
                             <span class="badge bg-warning">Pending</span>
@@ -83,7 +92,7 @@
                                 <div class="dropdown-menu dropdown-menu-end py-2">
                                     <a class="dropdown-item {{ $kegiatan->status === 'approve' ? 'disabled' : '' }}"
                                         href="{{ $kegiatan->status === 'approve' ? '#' : route('harian-pegawai.edit', $kegiatan->uuid) }}"
-                                        {{ $skp->status === 'approve' ? 'aria-disabled=true' : '' }}>
+                                        {{ $kegiatan->status === 'approve' ? 'aria-disabled=true' : '' }}>
                                         Edit
                                     </a>
                                     <hr class="dropdown-divider">
@@ -118,12 +127,12 @@
 
 
 <script>
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}");
-    @endif
+@if(session('error'))
+toastError("{{ session('error') }}");
+@endif
 </script>
 @endpush
