@@ -44,21 +44,15 @@ class KegiatanHarianController extends Controller
 
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request, KegiatanService $service)
     {
         try {
             $data = $request->all();
-            $isDraft = $request->has('is_draft');
+
+            // Ambil nilai is_draft dan konversi ke boolean
+            $isDraft = $request->input('is_draft') === '1'; // Draft jika nilai is_draft adalah string '0'
 
             $kegiatanHarian = $service->saveKegiatanHarian($data, $isDraft);
 
@@ -71,35 +65,58 @@ class KegiatanHarianController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, KegiatanService $service, $uuid)
     {
-        //
+        // Validasi data yang masuk
+        $request->validate([
+            'tanggal' => 'required|date',
+            'jenis_kegiatan' => 'required|string',
+            'uraian' => 'required|string',
+            'rencana_pegawai_id' => 'required|integer',
+            'output' => 'required|string',
+            'jumlah' => 'required|numeric',
+            'waktu_mulai' => 'required|date_format:H:i',
+            'waktu_selesai' => 'required|date_format:H:i',
+            'biaya' => 'nullable|numeric',
+            'evidence' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Sesuaikan dengan jenis file yang diizinkan
+        ]);
+
+        try {
+            $data = $request->all();
+
+            // Ambil nilai is_draft dan konversi ke boolean
+            $isDraft = $request->input('is_draft') === '0'; // Draft jika nilai is_draft adalah string '0'
+
+            // Panggil service untuk memperbarui kegiatan harian
+            $kegiatanHarian = $service->updateKegiatanHarian($uuid, $data, $isDraft);
+
+            return redirect()->back()->with('success', 'Kegiatan Harian berhasil diperbarui.');
+        } catch (\Exception $e) {
+            Log::error('Gagal memperbarui Kegiatan Harian.', [
+                'error' => $e->getMessage()
+            ]);
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $uuid)
     {
-        //
+        $result = $this->kegiatanService->delete($uuid);
+
+        if ($result) {
+            return response()->json(['message' => 'Item successfully deleted.']);
+        }
+
+        return response()->json(['message' => 'Failed to delete the item.'], 500);
     }
 }

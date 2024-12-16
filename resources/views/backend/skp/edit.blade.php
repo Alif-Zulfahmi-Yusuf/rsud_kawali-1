@@ -394,30 +394,30 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        @if(session('success'))
-        toastSuccess("{{ session('success') }}");
-        @endif
+$(document).ready(function() {
+    @if(session('success'))
+    toastSuccess("{{ session('success') }}");
+    @endif
 
-        @if(session('error'))
-        toastError("{{ session('error') }}");
-        @endif
+    @if(session('error'))
+    toastError("{{ session('error') }}");
+    @endif
+});
+
+function confirmSubmit() {
+    Swal.fire({
+        title: 'Ajukan SKP?',
+        text: "Anda tidak dapat mengubah data setelah diajukan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, ajukan!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('form-skp').submit();
+        }
     });
-
-    function confirmSubmit() {
-        Swal.fire({
-            title: 'Ajukan SKP?',
-            text: "Anda tidak dapat mengubah data setelah diajukan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, ajukan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('form-skp').submit();
-            }
-        });
-    }
+}
 </script>
 
 @endpush

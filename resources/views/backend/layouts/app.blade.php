@@ -52,19 +52,19 @@
 
     @stack('css')
     <script>
-        var phoenixIsRTL = window.config.config.phoenixIsRTL;
-        if (phoenixIsRTL) {
-            var linkDefault = document.getElementById('style-default');
-            var userLinkDefault = document.getElementById('user-style-default');
-            linkDefault.setAttribute('disabled', true);
-            userLinkDefault.setAttribute('disabled', true);
-            document.querySelector('html').setAttribute('dir', 'rtl');
-        } else {
-            var linkRTL = document.getElementById('style-rtl');
-            var userLinkRTL = document.getElementById('user-style-rtl');
-            linkRTL.setAttribute('disabled', true);
-            userLinkRTL.setAttribute('disabled', true);
-        }
+    var phoenixIsRTL = window.config.config.phoenixIsRTL;
+    if (phoenixIsRTL) {
+        var linkDefault = document.getElementById('style-default');
+        var userLinkDefault = document.getElementById('user-style-default');
+        linkDefault.setAttribute('disabled', true);
+        userLinkDefault.setAttribute('disabled', true);
+        document.querySelector('html').setAttribute('dir', 'rtl');
+    } else {
+        var linkRTL = document.getElementById('style-rtl');
+        var userLinkRTL = document.getElementById('user-style-rtl');
+        linkRTL.setAttribute('disabled', true);
+        userLinkRTL.setAttribute('disabled', true);
+    }
     </script>
 
 </head>
@@ -101,17 +101,17 @@
             </footer>
         </div>
         <script>
-            var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
-            var navbarTop = document.querySelector('.navbar-top');
-            if (navbarTopStyle === 'darker') {
-                navbarTop.setAttribute('data-navbar-appearance', 'darker');
-            }
+        var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
+        var navbarTop = document.querySelector('.navbar-top');
+        if (navbarTopStyle === 'darker') {
+            navbarTop.setAttribute('data-navbar-appearance', 'darker');
+        }
 
-            var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
-            var navbarVertical = document.querySelector('.navbar-vertical');
-            if (navbarVertical && navbarVerticalStyle === 'darker') {
-                navbarVertical.setAttribute('data-navbar-appearance', 'darker');
-            }
+        var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+        var navbarVertical = document.querySelector('.navbar-vertical');
+        if (navbarVertical && navbarVerticalStyle === 'darker') {
+            navbarVertical.setAttribute('data-navbar-appearance', 'darker');
+        }
         </script>
     </main>
     <!-- ===============================================-->
