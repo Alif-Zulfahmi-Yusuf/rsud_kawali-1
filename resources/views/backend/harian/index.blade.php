@@ -64,7 +64,9 @@
                         </td>
                         <td>{{ $kegiatan->uraian }}</td>
                         <td class="text-center">{{ $kegiatan->jumlah }}</td>
-                        <td class="text-center">{{ number_format($kegiatan->biaya, 0, ',', '.') }} Rp</td>
+                        <td class="text-center">
+                            Rp {{ number_format((float) ($kegiatan->biaya ?? 0), 0, ',', '.') }}
+                        </td>
                         <td class="text-center">
                             {{ \Carbon\Carbon::parse($kegiatan->waktu_mulai)->format('H:i') }} sd
                             {{ \Carbon\Carbon::parse($kegiatan->waktu_selesai)->format('H:i') }}
