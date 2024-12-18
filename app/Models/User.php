@@ -94,16 +94,16 @@ class User extends Authenticatable
         return $this->belongsTo(Atasan::class, 'atasan_id', 'id');
     }
 
-
     public function pegawai()
     {
-        return $this->hasMany(User::class, 'atasan_id');
+        return $this->hasMany(User::class, 'atasan_id', 'id');
     }
 
     public function pangkat()
     {
         return $this->belongsTo(Pangkat::class, 'pangkat_id');
     }
+
     public function skpAtasan()
     {
         return $this->hasMany(SkpAtasan::class);

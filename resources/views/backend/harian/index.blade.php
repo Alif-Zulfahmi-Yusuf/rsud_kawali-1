@@ -153,8 +153,8 @@
             </div>
             <div class="modal-body">
                 <!-- Form Kegiatan Harian -->
-                <form action="{{ route('harian-pegawai.update', $kegiatan->uuid) }}" method="POST"
-                    enctype="multipart/form-data">
+                <form action="{{ isset($kegiatan) ? route('harian-pegawai.update', $kegiatan->uuid) : '#' }}"
+                    method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     <div class="row">

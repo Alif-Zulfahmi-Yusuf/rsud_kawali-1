@@ -24,7 +24,9 @@ class KegiatanHarian extends Model
         'uuid',
         'user_id',
         'rencana_pegawai_id',
+        'atasan_id',
         'skp_id',
+        'skp_atasan_id',
         'uraian',
         'jenis_kegiatan',
         'output',
@@ -69,7 +71,7 @@ class KegiatanHarian extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -86,5 +88,15 @@ class KegiatanHarian extends Model
     public function skp(): BelongsTo
     {
         return $this->belongsTo(Skp::class);
+    }
+
+    public function atasan(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'atasan_id');
+    }
+
+    public function skpAtasan(): BelongsTo
+    {
+        return $this->belongsTo(Skp::class, 'skp_atasan_id');
     }
 }

@@ -47,6 +47,10 @@ class Atasan extends Model
         return $this->hasMany(SkpAtasan::class, 'user_id', 'user_id');
     }
 
+    public function pegawai()
+    {
+        return $this->hasMany(User::class, 'atasan_id', 'id');
+    }
     /**
      * Relasi ke user yang menjadi atasan
      */

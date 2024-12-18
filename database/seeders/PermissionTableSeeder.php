@@ -30,6 +30,7 @@ class PermissionTableSeeder extends Seeder
             'jabatan-atasan',
             'pangkat-list',
             'atasan-list',
+            'pengukuran-list',
 
         ];
 

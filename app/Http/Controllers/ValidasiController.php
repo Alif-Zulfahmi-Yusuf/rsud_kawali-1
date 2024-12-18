@@ -25,10 +25,12 @@ class ValidasiController extends Controller
     public function index()
     {
         // Ambil data SKP yang statusnya 'pending' dan sudah diajukan (is_submitted = 1)
+        // dan yang mempunyai relasi dengan skpAtasan yang user_id nya sama dengan user yang login
         $skps = Skp::with(['user', 'skpAtasan'])
             ->where('status', 'pending') // Filter status pending
             ->where('is_submitted', 1)  // Filter hanya yang sudah diajukan
             ->whereHas('skpAtasan', function ($query) {
+                // Filter hanya yang memiliki relasi dengan skpAtasan yang user_id nya sama dengan user yang login
                 $query->where('user_id', Auth::id());
             })
             ->get();

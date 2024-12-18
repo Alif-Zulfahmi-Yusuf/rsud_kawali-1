@@ -92,7 +92,7 @@ class KegiatanHarianController extends Controller
             $data = $request->all();
 
             // Ambil nilai is_draft dan konversi ke boolean
-            $isDraft = $request->input('is_draft') === '0'; // Draft jika nilai is_draft adalah string '0'
+            $isDraft = $request->input('is_draft') === '1'; // Draft jika nilai is_draft adalah string '0'
 
             // Panggil service untuk memperbarui kegiatan harian
             $kegiatanHarian = $service->updateKegiatanHarian($uuid, $data, $isDraft);

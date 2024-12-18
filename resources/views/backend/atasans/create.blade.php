@@ -37,7 +37,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="user_id"><strong>Pilih User:</strong></label>
-                                <select class="select-single" name="user_id" required>
+                                <select class="form-select select-single" name="user_id" required>
                                     <option value="" disabled selected>Pilih User</option>
                                     @foreach ($users as $user)
                                     <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
@@ -55,7 +55,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="pangkat_id"><strong>Pangkat:</strong></label>
-                                <select class="select-single" name="pangkat_id" required>
+                                <select class="form-select select-single" name="pangkat_id" required>
                                     <option value="" disabled selected>Pilih Pangkat</option>
                                     @foreach ($pangkats as $pangkat)
                                     <option value="{{ $pangkat->id }}">{{ $pangkat->name }}</option>
