@@ -144,16 +144,15 @@ const editData = (uuid, tanggal, jenisKegiatan, uraian, rencanaPegawaiId, output
 
 
 
-
 $(document).ready(function () {
     $('#tableHarian').DataTable({
-        // Opsi DataTables yang diinginkan
+        // Nonaktifkan fitur search dan length change (show entries)
+        searching: false,
+        lengthChange: false,
         language: {
             emptyTable: "No data available in table",
             info: "Show _START_ to _END_ of _TOTAL_ entries",
             infoEmpty: "Show 0 to 0 of 0 entries",
-            lengthMenu: "Show _MENU_ entries",
-            search: "Cari:",
             paginate: {
                 first: "First",
                 last: "Last",
@@ -163,5 +162,4 @@ $(document).ready(function () {
         }
     });
 });
-
 

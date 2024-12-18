@@ -79,7 +79,7 @@ class KegiatanHarian extends Model
      */
     public function rencanaPegawai(): BelongsTo
     {
-        return $this->belongsTo(RencanaHasilKinerjaPegawai::class);
+        return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_pegawai_id');
     }
 
     /**

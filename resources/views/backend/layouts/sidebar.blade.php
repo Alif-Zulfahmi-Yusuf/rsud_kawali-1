@@ -89,7 +89,8 @@
                     </div>
                     @endcan
 
-                    <!-- validasi data -->
+                    @can('pengukuran-list')
+                    <!-- pengukuran data -->
                     <div class="nav-item-wrapper">
                         <a class="nav-link dropdown-indicator label-1" href="#nv-pengukuran" role="button"
                             data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-pengukuran">
@@ -121,7 +122,8 @@
                             </ul>
                         </div>
                     </div>
-                    <!-- end validasi data -->
+                    <!-- end pengukuran data -->
+                    @endcan
 
                     <!-- perencanaan kinerja -->
                     <div class="nav-item-wrapper">
@@ -168,6 +170,7 @@
                     </div>
                     <!-- end perencanaan kinerja -->
 
+                    @can('validasi-list')
                     <!-- validasi data -->
                     <div class="nav-item-wrapper">
                         <a class="nav-link dropdown-indicator label-1" href="#nv-validasi" role="button"
@@ -209,6 +212,7 @@
                         </div>
                     </div>
                     <!-- end validasi data -->
+                    @endcan
                 </li>
             </ul>
         </div>

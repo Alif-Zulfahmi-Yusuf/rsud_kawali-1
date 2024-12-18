@@ -90,14 +90,22 @@ class SkpService
             $skpDetail = Skp::where('uuid', $uuid)
                 ->where('user_id', $user->id) // Filter berdasarkan user yang sedang login
                 ->with([
-
-                    'skpAtasan.rencanaHasilKinerja.rencanaPegawai.indikatorKinerja',
-                    'skpAtasan.rencanaHasilKinerja',
-                    'rencanaPegawai'
+                    'skpAtasan.rencanaHasilKinerja' => function ($query) use ($user) {
+                        $query->with([
+                            'rencanaPegawai' => function ($queryPegawai) use ($user) {
+                                // Filter data rencana pegawai agar hanya milik user login
+                                $queryPegawai->where('user_id', $user->id)
+                                    ->with('indikatorKinerja');
+                            }
+                        ]);
+                    },
+                    'rencanaPegawai' => function ($query) use ($user) {
+                        // Filter data rencana pegawai hanya untuk user login
+                        $query->where('user_id', $user->id)
+                            ->with('indikatorKinerja'); // Relasi indikatorKinerja untuk rencanaPegawai
+                    }
                 ])
                 ->firstOrFail(); // Ambil data pertama atau gagal jika tidak ditemukan
-
-            // Jika diperlukan, Anda dapat menambahkan logika lain untuk memanipulasi data indikator atau relasi lainnya
 
             return $skpDetail;
         } catch (\Exception $e) {

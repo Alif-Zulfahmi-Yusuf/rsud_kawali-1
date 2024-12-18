@@ -41,42 +41,6 @@ class KegiatanService
             throw new \Exception('User belum memilih atasan.');
         }
 
-        // Cari data atasan berdasarkan atasan_id
-        $atasan = Atasan::find($user->atasan_id);
-
-        // Jika data atasan tidak ditemukan, tampilkan error
-        if (!$atasan) {
-            Log::warning('Atasan tidak ditemukan.', [
-                'atasan_id' => $user->atasan_id
-            ]);
-            throw new \Exception('Atasan dengan ID ' . $user->atasan_id . ' tidak ditemukan.');
-        }
-
-        // Gunakan tahun saat ini untuk pencarian SKP Atasan
-        $currentYear = now()->year;
-
-        // Cari SKP Atasan berdasarkan user_id dan tahun
-        $skpAtasan = SkpAtasan::where('user_id', $atasan->user_id)
-            ->where('tahun', $currentYear) // Menggunakan tahun berjalan
-            ->first();
-
-        // Log SKP Atasan
-        Log::info('Pencarian SKP Atasan', [
-            'skp_atasan_id' => $skpAtasan ? $skpAtasan->id : null
-        ]);
-
-        // Jika SKP Atasan tidak ditemukan, tampilkan error
-        if (!$skpAtasan) {
-            Log::warning('SKP Atasan tidak ditemukan.', [
-                'user_id' => $atasan->user_id,
-                'year' => $currentYear
-            ]);
-            throw new \Exception('Atasan belum membuat SKP untuk tahun ' . $currentYear . '.');
-        }
-
-        // Tambahkan skp_atasan_id ke data
-        $data['skp_atasan_id'] = $skpAtasan->id;
-
         // Tangani file evidence jika ada
         if (isset($data['evidence']) && $data['evidence'] instanceof UploadedFile) {
             $data['evidence'] = $this->uploadEvidence($data['evidence']);
@@ -92,7 +56,6 @@ class KegiatanService
             'kegiatan_harian_id' => $kegiatanHarian->id,
             'user_id' => $user->id,
             'atasan_id' => $user->atasan_id,
-            'skp_atasan_id' => $data['skp_atasan_id'],
         ]);
 
         return $kegiatanHarian;

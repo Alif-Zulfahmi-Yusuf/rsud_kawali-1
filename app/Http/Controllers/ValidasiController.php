@@ -46,23 +46,40 @@ class ValidasiController extends Controller
             // Mendapatkan detail SKP menggunakan service
             $skpDetail = $this->validasiService->getSkpDetail($uuid);
 
+            // Validasi apakah data terkait atasan login ditemukan
+            if (!$skpDetail) {
+                throw new \RuntimeException('Data SKP tidak ditemukan atau tidak memiliki akses.');
+            }
+
             // Mendapatkan semua kategori yang memiliki perilakus
             $categories = CategoryPerilaku::with('perilakus')
                 ->whereHas('perilakus') // Hanya ambil kategori yang memiliki perilakus
                 ->get();
+
             // Menampilkan view edit dengan data SKP dan kategori perilaku
             return view('backend.validasi.edit', compact('skpDetail', 'categories'));
         } catch (\RuntimeException $e) {
-            // Log error jika data tidak ditemukan
+            // Log error jika data tidak ditemukan atau ada masalah lainnya
             Log::error('Gagal menampilkan data SKP untuk edit', [
                 'uuid' => $uuid,
+                'user_id' => Auth::id(),
                 'error' => $e->getMessage(),
             ]);
 
             // Tangani jika data tidak ditemukan
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->route('validasi.index')->with('error', $e->getMessage());
+        } catch (\Exception $e) {
+            // Log error jika terjadi masalah lain
+            Log::error('Kesalahan tidak terduga saat menampilkan data SKP untuk edit', [
+                'uuid' => $uuid,
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()->route('validasi.index')->with('error', 'Terjadi kesalahan. Silakan coba lagi.');
         }
     }
+
 
     /**
      * Update the specified resource in storage.
