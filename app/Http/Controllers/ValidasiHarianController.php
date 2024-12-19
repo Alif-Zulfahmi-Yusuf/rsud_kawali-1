@@ -17,21 +17,17 @@ class ValidasiHarianController extends Controller
      */
     public function index(Request $request)
     {
-        // Logging awal untuk debug
-        Log::info('Mengambil data Kegiatan Harian berdasarkan filter.', [
+        Log::info('Memulai proses index validasi harian.', [
             'user_id' => Auth::id(),
             'bulan' => $request->bulan,
             'tahun' => $request->tahun,
         ]);
 
-        // Aktifkan query log
         DB::enableQueryLog();
 
-        // Filter bulan dan tahun
         $bulan = $request->bulan;
         $tahun = $request->tahun;
 
-        // Ambil satu data per user berdasarkan filter
         $kegiatanHarianList = KegiatanHarian::with(['user', 'user.pangkat'])
             ->where('status', 'pending')
             ->where('is_draft', 1)
@@ -40,64 +36,48 @@ class ValidasiHarianController extends Controller
                     $queryAtasan->where('user_id', Auth::id());
                 });
 
-                // Filter berdasarkan bulan jika diberikan
                 if ($bulan) {
-                    $query->whereMonth('created_at', $bulan);
+                    $query->whereMonth('tanggal', $bulan);
                 }
 
-                // Filter berdasarkan tahun jika diberikan
                 if ($tahun) {
-                    $query->whereYear('created_at', $tahun);
+                    $query->whereYear('tanggal', $tahun);
                 }
             })
             ->get()
-            ->unique('user_id'); // Ambil satu data per user
+            ->unique('user_id'); // Pastikan hanya satu data per user
 
-        // Logging query yang dieksekusi
-        Log::info('Query SQL', DB::getQueryLog());
+        Log::info('Query SQL:', DB::getQueryLog());
         DB::disableQueryLog();
 
-        // Jika tidak ada data ditemukan, beri log tambahan
         if ($kegiatanHarianList->isEmpty()) {
-            Log::warning('Tidak ada data Kegiatan Harian yang ditemukan.', [
+            Log::warning('Tidak ada data ditemukan untuk validasi harian.', [
                 'user_id' => Auth::id(),
                 'bulan' => $bulan,
                 'tahun' => $tahun,
             ]);
         }
 
-        // Return data ke view
         return view('backend.validasi_harian.index', compact('kegiatanHarianList'));
     }
+
 
     public function getByUser($userId)
     {
         try {
-            Log::info('Memuat kegiatan harian untuk user_id: ' . $userId);
-
-            if (!User::find($userId)) {
-                Log::warning('User  dengan ID ' . $userId . ' tidak ditemukan.');
-                return response()->json(['message' => 'User  tidak ditemukan.'], 404);
-            }
-
-            $kegiatanHarianList = KegiatanHarian::with(['rencanaPegawai'])
-                ->where('user_id', $userId)
+            $kegiatanHarians = KegiatanHarian::where('user_id', $userId)
                 ->where('status', 'pending')
                 ->where('is_draft', 1)
-                ->get()
-                ->map(function ($item) {
-                    // Pastikan $item->evidence hanya berisi nama file
-                    $item->evidence = Storage::url($item->evidence); // Hanya gunakan nama file
-                    return $item;
-                });
+                ->get();
 
-            return response()->json($kegiatanHarianList, 200);
+            if ($kegiatanHarians->isEmpty()) {
+                return response()->json(['message' => 'Tidak ada data ditemukan'], 404);
+            }
+
+            return response()->json($kegiatanHarians);
         } catch (\Exception $e) {
-            Log::error('Error mengambil data kegiatan harian: ' . $e->getMessage(), [
-                'user_id' => $userId,
-            ]);
-
-            return response()->json(['message' => 'Terjadi kesalahan saat mengambil data.'], 500);
+            Log::error('Gagal mengambil data kegiatan harian untuk user_id ' . $userId, ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Terjadi kesalahan'], 500);
         }
     }
 
@@ -105,28 +85,32 @@ class ValidasiHarianController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $uuid)
+    public function update(Request $request, $userId)
     {
-        try {
-            // Validasi input
-            $request->validate([
-                'penilaian' => 'required|array', // Pastikan penilaian adalah array
-            ]);
+        // Validasi input
+        $request->validate([
+            'penilaian' => 'required|array', // Penilaian harus berupa array
+            'penilaian.*' => 'in:logis,kurang_logis,tidak_logis', // Validasi nilai penilaian
+        ]);
 
-            // Temukan kegiatan harian berdasarkan UUID
-            $kegiatanHarian = KegiatanHarian::where('uuid', $uuid)->firstOrFail();
+        // Ambil semua data kegiatan harian untuk user_id tertentu
+        $kegiatanHarianList = KegiatanHarian::where('user_id', $userId)->get();
 
-            // Update kolom penilaian di tabel kegiatan_harians
-            // Misalkan Anda ingin menyimpan penilaian sebagai array
-            $penilaian = $request->penilaian[$uuid] ?? []; // Ambil penilaian untuk UUID ini
-            $kegiatanHarian->penilaian = json_encode($penilaian); // Simpan sebagai JSON atau sesuai kebutuhan
-            $kegiatanHarian->save(); // Simpan perubahan
-
-            return redirect()->back()->with('success', 'Penilaian berhasil diperbarui.');
-        } catch (\Exception $e) {
-            Log::error('Error saat memperbarui penilaian: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui penilaian.');
+        // Jika tidak ada data, berikan respons error
+        if ($kegiatanHarianList->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada data untuk user ini.');
         }
+
+        // Update setiap kegiatan harian berdasarkan input penilaian
+        foreach ($kegiatanHarianList as $kegiatanHarian) {
+            if (isset($request->penilaian[$kegiatanHarian->id])) {
+                $kegiatanHarian->penilaian = $request->penilaian[$kegiatanHarian->id];
+                $kegiatanHarian->status = 'approve'; // Set status menjadi "approve"
+                $kegiatanHarian->save();
+            }
+        }
+
+        return redirect()->route('validasi-harian.index')->with(['success' => 'Data berhasil diperbarui dan status diubah menjadi "approve".']);
     }
 
     /**

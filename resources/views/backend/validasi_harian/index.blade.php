@@ -103,8 +103,9 @@
 
 @endsection
 
-<form action="{{ route('validasi-harian.update', '') }}" method="post" enctype="multipart/form-data"
-    id="formEditHarian">
+<form
+    action="{{ isset($kegiatanHarian) ? route('validasi-harian.update', ['user_id' => $kegiatanHarian->user->id]) : '#' }}"
+    method="POST" id="formEditHarian" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -131,6 +132,10 @@
                                 </tr>
                             </thead>
                             <tbody id="modalTableBody">
+                                <!-- Data kegiatan harian -->
+                                <input type="hidden" name="penilaian[{{$kegiatanHarian->uuid ?? ''}}]"
+                                    value="{{ isset($kegiatanHarian->penilaian) ? $kegiatanHarian->penilaian : 'logis' }}">
+                                <!-- Ulangi untuk setiap data -->
                                 <!-- Data akan diisi dengan AJAX -->
                             </tbody>
                         </table>
@@ -179,15 +184,11 @@ $(document).ready(function() {
 });
 
 function editDataHarianByUser(userId) {
-    // AJAX request untuk mengambil data kegiatan harian
     $.ajax({
         url: `/validasi-harian/user/${userId}`,
         method: 'GET',
         success: function(response) {
-            let tableBody = '';
-
-            // Tambahkan header dengan checkbox "Pilih Semua Logis"
-            tableBody += `
+            let tableBody = `
                 <tr>
                     <td colspan="6" class="text-center"><strong>Pilihan untuk Semua sebagai Logis</strong></td>
                     <td class="text-center">
@@ -196,15 +197,13 @@ function editDataHarianByUser(userId) {
                             <label class="form-check-label" for="pilih-semua-logis">Centang Semua Logis</label>
                         </div>
                     </td>
-                </tr>
-            `;
+                </tr>`;
 
-            // Iterasi data dan buat baris tabel
             response.forEach((item, index) => {
                 tableBody += `
                     <tr>
                         <td class="text-center">${index + 1}</td>
-                        <td class="text-center">${new Date(item.tanggal).toLocaleDateString('id-ID', { year: 'numeric', month: '2-digit', day: '2-digit' })}</td>
+                        <td class="text-center">${new Date(item.tanggal).toLocaleDateString('id-ID')}</td>
                         <td class="text-center">${item.uraian}</td>
                         <td class="text-center">${item.output}</td>
                         <td class="text-center">${item.waktu_mulai} - ${item.waktu_selesai}</td>
@@ -212,42 +211,27 @@ function editDataHarianByUser(userId) {
                             <a href="${item.evidence}" target="_blank" class="btn btn-link btn-sm">Lihat File</a>
                         </td>
                         <td class="text-center">
-                            <div class="form-check">
-                                <input class="form-check-input logis-checkbox" type="checkbox" 
-                                       name="penilaian[${item.uuid}][logis]" value="logis" id="logis-${item.uuid}">
-                                <label class="form-check-label" for="logis-${item.uuid}">Logis</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" 
-                                       name="penilaian[${item.uuid}][kurang_logis]" value="kurang_logis" id="kurang_logis-${item.uuid}">
-                                <label class="form-check-label" for="kurang_logis-${item.uuid}">Kurang Logis</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" 
-                                       name="penilaian[${item.uuid}][tidak_logis]" value="tidak_logis" id="tidak_logis-${item.uuid}">
-                                <label class="form-check-label" for="tidak_logis-${item.uuid}">Tidak Logis</label>
-                            </div>
+                            <select class="form-select penilaian-select" name="penilaian[${item.id}]">
+                                <option value="" disabled selected>Pilih Penilaian</option>
+                                <option value="logis">Logis</option>
+                                <option value="kurang_logis">Kurang Logis</option>
+                                <option value="tidak_logis">Tidak Logis</option>
+                            </select>
                         </td>
-                    </tr>
-                `;
+                    </tr>`;
             });
 
-            // Masukkan baris tabel ke dalam modal
             $('#modalTableBody').html(tableBody);
 
-            // Tambahkan event listener untuk checkbox "Pilih Semua Logis"
             $('#pilih-semua-logis').on('change', function() {
                 const isChecked = $(this).is(':checked');
-
-                // Centang/Uncentang semua checkbox "Logis"
-                $('.logis-checkbox').prop('checked', isChecked);
+                $('.penilaian-select').val(isChecked ? 'logis' : '');
             });
 
-            // Tampilkan modal
             $('#modalEditHarian').modal('show');
         },
         error: function() {
-            alert('Gagal memuat data kegiatan harian. Silakan coba lagi.');
+            alert('Gagal memuat data kegiatan harian.');
         }
     });
 }

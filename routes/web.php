@@ -90,7 +90,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('validasi-harian', ValidasiHarianController::class);
     Route::get('/validasi-harian/user/{userId}', [ValidasiHarianController::class, 'getByUser']);
     // Rute untuk update
-    Route::put('/validasi-harian/{uuid}', [ValidasiHarianController::class, 'update'])->name('validasi-harian.update');
+    Route::put('/validasi-harian/{user_id}', [ValidasiHarianController::class, 'update'])->name('validasi-harian.update');
 
     Route::resource('harian-pegawai', KegiatanHarianController::class);
     Route::delete('/harian-pegawai/destroy/{uuid}', [KegiatanHarianController::class, 'destroy'])->name('harian-pegawai.destroy');
