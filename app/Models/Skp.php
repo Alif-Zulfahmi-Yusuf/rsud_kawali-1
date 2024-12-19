@@ -72,8 +72,6 @@ class Skp extends Model
         return $this->belongsTo(User::class, 'atasan_id');
     }
 
-
-
     public function skpAtasan()
     {
         return $this->belongsTo(SkpAtasan::class, 'skp_atasan_id');

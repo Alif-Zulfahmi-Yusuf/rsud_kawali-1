@@ -43,42 +43,40 @@ class ValidasiController extends Controller
     public function edit($uuid)
     {
         try {
-            // Mendapatkan detail SKP menggunakan service
+            // Mendapatkan detail SKP
             $skpDetail = $this->validasiService->getSkpDetail($uuid);
 
-            // Validasi apakah data terkait atasan login ditemukan
-            if (!$skpDetail) {
-                throw new \RuntimeException('Data SKP tidak ditemukan atau tidak memiliki akses.');
-            }
-
-            // Mendapatkan semua kategori yang memiliki perilakus
+            // Mendapatkan semua kategori perilaku yang memiliki perilakus
             $categories = CategoryPerilaku::with('perilakus')
-                ->whereHas('perilakus') // Hanya ambil kategori yang memiliki perilakus
+                ->whereHas('perilakus')
                 ->get();
 
-            // Menampilkan view edit dengan data SKP dan kategori perilaku
+            // Tampilkan view edit dengan data SKP dan kategori perilaku
             return view('backend.validasi.edit', compact('skpDetail', 'categories'));
         } catch (\RuntimeException $e) {
-            // Log error jika data tidak ditemukan atau ada masalah lainnya
+            // Log error untuk kasus runtime exception
             Log::error('Gagal menampilkan data SKP untuk edit', [
                 'uuid' => $uuid,
                 'user_id' => Auth::id(),
                 'error' => $e->getMessage(),
             ]);
 
-            // Tangani jika data tidak ditemukan
+            // Redirect dengan pesan error
             return redirect()->route('validasi.index')->with('error', $e->getMessage());
         } catch (\Exception $e) {
-            // Log error jika terjadi masalah lain
+            // Log error untuk exception tak terduga
             Log::error('Kesalahan tidak terduga saat menampilkan data SKP untuk edit', [
                 'uuid' => $uuid,
                 'user_id' => Auth::id(),
                 'error' => $e->getMessage(),
             ]);
 
+            // Redirect dengan pesan error
             return redirect()->route('validasi.index')->with('error', 'Terjadi kesalahan. Silakan coba lagi.');
         }
     }
+
+
 
 
     /**
@@ -108,7 +106,7 @@ class ValidasiController extends Controller
 
             $skp->save();
 
-            return redirect()->route('validasi.index')->with('success', 'Status SKP berhasil diperbarui.');
+            return redirect()->route('validasi.index')->with('success', 'Review SKP berhasil diperbarui.');
         } catch (\Exception $e) {
             // Log error untuk debugging
             Log::error('Gagal memperbarui status SKP', [
