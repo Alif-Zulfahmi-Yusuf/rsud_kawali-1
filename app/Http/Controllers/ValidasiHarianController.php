@@ -71,13 +71,13 @@ class ValidasiHarianController extends Controller
                 ->get();
 
             if ($kegiatanHarians->isEmpty()) {
-                return response()->json(['message' => 'Tidak ada data ditemukan'], 404);
+                return redirect()->back()->with('warning', 'Tidak ada data ditemukan');
             }
 
             return response()->json($kegiatanHarians);
         } catch (\Exception $e) {
             Log::error('Gagal mengambil data kegiatan harian untuk user_id ' . $userId, ['error' => $e->getMessage()]);
-            return response()->json(['message' => 'Terjadi kesalahan'], 500);
+            return redirect()->back()->with('error', 'Terjadi kesalahan');
         }
     }
 

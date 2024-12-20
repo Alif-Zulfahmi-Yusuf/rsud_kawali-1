@@ -18,30 +18,34 @@ class ValidasiService
         return Skp::where($column, $value)->firstOrFail();
     }
 
+
     public function getSkpDetail(string $uuid)
     {
         try {
             $user = Auth::user(); // Mendapatkan user yang sedang login (atasan)
+            $targetUserId = Auth::id(); // ID user pegawai yang sedang login
 
-            // Mendapatkan detail SKP beserta relasi yang terkait dengan filter berdasarkan atasan
+            // Mendapatkan detail SKP beserta relasi yang terkait dengan filter berdasarkan user_id
             $skpDetail = Skp::where('uuid', $uuid)
                 ->with([
-                    // Relasi rencana atasan
-                    'skpAtasan' => function ($query) use ($user) {
+                    // Relasi skpAtasan
+                    'skpAtasan' => function ($query) use ($user, $targetUserId) {
                         $query->where('user_id', $user->id) // Filter berdasarkan user atasan
                             ->with([
-                                'rencanaHasilKinerja' => function ($queryHasil) {
+                                'rencanaHasilKinerja' => function ($queryHasil) use ($targetUserId) {
                                     $queryHasil->with([
-                                        'rencanaPegawai' => function ($queryPegawai) {
-                                            $queryPegawai->with('indikatorKinerja');
+                                        'rencanaPegawai' => function ($queryPegawai) use ($targetUserId) {
+                                            $queryPegawai->where('user_id', $targetUserId) // Filter berdasarkan user_id pegawai
+                                                ->with('indikatorKinerja'); // Load indikator kinerja
                                         },
                                     ]);
                                 },
                             ]);
                     },
-                    // Relasi rencana pegawai
-                    'rencanaPegawai' => function ($query) {
-                        $query->with('indikatorKinerja'); // Pastikan indikator kinerja ikut di-load
+                    // Relasi rencanaPegawai secara langsung
+                    'rencanaPegawai' => function ($query) use ($targetUserId) {
+                        $query->where('user_id', $targetUserId) // Filter berdasarkan user_id pegawai
+                            ->with('indikatorKinerja'); // Pastikan indikator kinerja ikut di-load
                     },
                 ])
                 ->firstOrFail(); // Ambil data pertama atau gagal jika tidak ditemukan

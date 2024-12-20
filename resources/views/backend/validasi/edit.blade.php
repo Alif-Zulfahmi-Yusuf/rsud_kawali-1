@@ -37,24 +37,24 @@
                                 <th width="2%" class="text-center">No</th>
                                 <th width="25%">Rencana Hasil Kerja Pimpinan yang Diintervensi</th>
                                 <th width="20%">Rencana Hasil Kerja</th>
-                                <th width="5%">Aspek</th>
+                                <th class="text-center" width="5%">Aspek</th>
                                 <th width="25%">Indikator Kinerja Individu</th>
-                                <th width="5%">Target</th>
+                                <th class="text-center" width="5%">Target</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja ?? [] as $rencana)
                             <tr>
                                 <td class="align-middle text-center"
-                                    rowspan="{{ $rencana->rencanaPegawai->sum(fn($pegawai) => $pegawai->indikatorKinerja->count()) }}">
+                                    rowspan="{{ $rencana->rencanaPegawai?->sum(fn($pegawai) => $pegawai->indikatorKinerja?->count()) ?? 1 }}">
                                     {{ $loop->iteration }}
                                 </td>
                                 <td class="align-middle"
-                                    rowspan="{{ $rencana->rencanaPegawai->sum(fn($pegawai) => $pegawai->indikatorKinerja->count()) }}">
+                                    rowspan="{{ $rencana->rencanaPegawai?->sum(fn($pegawai) => $pegawai->indikatorKinerja?->count()) ?? 1 }}">
                                     {{ $rencana->rencana ?? 'Data Rencana Tidak Tersedia' }}
                                 </td>
                                 @foreach ($rencana->rencanaPegawai ?? [] as $pegawai)
-                                <td class="align-middle" rowspan="{{ $pegawai->indikatorKinerja->count() }}">
+                                <td class="align-middle" rowspan="{{ $pegawai->indikatorKinerja?->count() ?? 1 }}">
                                     {{ $pegawai->rencana ?? 'Data Rencana Pegawai Tidak Tersedia' }}
                                 </td>
                                 @foreach ($pegawai->indikatorKinerja ?? [] as $indikator)
