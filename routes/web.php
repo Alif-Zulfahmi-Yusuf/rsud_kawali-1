@@ -11,6 +11,7 @@ use App\Http\Controllers\PangkatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CategoriController;
+use App\Http\Controllers\EvaluasiController;
 use App\Http\Controllers\ValidasiController;
 use App\Http\Controllers\SkpAtasanController;
 use App\Http\Controllers\RencanaKerjaController;
@@ -96,6 +97,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('harian-pegawai', KegiatanHarianController::class);
     Route::delete('/harian-pegawai/destroy/{uuid}', [KegiatanHarianController::class, 'destroy'])->name('harian-pegawai.destroy');
     Route::patch('/harian-pegawai/{uuid}/update', [KegiatanHarianController::class, 'update'])->name('harian-pegawai.update');
+
+    Route::resource('evaluasi-pegawai', EvaluasiController::class);
 });
 
 require __DIR__ . '/auth.php';

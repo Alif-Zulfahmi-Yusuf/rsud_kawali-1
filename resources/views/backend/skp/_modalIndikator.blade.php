@@ -14,7 +14,9 @@
 
                     <div class="form-group mb-3">
                         <label for="rencana_pegawai" class="form-label">Rencana Pegawai</label>
-                        <select class="form-select" id="rencana_pegawai" name="rencana_kerja_pegawai_id" required>
+                        <select class="form-select" id="rencana_pegawai" name="rencana_kerja_pegawai_id"
+                            data-choices="data-choices" data-options='{"removeItemButton":true,"placeholder":true}'
+                            required>
                             <option value="" selected>Pilih Rencana</option>
 
                             @foreach ($skpDetail->rencanaPegawai as $rencana)

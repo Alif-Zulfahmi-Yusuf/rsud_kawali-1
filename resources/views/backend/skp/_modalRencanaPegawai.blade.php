@@ -15,7 +15,9 @@
                     <!-- Rencana Atasan -->
                     <div class="form-group mb-3">
                         <label for="rencana_atasan" class="form-label">Rencana Atasan</label>
-                        <select class="form-select" id="rencana_atasan" name="rencana_atasan_id" required>
+                        <select class="form-select" data-choices="data-choices"
+                            data-options='{"removeItemButton":true,"placeholder":true}' id="rencana_atasan"
+                            name="rencana_atasan_id" required>
                             <option value="" selected>Pilih Rencana Atasan</option>
                             @if($skpDetail->skpAtasan && $skpDetail->skpAtasan->rencanaHasilKinerja->isNotEmpty())
                             @foreach ($skpDetail->skpAtasan->rencanaHasilKinerja as $rencana)

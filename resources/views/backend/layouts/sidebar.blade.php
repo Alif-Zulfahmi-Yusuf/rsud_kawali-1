@@ -106,16 +106,22 @@
                             </div>
                         </a>
                         <div class="parent-wrapper label-1">
-                            <ul class="nav collapse parent {{ request()->routeIs('harian-pegawai.*') ? 'show' : '' }}"
+                            <ul class="nav collapse parent {{ request()->routeIs('harian-pegawai.*') || request()->routeIs('evaluasi-pegawai.*') ? 'show' : '' }}"
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-pengukuran">
                                 <li class="collapsed-nav-item-title d-none">Pengukuran Kinerja</li>
-
-
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('harian-pegawai.*') ? 'active' : '' }}"
                                         href="{{ route('harian-pegawai.index') }}">
                                         <div class="d-flex align-items-center">
                                             <span class="nav-link-text">Kegiatan Harian </span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('evaluasi-pegawai.*') ? 'active' : '' }}"
+                                        href="{{ route('evaluasi-pegawai.index') }}">
+                                        <div class="d-flex align-items-center">
+                                            <span class="nav-link-text">Evaluasi Kinerja </span>
                                         </div>
                                     </a>
                                 </li>

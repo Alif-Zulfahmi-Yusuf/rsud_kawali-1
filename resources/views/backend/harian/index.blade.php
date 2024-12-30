@@ -169,7 +169,9 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label for="tanggal" class="form-label">Tanggal *</label>
-                                <input type="date" name="tanggal" id="edit-tanggal" class="form-control" required>
+                                <input type="date" name="tanggal" id="edit-tanggal" class="form-control datetimepicker"
+                                    placeholder="dd/mm/yyyy" data-options='{"disableMobile":true,"dateFormat":"d/m/Y"}'
+                                    required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -217,14 +219,18 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label for="waktu_mulai" class="form-label">Waktu Mulai (Jam) *</label>
-                                <input type="time" name="waktu_mulai" id="edit-waktu_mulai" class="form-control"
+                                <input type="time" name="waktu_mulai" id="edit-waktu_mulai"
+                                    class="form-control datetimepicker" placeholder="hour : minute"
+                                    data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":true}'
                                     required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label for="waktu_selesai" class="form-label">Waktu Selesai (Jam) *</label>
-                                <input type="time" name="waktu_selesai" id="edit-waktu_selesai" class="form-control"
+                                <input type="time" name="waktu_selesai" id="edit-waktu_selesai"
+                                    class="form-control datetimepicker" placeholder="hour : minute"
+                                    data-options='{"enableTime":true,"noCalendar":true,"dateFormat":"H:i","disableMobile":true}'
                                     required>
                             </div>
                         </div>

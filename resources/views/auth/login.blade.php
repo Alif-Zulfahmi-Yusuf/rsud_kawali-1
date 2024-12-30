@@ -122,12 +122,11 @@
                                     </div>
                                     <form method="POST" action="{{ route('login') }}">
                                         @csrf
-
                                         <div class="mb-3 text-start">
                                             <label class="form-label" for="nip">Nip </label>
                                             <div class="form-icon-container">
                                                 <input class="form-control form-icon-input" id="nip" type="text"
-                                                    name="nip" />
+                                                    name="nip" placeholder="Masukkan Nip" />
                                                 <span class="fas fa-user text-body fs-9 form-icon"></span>
                                             </div>
                                             <x-input-error :messages="$errors->get('nip')" class="mt-2" />
@@ -145,7 +144,6 @@
                                                         class="uil uil-eye show"></span><span
                                                         class="uil uil-eye-slash hide"></span></button>
                                             </div>
-
                                         </div>
                                         <div class="row flex-between-center mb-7">
                                             <div class="col-auto">

@@ -90,7 +90,7 @@ class KegiatanHarianController extends Controller
             $data = $request->validate([
                 'tanggal' => 'required|date',
                 'jenis_kegiatan' => 'required|string',
-                'uraian' => 'required|string',
+                'uraian' => 'required|string|max:700',
                 'rencana_pegawai_id' => 'required|integer',
                 'output' => 'required|string',
                 'jumlah' => 'required|numeric',

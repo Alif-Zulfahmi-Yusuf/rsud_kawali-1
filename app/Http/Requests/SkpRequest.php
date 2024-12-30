@@ -22,10 +22,11 @@ class SkpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'year' => 'required|integer|digits:4|gte:' . (date('Y') - 5) . '|lte:' . (date('Y') + 1), // Validasi tahun antara 5 tahun lalu dan tahun depan
-            'module' => 'required|string|in:kuantitatif,kualitatif',
+            'year' => ['required', 'integer', 'min:2019'], // Hapus 'max' untuk mengizinkan tahun di masa depan
+            'module' => ['required', 'string'],
         ];
     }
+
 
     /**
      * Custom error messages for validation.

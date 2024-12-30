@@ -12,7 +12,8 @@
                     @csrf
                     <div class="form-group mb-3">
                         <label for="skp_year" class="form-label">Tahun SKP</label>
-                        <select class="form-select" id="skp_year" name="year" required>
+                        <select class="form-select" name="year" id="skp_year" data-choices="data-choices"
+                            data-options='{"removeItemButton":true,"placeholder":true}' required>
                             <option value="" disabled selected>Pilih Tahun</option>
                             @php
                             $currentYear = now()->year;
