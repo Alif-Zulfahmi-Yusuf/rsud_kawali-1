@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('/harian-pegawai/{uuid}/update', [KegiatanHarianController::class, 'update'])->name('harian-pegawai.update');
 
     Route::resource('evaluasi-pegawai', EvaluasiController::class);
+    Route::delete('/evaluasi-pegawai/destroy/{uuid}', [EvaluasiController::class, 'destroy'])->name('evaluasi-pegawai.destroy');
 });
 
 require __DIR__ . '/auth.php';

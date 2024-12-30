@@ -40,27 +40,32 @@
         <!-- Card Pegawai yang Dinilai -->
         <div class="col-md-6">
             <div class="card shadow border-0 rounded-lg">
-                <div class="card-header text-white text-center rounded-top">
-                    <h5 class="mb-0"><i class="fas fa-user-check me-2"></i>Pegawai yang Dinilai</h5>
-                </div>
                 <div class="card-body">
-                    <table class="table table-sm table-borderless mb-0">
+                    <table class="table small">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-center" colspan="2">
+                                    <i class="fas fa-user-check me-2"></i>
+                                    Pegawai yang Dinilai
+                                </th>
+                            </tr>
+                        </thead>
                         <tbody>
                             <tr>
-                                <td><strong><i class="fas fa-user me-2 text-primary"></i>Nama</strong></td>
-                                <td>: {{ Auth::user()->name }}</td>
+                                <td>Nama</td>
+                                <td>{{ Auth::user()->name }}</td>
                             </tr>
                             <tr>
-                                <td><strong><i class="fas fa-id-badge me-2 text-primary"></i>NIP</strong></td>
-                                <td>: {{ Auth::user()->nip }}</td>
+                                <td>NIP</td>
+                                <td>{{ Auth::user()->nip }}</td>
                             </tr>
                             <tr>
-                                <td><strong><i class="fas fa-building me-2 text-primary"></i>Unit Kerja</strong></td>
-                                <td>: {{ Auth::user()->unit_kerja }}</td>
+                                <td>Unit Kerja</td>
+                                <td>{{ Auth::user()->unit_kerja }}</td>
                             </tr>
                             <tr>
-                                <td><strong><i class="fas fa-layer-group me-2 text-primary"></i>Pangkat</strong></td>
-                                <td>: {{ Auth::user()->pangkat->name }}</td>
+                                <td>Pangkat</td>
+                                <td>{{ Auth::user()->pangkat->name }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -71,27 +76,32 @@
         <!-- Card Atasan Penilai -->
         <div class="col-md-6">
             <div class="card shadow border-0 rounded-lg">
-                <div class="card-header  text-white text-center rounded-top">
-                    <h5 class="mb-0"><i class="fas fa-user-tie me-2"></i>Atasan Penilai</h5>
-                </div>
                 <div class="card-body">
-                    <table class="table table-sm table-borderless mb-0">
+                    <table class="table small">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-center" colspan="2">
+                                    <i class="fas fa-user-tie me-2"></i>
+                                    Atasan Penilai
+                                </th>
+                            </tr>
+                        </thead>
                         <tbody>
                             <tr>
-                                <td><strong><i class="fas fa-user me-2 text-success"></i>Nama</strong></td>
-                                <td>: {{ Auth::user()->atasan->name }}</td>
+                                <td>Nama</td>
+                                <td>{{ Auth::user()->atasan->name }}</td>
                             </tr>
                             <tr>
-                                <td><strong><i class="fas fa-id-badge me-2 text-success"></i>NIP</strong></td>
-                                <td>: {{ Auth::user()->atasan->nip }}</td>
+                                <td>NIP</td>
+                                <td>{{ Auth::user()->atasan->nip }}</td>
                             </tr>
                             <tr>
-                                <td><strong><i class="fas fa-building me-2 text-success"></i>Unit Kerja</strong></td>
-                                <td>: {{ Auth::user()->atasan->unit_kerja }}</td>
+                                <td>Unit Kerja</td>
+                                <td>{{ Auth::user()->atasan->unit_kerja }}</td>
                             </tr>
                             <tr>
-                                <td><strong><i class="fas fa-layer-group me-2 text-success"></i>Pangkat</strong></td>
-                                <td>: {{ Auth::user()->atasan->pangkat->name }}</td>
+                                <td>Pangkat</td>
+                                <td>{{ Auth::user()->atasan->pangkat->name }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -106,7 +116,7 @@
         @method('PUT')
         <div class="card shadow rounded-lg mb-4">
             <div class="card-body">
-                <div class="table-responsive">
+                <div class="table-responsive scrollbar">
                     <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
                         <div class="btn-group">
                             <button type="button" class="btn btn-outline-success dropdown-toggle"
