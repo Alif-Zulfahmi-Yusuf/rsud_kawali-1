@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Skp;
 use App\Models\Atasan;
+use App\Models\EvaluasiPegawai;
 use App\Models\SkpAtasan;
 use App\Models\KegiatanHarian;
 use Illuminate\Http\UploadedFile;
@@ -51,6 +52,20 @@ class KegiatanService
 
         // Simpan kegiatan harian ke database
         $kegiatanHarian = KegiatanHarian::create($data);
+        
+        $bulan = date('Y-m', strtotime($kegiatanHarian->tanggal));
+
+        $evaluasi = EvaluasiPegawai::where('user_id', $user->id)
+        ->where('bulan', 'LIKE', "$bulan%")
+        ->first();
+
+        if(!$evaluasi) {
+            EvaluasiPegawai::create([
+                'kegiatan_harian_id' => $kegiatanHarian->id,
+                'user_id' => $user->id,
+                'bulan' => date('Y-m-d', strtotime($kegiatanHarian->tanggal)),
+            ]);
+        }
 
         Log::info('Kegiatan Harian berhasil disimpan.', [
             'kegiatan_harian_id' => $kegiatanHarian->id,

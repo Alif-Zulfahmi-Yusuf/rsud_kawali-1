@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Skp;
 use Illuminate\Http\Request;
+use App\Models\KegiatanHarian;
 use App\Models\EvaluasiPegawai;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,7 @@ class EvaluasiController extends Controller
 
         // Ambil data evaluasi pegawai berdasarkan user ID
         $evaluasiPegawai = EvaluasiPegawai::where('user_id', $user->id)
+        ->where('status', '!=', 'nonaktif')
             ->with(['skp']) // Pastikan relasi dengan tabel SKP tersedia di model EvaluasiPegawai
             ->get();
 
@@ -61,12 +63,30 @@ class EvaluasiController extends Controller
                 return back()->with('error', 'SKP tidak ditemukan untuk user ini.');
             }
 
+            $bulan = date('Y-m', strtotime($bulanDenganTanggal));
+            
+            $evaluasi = EvaluasiPegawai::where('user_id', $user->id)
+            ->where('bulan', 'LIKE', "$bulan%")
+            ->first();
+
+        if(!$evaluasi) {
             // Simpan data evaluasi
             EvaluasiPegawai::create([
                 'user_id' => $user->id,
                 'skp_id' => $skp->id,
                 'bulan' => $bulanDenganTanggal,
             ]);
+        } else {
+            $kegiatanHarian= KegiatanHarian::where('id', $evaluasi->kegiatan_harian_id)->first();
+            
+            $evaluasi->update([
+                'skp_id' => $skp->id,
+                'rencana_pegawai_id' => $kegiatanHarian->rencana_pegawai_id,
+                'status' => 'review',
+
+            ]);
+        }
+            
 
             return back()->with('success', 'Bulan evaluasi berhasil ditambahkan.');
         } catch (\Exception $e) {

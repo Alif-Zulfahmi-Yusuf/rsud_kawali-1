@@ -16,6 +16,7 @@ class EvaluasiPegawai extends Model
         'user_id',
         'skp_id',
         'rencana_pegawai_id',
+        'kegiatan_harian_id',
         'bulan',
         'tanggal_capaian',
         'status',

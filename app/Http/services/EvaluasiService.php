@@ -26,16 +26,21 @@ class EvaluasiService
         $bulan = \Carbon\Carbon::parse($evaluasi->bulan)->format('m'); // Ambil bulan (numerik)
         $tahun = \Carbon\Carbon::parse($evaluasi->bulan)->format('Y'); // Ambil tahun
 
-        // Query data dengan LEFT JOIN tanpa menggunakan `kegiatan_harian_id`
+        // Query data dengan LEFT JOIN dan filter berdasarkan bulan & tahun
         $data = DB::table('kegiatan_harians')
-            ->leftJoin('skps', 'kegiatan_harians.rencana_pegawai_id', '=', 'skps.id')
+            ->leftJoin('evaluasi_pegawais', 'kegiatan_harians.id', '=', 'evaluasi_pegawais.kegiatan_harian_id')
+            ->leftJoin('rencana_indikator_kinerja', 'kegiatan_harians.rencana_pegawai_id', '=', 'rencana_indikator_kinerja.id')
             ->select(
                 'kegiatan_harians.id as kegiatan_harian_id',
                 'kegiatan_harians.uraian as uraian_kegiatan',
                 'kegiatan_harians.tanggal',
-                'skps.id as skp_id',
-                'skps.module as nama_skp',
-                'skps.tahun as tahun_skp'
+                'kegiatan_harians.waktu_mulai',
+                'kegiatan_harians.waktu_selesai',
+                'evaluasi_pegawais.id as evaluasi_id',
+                'evaluasi_pegawais.rencana_pegawai_id as rencana_pegawai_id',
+                'rencana_indikator_kinerja.id as indikator_id',
+                'rencana_indikator_kinerja.indikator_kinerja as nama_indikator',
+                
             )
             ->whereMonth('kegiatan_harians.tanggal', '=', $bulan) // Filter bulan
             ->whereYear('kegiatan_harians.tanggal', '=', $tahun) // Filter tahun

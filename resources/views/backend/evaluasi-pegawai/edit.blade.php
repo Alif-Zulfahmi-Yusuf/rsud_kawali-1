@@ -119,8 +119,19 @@
                         <tbody>
                             @foreach ($data as $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->uraian_kegiatan }}</td>
+                                <td width="5%" class="text-center align-middle">{{ $loop->iteration }}</td>
+                                <td>{{ $item->rencanaKerjaPegawai->id ?? '-' }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center align-middle">
+                                    {{ \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) }} Jam
+                                </td>
+                                <td class="text-center align-middle">
+                                    <a href="" target="_blank" class="btn btn-sm btn-info">
+                                        <i class="fas fa-file-download"></i>
+                                    </a>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

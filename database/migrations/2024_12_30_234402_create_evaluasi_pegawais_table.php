@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('skp_id')->constrained('skps')->onDelete('cascade');
             $table->foreignId('rencana_pegawai_id')->constrained('rencana_hasil_kerja_pegawai')->onDelete('cascade')->nullable();
+            $table->foreignId('kegiatan_harian_id')->constrained('kegiatan_harians')->onDelete('cascade')->nullable();
             $table->date('bulan')->nullable();
             $table->date('tanggal_capaian')->nullable();
             $table->enum('status', ['review', 'selesai', 'revisi'])->default('review');
