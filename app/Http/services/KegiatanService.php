@@ -52,14 +52,14 @@ class KegiatanService
 
         // Simpan kegiatan harian ke database
         $kegiatanHarian = KegiatanHarian::create($data);
-        
+
         $bulan = date('Y-m', strtotime($kegiatanHarian->tanggal));
 
         $evaluasi = EvaluasiPegawai::where('user_id', $user->id)
-        ->where('bulan', 'LIKE', "$bulan%")
-        ->first();
+            ->where('bulan', 'LIKE', "$bulan%")
+            ->first();
 
-        if(!$evaluasi) {
+        if (!$evaluasi) {
             EvaluasiPegawai::create([
                 'kegiatan_harian_id' => $kegiatanHarian->id,
                 'user_id' => $user->id,

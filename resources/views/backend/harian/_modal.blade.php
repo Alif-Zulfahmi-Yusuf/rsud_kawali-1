@@ -14,8 +14,7 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label for="tanggal" class="form-label">Tanggal *</label>
-                                <input type="date" name="tanggal" id="tanggal" class="form-control"
-                                    required>
+                                <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">

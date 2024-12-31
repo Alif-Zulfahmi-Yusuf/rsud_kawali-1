@@ -50,6 +50,11 @@ class EvaluasiPegawai extends Model
 
     public function rencanaKerjaPegawai()
     {
-        return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_kerja_pegawai_id');
+        return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_pegawai_id');
+    }
+
+    public function kegiatanHarian()
+    {
+        return $this->belongsTo(KegiatanHarian::class, 'kegiatan_harian_id');
     }
 }
