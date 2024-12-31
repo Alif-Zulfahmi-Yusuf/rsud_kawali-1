@@ -112,7 +112,7 @@
                             </tr>
                             <tr>
                                 <th class="text-center">Kuantitas Output</th>
-                                <th class="text-center">Kualitas</th>
+                                <th width="10%" class="text-center">Kualitas</th>
                                 <th class="text-center">Waktu</th>
                             </tr>
                         </thead>
@@ -123,7 +123,16 @@
                                 <td>{{ $item->rencanaKerjaPegawai->id ?? '-' }}</td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
+                                <td>
+                                    <select name="" class="form-select" id="">
+                                        <option value="">pilih</option>
+                                        <option value="sangat_kuat">Sangat kuat</option>
+                                        <option value="kurang">Kurang</option>
+                                        <option value="butuh_perbaikan">Butuh Perbaikan</option>
+                                        <option value="baik">Baik</option>
+                                        <option value="sangat_baik">Sangat Baik</option>
+                                    </select>
+                                </td>
                                 <td class="text-center align-middle">
                                     {{ \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) }} Jam
                                 </td>
