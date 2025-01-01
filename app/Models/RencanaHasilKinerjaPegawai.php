@@ -46,6 +46,8 @@ class RencanaHasilKinerjaPegawai extends Model
         return $this->belongsTo(Skp::class);
     }
 
+
+
     public function IndikatorKinerja()
     {
         return $this->hasMany(IndikatorKinerja::class, 'rencana_kerja_pegawai_id');

@@ -15,6 +15,7 @@ class EvaluasiPegawai extends Model
         'uuid',
         'user_id',
         'skp_id',
+        'skp_atasan_id',
         'rencana_pegawai_id',
         'kegiatan_harian_id',
         'bulan',
@@ -38,6 +39,11 @@ class EvaluasiPegawai extends Model
         return 'uuid';
     }
 
+    public function evaluasiPegawai()
+    {
+        return $this->hasMany(EvaluasiPegawai::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -48,7 +54,7 @@ class EvaluasiPegawai extends Model
         return $this->belongsTo(Skp::class);
     }
 
-    public function rencanaKerjaPegawai()
+    public function rencanaPegawai()
     {
         return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_pegawai_id');
     }
@@ -56,5 +62,9 @@ class EvaluasiPegawai extends Model
     public function kegiatanHarian()
     {
         return $this->belongsTo(KegiatanHarian::class, 'kegiatan_harian_id');
+    }
+    public function skpAtasan()
+    {
+        return $this->belongsTo(SkpAtasan::class, 'skp_atasan_id');
     }
 }

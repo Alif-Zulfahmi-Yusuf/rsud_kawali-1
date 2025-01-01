@@ -73,7 +73,6 @@ class KegiatanHarian extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
     /**
      * Get the rencana pegawai associated with the kegiatan harian.
      */
@@ -82,6 +81,10 @@ class KegiatanHarian extends Model
         return $this->belongsTo(RencanaHasilKinerjaPegawai::class, 'rencana_pegawai_id');
     }
 
+    public function rencanaHasilKinerja()
+    {
+        return $this->hasMany(RencanaHasilKinerja::class);
+    }
     /**
      * Get the SKP associated with the kegiatan harian.
      */
@@ -98,5 +101,10 @@ class KegiatanHarian extends Model
     public function skpAtasan(): BelongsTo
     {
         return $this->belongsTo(Skp::class, 'skp_atasan_id');
+    }
+
+    public function evaluasiPegawai(): BelongsTo
+    {
+        return $this->BelongsTo(EvaluasiPegawai::class);
     }
 }

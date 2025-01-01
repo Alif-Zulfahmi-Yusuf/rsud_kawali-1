@@ -280,5 +280,49 @@ $(document).ready(function() {
     toastError("{{ session('error') }}");
     @endif
 });
+
+$('#formEditHarian').submit(function(e) {
+    e.preventDefault();
+
+    const uuid = $('#edit-uuid').val(); // ID dari form untuk UUID
+    const formData = new FormData(this); // Ambil data langsung dari form
+
+    if (!uuid) {
+        toastError('UUID tidak ditemukan.');
+        return;
+    }
+
+    console.log(`Mengupdate data harian dengan UUID: ${uuid}`); // Debugging
+
+    // Proses AJAX untuk mengupdate data
+    $.ajax({
+        type: "POST", // POST untuk menangani unggahan file
+        url: `/harian-pegawai/${uuid}/update`, // Endpoint dinamis dengan UUID
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Tambahkan CSRF token
+        },
+        data: formData, // Kirimkan FormData
+        processData: false, // Jangan proses data FormData
+        contentType: false, // Jangan set `content-type` secara manual
+        success: function(response) {
+            console.log('Success:', response);
+            toastSuccess(response.message || 'Data berhasil diperbarui.');
+            $('#editHarianModal').modal('hide'); // Tutup modal
+            location.reload(); // Reload halaman
+        },
+        error: function(xhr) {
+            console.error('Error:', xhr);
+            let errorMessage = 'Terjadi kesalahan saat mengupdate data harian.';
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                errorMessage = Object.values(xhr.responseJSON.errors)
+                    .flat()
+                    .join('<br>');
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+            }
+            toastError(errorMessage);
+        }
+    });
+});
 </script>
 @endpush

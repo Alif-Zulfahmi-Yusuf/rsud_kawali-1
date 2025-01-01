@@ -108,34 +108,31 @@
     <form action="">
         <div class="card shadow rounded-lg mb-4">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
-                    <h5>Realisasi Rencana Aksi</h5>
-                </div>
+                <h5>Realisasi Rencana Aksi</h5>
                 <div class="table-responsive scrollbar">
                     <table class="table small">
                         <thead class="table-dark">
                             <tr>
-                                <th rowspan="2" class="text-center align-middle">No</th>
-                                <th rowspan="2" class="text-center align-middle">Rencana Aksi</th>
-                                <th rowspan="2" class="text-center align-middle">Target</th>
-                                <th colspan="3" class="text-center">Realisasi</th>
-                                <th rowspan="2" class="text-center align-middle">File</th>
-                            </tr>
-                            <tr>
-                                <th class="text-center">Kuantitas Output</th>
-                                <th width="10%" class="text-center">Kualitas</th>
-                                <th class="text-center">Waktu</th>
+                                <th class="text-center align-middle" width="5%">No</th>
+                                <th class="text-center align-middle" width="30%">Rencana Aksi</th>
+                                <th class="text-center align-middle" width="5%">Target</th>
+                                <th class="text-center align-middle">Kuantitas Output</th>
+                                <th class="text-center align-middle">Kualitas</th>
+                                <th class="text-center align-middle">Waktu</th>
+                                <th class="text-center align-middle">File</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $item)
+                            @foreach ($dataRencanaAksi as $item)
                             <tr>
-                                <td class="text-center align-middle">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
-                                <td>{{ $item->nama_indikator ?? '-' }}</td>
-                                <td></td>
+                                <td class="text-center">
+                                    {{ $item->target_bulanan ?? '-' }}
+                                </td>
+                                <td>-</td>
                                 <td>
-                                    <select name="evaluasi[{{ $item->evaluasi_id }}]" class="form-select">
+                                    <select name="evaluasi" class="form-select">
                                         <option value="">Pilih</option>
                                         <option value="sangat_kuat">Sangat Kuat</option>
                                         <option value="kurang">Kurang</option>
@@ -146,55 +143,68 @@
                                 </td>
                                 <td class="text-center align-middle">
                                     {{ isset($item->waktu_mulai, $item->waktu_selesai) 
-                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
-                    : '-' }}
+                                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
+                                    : '-' }}
                                 </td>
                                 <td class="text-center align-middle">
-                                    <a href="#" class="btn btn-sm btn-info">
-                                        <i class="fas fa-file-upload"></i>
-                                    </a>
+                                    <a href="" class="btn btn-outline-warning btn-sm"><i class="fa fa-upload"></i></a>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
-
                     </table>
                 </div>
             </div>
         </div>
+
         <div class="card shadow rounded-lg mb-4">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
-                    <h5>Evaluasi Kinerja Tahunan</h5>
-                </div>
+                <h5>Evaluasi Kinerja Tahunan</h5>
                 <div class="table-responsive scrollbar">
                     <table class="table small">
                         <thead class="table-dark">
                             <tr>
-                                <th>NO</th>
-                                <th>
-                                    Rencana Hasil Kerja Pimpinan yang Di intervensi
-                                </th>
-                                <th>Rencana Hasil Kerja</th>
-                                <th>Aspek</th>
-                                <th>Indikator Kinerja Individu</th>
-                                <th>Target</th>
-                                <th>Realisasi</th>
+                                <th class="text-center" width="5%">No</th>
+                                <th width="10%">Rencana Hasil Kerja Pimpinan</th>
+                                <th width="10%">Rencana Hasil Kerja</th>
+                                <th class="text-center" width="7%">Aspek</th>
+                                <th width="30%">Indikator Kinerja Individu</th>
+                                <th class="text-center" width="5%">Target</th>
+                                <th class="text-center" width="30%">Realisasi</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <tbody>
-                            @foreach ($data as $item)
+                            @foreach ($groupedDataEvaluasi as $pegawaiId => $items)
+                            @php $pegawai = $items->first(); @endphp
+                            @foreach ($items as $index => $indikator)
                             <tr>
-                                <td class="text-center align-middle">{{ $loop->iteration }}</td>
-                                <td>{{ $item->nama_rencana_pimpinan ?? '-' }}</td>
-                                <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
-                                <td>{{ $item->nama_indikator ?? '-' }}</td>
-                                <td>{{ $item->target ?? '-' }}</td>
-                                <td></td>
+                                @if ($loop->parent->first && $loop->first)
+                                <td class="align-middle text-center"
+                                    rowspan="{{ $groupedDataEvaluasi->sum(fn($item) => $item->count()) }}">
+                                    {{ $loop->parent->iteration }}
+                                </td>
+                                <td class="align-middle text-center"
+                                    rowspan="{{ $groupedDataEvaluasi->sum(fn($item) => $item->count()) }}">
+                                    {{ $pegawai->rencana_pimpinan ?? '-' }}
+                                </td>
+                                @endif
+                                @if ($loop->first)
+                                <td class="align-middle text-center" rowspan="{{ $items->count() }}">
+                                    {{ $pegawai->rencana_pegawai ?? '-' }}
+                                </td>
+                                @endif
+                                <td class="align-middle text-center">{{ $indikator->aspek_indikator ?? '-' }}</td>
+                                <td>{{ $indikator->nama_indikator ?? '-' }}</td>
+                                <td class="align-middle text-center">
+                                    {{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
+                                    {{ $indikator->satuan ?? '-' }}
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control">
+                                </td>
                             </tr>
                             @endforeach
-                        </tbody>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

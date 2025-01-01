@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Skp;
+use App\Models\Atasan;
+use App\Models\SkpAtasan;
 use Illuminate\Http\Request;
 use App\Models\KegiatanHarian;
 use App\Models\EvaluasiPegawai;
@@ -53,11 +55,49 @@ class EvaluasiController extends Controller
         // Tambahkan hari default agar format sesuai dengan tipe DATE di MySQL
         $bulanDenganTanggal = $request->bulan . '-01';
         try {
+
             // Ambil user yang sedang login
             $user = Auth::user();
 
+            // Pastikan user memiliki atasan_id yang valid
+            if (!$user->atasan_id) {
+                throw new \Exception('User belum memilih atasan.');
+            }
+
+            // Ambil data atasan berdasarkan atasan_id di tabel users (mengacu ke id di tabel atasans)
+            $atasan = Atasan::find($user->atasan_id);
+
+            // Jika data atasan tidak ditemukan, tampilkan error
+            if (!$atasan) {
+                Log::warning('Atasan tidak ditemukan', [
+                    'atasan_id' => $user->atasan_id
+                ]);
+                throw new \Exception('Atasan dengan ID ' . $user->atasan_id . ' tidak ditemukan.');
+            }
+
+
+            // Cari SKP Atasan berdasarkan ID atasan dan tahun
+            $skpAtasan = SkpAtasan::where('user_id', $atasan->user_id)->first();
+
+            // Log ID SKP Atasan yang ditemukan
+            Log::info('ID SKP Atasan', [
+                'skp_atasan_id' => $skpAtasan ? $skpAtasan->id : null // Pastikan id-nya ada atau null
+            ]);
+
+            // Jika SKP Atasan tidak ditemukan, tampilkan pesan error
+            if (!$skpAtasan) {
+                Log::warning('SKP Atasan tidak ditemukan', [
+                    'atasan_id' => $atasan->user_id,
+                ]);
+                throw new \Exception('Atasan belum membuat Skp.');
+            }
+
             // Ambil SKP terkait (jika ada logika spesifik untuk mencari SKP, tambahkan di sini)
-            $skp = Skp::where('user_id', $user->id)->latest()->first();
+            $skp = Skp::where('user_id', $user->id)
+                ->where('is_active', 1)
+                ->where('status', 'approve')
+                ->latest()
+                ->first();
 
             if (!$skp) {
                 return back()->with('error', 'SKP tidak ditemukan untuk user ini.');
@@ -74,13 +114,16 @@ class EvaluasiController extends Controller
                 EvaluasiPegawai::create([
                     'user_id' => $user->id,
                     'skp_id' => $skp->id,
+                    'skp_atasan_id' => $skpAtasan->id,
                     'bulan' => $bulanDenganTanggal,
                 ]);
             } else {
+
                 $kegiatanHarian = KegiatanHarian::where('id', $evaluasi->kegiatan_harian_id)->first();
 
                 $evaluasi->update([
                     'skp_id' => $skp->id,
+                    'skp_atasan_id' => $skpAtasan->id,
                     'rencana_pegawai_id' => $kegiatanHarian->rencana_pegawai_id,
                     'status' => 'review',
 
@@ -96,26 +139,22 @@ class EvaluasiController extends Controller
         }
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($uuid, EvaluasiService $evaluasiPegawaiService)
+    public function edit($uuid, EvaluasiService $evaluasiService)
     {
         try {
-            // Ambil data evaluasi pegawai
-            $data = $evaluasiPegawaiService->getEvaluasiPegawai($uuid);
+            // Ambil data evaluasi (Realisasi Rencana Aksi dan Evaluasi Kinerja Tahunan)
+            $evaluasiData = $evaluasiService->getEvaluasiData($uuid);
 
             // Kirim data ke view
-            return view('backend.evaluasi-pegawai.edit', compact('data'));
+            return view('backend.evaluasi-pegawai.edit', $evaluasiData);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
     }
+
 
 
     /**
