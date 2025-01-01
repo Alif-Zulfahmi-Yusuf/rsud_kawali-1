@@ -130,14 +130,14 @@
                         <tbody>
                             @foreach ($data as $item)
                             <tr>
-                                <td width="5%" class="text-center align-middle">{{ $loop->iteration }}</td>
+                                <td class="text-center align-middle">{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
-                                <td></td>
+                                <td>{{ $item->nama_indikator ?? '-' }}</td>
                                 <td></td>
                                 <td>
-                                    <select name="" class="form-select" id="">
-                                        <option value="">pilih</option>
-                                        <option value="sangat_kuat">Sangat kuat</option>
+                                    <select name="evaluasi[{{ $item->evaluasi_id }}]" class="form-select">
+                                        <option value="">Pilih</option>
+                                        <option value="sangat_kuat">Sangat Kuat</option>
                                         <option value="kurang">Kurang</option>
                                         <option value="butuh_perbaikan">Butuh Perbaikan</option>
                                         <option value="baik">Baik</option>
@@ -145,17 +145,19 @@
                                     </select>
                                 </td>
                                 <td class="text-center align-middle">
-                                    {{ \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) }}
-                                    Jam
+                                    {{ isset($item->waktu_mulai, $item->waktu_selesai) 
+                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
+                    : '-' }}
                                 </td>
                                 <td class="text-center align-middle">
-                                    <a href="" target="_blank" class="btn btn-sm btn-info">
+                                    <a href="#" class="btn btn-sm btn-info">
                                         <i class="fas fa-file-upload"></i>
                                     </a>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
+
                     </table>
                 </div>
             </div>
@@ -181,16 +183,18 @@
                             </tr>
                         </thead>
                         <tbody>
+                        <tbody>
+                            @foreach ($data as $item)
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td class="text-center align-middle">{{ $loop->iteration }}</td>
+                                <td>{{ $item->nama_rencana_pimpinan ?? '-' }}</td>
+                                <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
+                                <td>{{ $item->nama_indikator ?? '-' }}</td>
+                                <td>{{ $item->target ?? '-' }}</td>
                                 <td></td>
                             </tr>
-
+                            @endforeach
+                        </tbody>
                         </tbody>
                     </table>
                 </div>
