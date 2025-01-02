@@ -31,8 +31,8 @@ class EvaluasiService
                 throw new \Exception('Tidak ada data kegiatan harian yang terkait.');
             }
 
-            $bulan = \Carbon\Carbon::parse($kegiatanHarian->waktu_mulai)->format('m');
-            $tahun = \Carbon\Carbon::parse($kegiatanHarian->waktu_mulai)->format('Y');
+            $bulan = \Carbon\Carbon::parse($kegiatanHarian->tanggal)->format('m');
+            $tahun = \Carbon\Carbon::parse($kegiatanHarian->tanggal)->format('Y');
 
             // Data Realisasi Rencana Aksi
             $dataRencanaAksi = DB::table('rencana_hasil_kerja_pegawai')
@@ -52,8 +52,8 @@ class EvaluasiService
                 )
                 ->where('rencana_indikator_kinerja.satuan', 'laporan') // Filter satuan "laporan"
                 ->where('rencana_indikator_kinerja.target_minimum', 12) // Filter target_minimum "12"
-                ->whereMonth('kegiatan_harians.waktu_mulai', $bulan) // Filter bulan
-                ->whereYear('kegiatan_harians.waktu_mulai', $tahun) // Filter tahun
+                ->whereMonth('kegiatan_harians.tanggal', $bulan) // Filter bulan
+                ->whereYear('kegiatan_harians.tanggal', $tahun) // Filter tahun
                 ->get()
                 ->map(function ($item) {
                     // Hitung target bulanan (dibagi 12 bulan)
@@ -61,7 +61,6 @@ class EvaluasiService
                     return $item;
                 });
 
-            // Data Evaluasi Kinerja Tahunan
             $groupedDataEvaluasi = DB::table('rencana_hasil_kerja_pegawai')
                 ->leftJoin('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
                 ->leftJoin('rencana_indikator_kinerja', 'rencana_hasil_kerja.id', '=', 'rencana_indikator_kinerja.rencana_atasan_id')
@@ -77,10 +76,11 @@ class EvaluasiService
                     'rencana_indikator_kinerja.target_minimum',
                     'rencana_indikator_kinerja.target_maksimum'
                 )
-                ->whereMonth('kegiatan_harians.waktu_mulai', $bulan) // Filter bulan
-                ->whereYear('kegiatan_harians.waktu_mulai', $tahun) // Filter tahun
+                ->whereMonth('kegiatan_harians.tanggal', $bulan)
+                ->whereYear('kegiatan_harians.tanggal', $tahun)
                 ->get()
-                ->groupBy('pegawai_id'); // Grup data berdasarkan pegawai
+                ->groupBy(['rencana_pimpinan', 'rencana_pegawai']); // Grup data berdasarkan rencana pimpinan dan rencana pegawai
+
 
             return compact('dataRencanaAksi', 'groupedDataEvaluasi');
         } catch (\Exception $e) {

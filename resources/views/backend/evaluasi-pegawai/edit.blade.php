@@ -113,13 +113,16 @@
                     <table class="table small">
                         <thead class="table-dark">
                             <tr>
-                                <th class="text-center align-middle" width="5%">No</th>
-                                <th class="text-center align-middle" width="30%">Rencana Aksi</th>
-                                <th class="text-center align-middle" width="5%">Target</th>
-                                <th class="text-center align-middle">Kuantitas Output</th>
+                                <th rowspan="2" class="text-center align-middle" width="5%">No</th>
+                                <th rowspan="2" class="text-center align-middle" width="30%">Rencana Aksi</th>
+                                <th rowspan="2" colspan="2" class="text-center align-middle" width="5%">Target</th>
+                                <th colspan="5" class="text-center align-middle">Realisasi</th>
+                                <th rowspan="2" class="text-center align-middle">File</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3" class="text-center align-middle">Kuantitas Output</th>
                                 <th class="text-center align-middle">Kualitas</th>
                                 <th class="text-center align-middle">Waktu</th>
-                                <th class="text-center align-middle">File</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -127,10 +130,24 @@
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
-                                <td class="text-center">
+                                <td class="text-center align-middle" width="5%">
                                     {{ $item->target_bulanan ?? '-' }}
                                 </td>
-                                <td>-</td>
+                                <td class="text-center align-middle">
+                                    {{ $item->satuan}}
+                                </td>
+                                <td class="text-center align-middle" width="5%">
+                                    <input type="text" class="form-control">
+                                </td>
+                                <td class="text-center align-middle">
+                                    {{ $item->satuan}}
+                                </td>
+                                <td>
+                                    <input type="radio" id="ada" name="fav_language" value="ada">
+                                    <label for="ada">Ada</label><br>
+                                    <input type="radio" id="tidak_ada" name="fav_language" value="tidak_ada">
+                                    <label for="tidak_ada">Tidak Ada</label><br>
+                                </td>
                                 <td>
                                     <select name="evaluasi" class="form-select">
                                         <option value="">Pilih</option>
@@ -140,6 +157,7 @@
                                         <option value="baik">Baik</option>
                                         <option value="sangat_baik">Sangat Baik</option>
                                     </select>
+
                                 </td>
                                 <td class="text-center align-middle">
                                     {{ isset($item->waktu_mulai, $item->waktu_selesai) 
@@ -161,7 +179,7 @@
             <div class="card-body">
                 <h5>Evaluasi Kinerja Tahunan</h5>
                 <div class="table-responsive scrollbar">
-                    <table class="table small">
+                    <table class="table table-bordered table-sm fs-9 mb-0">
                         <thead class="table-dark">
                             <tr>
                                 <th class="text-center" width="5%">No</th>
@@ -169,40 +187,37 @@
                                 <th width="10%">Rencana Hasil Kerja</th>
                                 <th class="text-center" width="7%">Aspek</th>
                                 <th width="30%">Indikator Kinerja Individu</th>
-                                <th class="text-center" width="5%">Target</th>
+                                <th class="text-center" width="10%">Target</th>
                                 <th class="text-center" width="30%">Realisasi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($groupedDataEvaluasi as $pegawaiId => $items)
-                            @php $pegawai = $items->first(); @endphp
-                            @foreach ($items as $index => $indikator)
+                            @foreach ($groupedDataEvaluasi as $rencanaPimpinan => $pegawaiItems)
+                            @foreach ($pegawaiItems as $rencanaPegawai => $items)
+                            @php
+                            $rowspan = count($items); // Hitung jumlah item dalam grup
+                            @endphp
+                            @foreach ($items as $index => $item)
                             <tr>
-                                @if ($loop->parent->first && $loop->first)
-                                <td class="align-middle text-center"
-                                    rowspan="{{ $groupedDataEvaluasi->sum(fn($item) => $item->count()) }}">
-                                    {{ $loop->parent->iteration }}
+                                @if ($index == 0) {{-- Hanya render rowspan pada baris pertama --}}
+                                <td class="align-middle text-center" rowspan="{{ $rowspan }}">
+                                    {{ $loop->parent->parent->iteration }}
                                 </td>
-                                <td class="align-middle text-center"
-                                    rowspan="{{ $groupedDataEvaluasi->sum(fn($item) => $item->count()) }}">
-                                    {{ $pegawai->rencana_pimpinan ?? '-' }}
+                                <td class="align-middle" rowspan="{{ $rowspan }}">{{ $rencanaPimpinan }}</td>
+                                <td class="align-middle" rowspan="{{ $rowspan }}">{{ $item->rencana_pegawai ?? '-' }}
                                 </td>
                                 @endif
-                                @if ($loop->first)
-                                <td class="align-middle text-center" rowspan="{{ $items->count() }}">
-                                    {{ $pegawai->rencana_pegawai ?? '-' }}
-                                </td>
-                                @endif
-                                <td class="align-middle text-center">{{ $indikator->aspek_indikator ?? '-' }}</td>
-                                <td>{{ $indikator->nama_indikator ?? '-' }}</td>
+                                <td class="align-middle text-center">{{ $item->aspek_indikator ?? '-' }}</td>
+                                <td class="align-middle">{{ $item->nama_indikator ?? '-' }}</td>
                                 <td class="align-middle text-center">
-                                    {{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
-                                    {{ $indikator->satuan ?? '-' }}
+                                    {{ $item->target_minimum ?? 0 }} - {{ $item->target_maksimum ?? 0 }}<br>
+                                    {{ $item->satuan ?? '-' }}
                                 </td>
-                                <td>
+                                <td class="align-middle text-center">
                                     <input type="text" class="form-control">
                                 </td>
                             </tr>
+                            @endforeach
                             @endforeach
                             @endforeach
                         </tbody>
@@ -226,6 +241,9 @@
                             <input type="text" class="form-control">
                         </div>
                         <div class="mb-3">
+                            <input type="date" name="tanggal_capai" id="" class="form-control">
+                        </div>
+                        <div class="mb-3">
                             <label for="">Permasalahan Jika Ada</label>
                             <textarea name="" class="form-control" id="" style="height: 150px;"></textarea>
                         </div>
@@ -233,7 +251,7 @@
                             <a href="{{ route('evaluasi-pegawai.index') }}" class="btn btn-outline-danger me-2">
                                 <i class="fas fa-arrow-left"></i> Back
                             </a>
-                            <button type="submit" class="btn btn-outline-primary">Simpan & Ajukan Preview</button>
+                            <button type="submit" class="btn btn-outline-secondary">Simpan & Ajukan Preview</button>
                         </div>
                     </div>
                 </div>

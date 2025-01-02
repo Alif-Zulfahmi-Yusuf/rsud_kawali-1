@@ -145,7 +145,7 @@
                                 <th class="text-center">Rencana Hasil Kerja</th>
                                 <th class="text-center">Aspek</th>
                                 <th class="text-center">Indikator Kinerja</th>
-                                <th class="text-center">Target</th>
+                                <th class="text-center" width="10%">Target</th>
                                 <th class="text-center">Report</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -156,7 +156,7 @@
                             @foreach ($rencana->rencanaPegawai ?? [] as $pegawai)
                             @foreach ($pegawai->indikatorKinerja ?? [] as $indikator)
                             <tr data-uuid="{{ $indikator->uuid }}">
-                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center align-middle">{{ $loop->iteration }}</td>
                                 <td>
                                     <div><strong>Rencana Hasil Kerja:</strong></div>
                                     <div>{{ $pegawai->rencana ?? 'Data Rencana Pegawai Tidak Tersedia' }}</div>
@@ -166,16 +166,18 @@
                                     <div class="text-muted">{{ $rencana->rencana ?? 'Data Rencana Tidak Tersedia' }}
                                     </div>
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center align-middle">
                                     {{ $indikator->aspek ?? '-' }}
                                 </td>
                                 <td>{{ $indikator->indikator_kinerja ?? '-' }}</td>
-                                <td class="text-center">
+                                <td class="text-center align-middle">
                                     {{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
                                     {{ $indikator->satuan ?? '-' }}
                                 </td>
-                                <td class="text-center">{{ $indikator->report ?? '-' }}</td>
-                                <td class="text-center">
+                                <td class="text-center align-middle">
+                                    {{ $indikator->report ?? '-' }}
+                                </td>
+                                <td class="text-center align-middle">
                                     <button
                                         class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
                                         type="button" data-bs-toggle="dropdown" aria-haspopup="true"

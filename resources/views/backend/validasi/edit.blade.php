@@ -40,7 +40,7 @@
                                 <th width="20%">Rencana Hasil Kerja</th>
                                 <th class="text-center" width="7%">Aspek</th>
                                 <th width="30%">Indikator Kinerja Individu</th>
-                                <th class="text-center" width="5%">Target</th>
+                                <th class="text-center" width="10%">Target</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,7 +64,7 @@
                                 @if ($loop->parent->first && $loop->first)
                                 <td class="align-middle text-center"
                                     rowspan="{{ $pegawaiList->count() * $rowspanIndikator }}">
-                                    {{ $loop->parent->iteration }}
+                                    {{ $loop->iteration }}
                                 </td>
                                 <td class="align-middle" rowspan="{{ $pegawaiList->count() * $rowspanIndikator }}">
                                     {{ $rencana->rencana ?? 'Data Tidak Tersedia' }}

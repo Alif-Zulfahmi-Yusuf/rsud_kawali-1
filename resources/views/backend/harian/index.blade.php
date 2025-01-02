@@ -169,9 +169,7 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label for="tanggal" class="form-label">Tanggal *</label>
-                                <input type="date" name="tanggal" id="edit-tanggal" class="form-control datetimepicker"
-                                    placeholder="dd/mm/yyyy" data-options='{"disableMobile":true,"dateFormat":"d/m/Y"}'
-                                    required>
+                                <input type="date" name="tanggal" id="edit-tanggal" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
