@@ -41,12 +41,13 @@ class EvaluasiService
                 ->leftJoin('evaluasi_pegawais', 'evaluasi_pegawais.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->leftJoin('kegiatan_harians', 'kegiatan_harians.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->select(
+                    'rencana_hasil_kerja_pegawai.id as rencana_pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as nama_rencana_pegawai',
                     'rencana_indikator_kinerja.indikator_kinerja as nama_indikator',
                     'rencana_indikator_kinerja.satuan',
                     'rencana_indikator_kinerja.target_minimum',
                     'rencana_indikator_kinerja.target_maksimum',
-                    'evaluasi_pegawais.id as evaluasi_id',
+                    'evaluasi_pegawais.id as evaluasi_pegawai_id',
                     'kegiatan_harians.waktu_mulai',
                     'kegiatan_harians.waktu_selesai'
                 )

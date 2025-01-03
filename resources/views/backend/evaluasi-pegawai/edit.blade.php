@@ -143,9 +143,11 @@
                                     {{ $item->satuan}}
                                 </td>
                                 <td>
-                                    <input type="radio" id="ada" name="fav_language" value="ada">
+                                    <input type="radio" id="ada" name="fav_language{{ $item->rencana_pegawai_id }}"
+                                        value="ada">
                                     <label for="ada">Ada</label><br>
-                                    <input type="radio" id="tidak_ada" name="fav_language" value="tidak_ada">
+                                    <input type="radio" id="tidak_ada"
+                                        name="fav_language{{ $item->rencana_pegawai_id }}" value="tidak_ada">
                                     <label for="tidak_ada">Tidak Ada</label><br>
                                 </td>
                                 <td>
@@ -165,7 +167,11 @@
                                     : '-' }}
                                 </td>
                                 <td class="text-center align-middle">
-                                    <a href="" class="btn btn-outline-warning btn-sm"><i class="fa fa-upload"></i></a>
+                                    <a href="#" class="btn btn-outline-warning btn-sm upload-btn"
+                                        data-evaluasi-id="{{ $item->evaluasi_pegawai_id }}"
+                                        data-rencana-id="{{ $item->rencana_pegawai_id }}">
+                                        <i class="fa fa-upload"></i>
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
@@ -241,6 +247,7 @@
                             <input type="text" class="form-control">
                         </div>
                         <div class="mb-3">
+                            <label for="">Tanggal Capai</label>
                             <input type="date" name="tanggal_capai" id="" class="form-control">
                         </div>
                         <div class="mb-3">
@@ -263,6 +270,34 @@
 @endsection
 
 
+<!-- Modal Upload File -->
+<div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="uploadFileForm" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadFileModalLabel">Upload File Realisasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="evaluasi_pegawai_id" id="evaluasi_pegawai_id">
+                    <input type="hidden" name="rencana_pegawai_id" id="rencana_pegawai_id">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Pilih File</label>
+                        <input type="file" class="form-control" name="file" id="file" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 @push('js')
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
@@ -272,5 +307,14 @@
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
 <script src="{{ asset('/assets/backend/js/evaluasi-pegawai.js') }}"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
+<script>
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
+
+@if(session('error'))
+toastError("{{ session('error') }}");
+@endif
+</script>
 
 @endpush
