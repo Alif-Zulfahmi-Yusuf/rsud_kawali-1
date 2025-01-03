@@ -40,6 +40,7 @@ class EvaluasiService
                 ->join('rencana_indikator_kinerja', 'rencana_hasil_kerja.id', '=', 'rencana_indikator_kinerja.rencana_atasan_id')
                 ->leftJoin('evaluasi_pegawais', 'evaluasi_pegawais.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->leftJoin('kegiatan_harians', 'kegiatan_harians.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
+                ->leftJoin('realisasi_rencanas', 'realisasi_rencanas.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->select(
                     'rencana_hasil_kerja_pegawai.id as rencana_pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as nama_rencana_pegawai',
@@ -49,7 +50,8 @@ class EvaluasiService
                     'rencana_indikator_kinerja.target_maksimum',
                     'evaluasi_pegawais.id as evaluasi_pegawai_id',
                     'kegiatan_harians.waktu_mulai',
-                    'kegiatan_harians.waktu_selesai'
+                    'kegiatan_harians.waktu_selesai',
+                    'realisasi_rencanas.file as file_realisasi'
                 )
                 ->where('rencana_indikator_kinerja.satuan', 'laporan') // Filter satuan "laporan"
                 ->where('rencana_indikator_kinerja.target_minimum', 12) // Filter target_minimum "12"

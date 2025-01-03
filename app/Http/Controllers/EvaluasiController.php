@@ -147,9 +147,12 @@ class EvaluasiController extends Controller
         try {
             // Ambil data evaluasi (Realisasi Rencana Aksi dan Evaluasi Kinerja Tahunan)
             $evaluasiData = $evaluasiService->getEvaluasiData($uuid);
+            $evaluasi = EvaluasiPegawai::where('uuid', $uuid)->firstOrFail();
+            $dataRencanaAksi = $evaluasiData['dataRencanaAksi'];
+            $groupedDataEvaluasi = $evaluasiData['groupedDataEvaluasi'];
 
             // Kirim data ke view
-            return view('backend.evaluasi-pegawai.edit', $evaluasiData);
+            return view('backend.evaluasi-pegawai.edit', compact('evaluasi', 'dataRencanaAksi', 'groupedDataEvaluasi'));
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -182,7 +185,43 @@ class EvaluasiController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $evaluasi = EvaluasiPegawai::where('uuid', $id)->firstOrFail();
+
+            $bulan = \Carbon\Carbon::parse($evaluasi->bulan)->format('m');
+            $tahun = \Carbon\Carbon::parse($evaluasi->bulan)->format('Y');
+            $kegiatan = KegiatanHarian::where('user_id', $evaluasi->user_id)
+                ->whereMonth('tanggal', $bulan) // Filter bulan
+                ->whereYear('tanggal', $tahun) // Filter tahun
+                ->get();
+            $kuantitas = [];
+            $laporan = [];
+            $kualitas = [];
+
+
+            foreach ($kegiatan as $item) {
+                // dd($item->id);
+                $kuantitas[] = $request->kuantitas_output[$item->rencana_pegawai_id];
+                $laporan[] = $request->laporan[$item->rencana_pegawai_id];
+                $kualitas[] = $request->kualitas[$item->rencana_pegawai_id];
+            }
+
+
+            $evaluasi->update([
+                'tanggal_capaian' => $request->tanggal_capai,
+                'kuantitas_output' => $kuantitas,
+                'permasalahan' => $request->permasalahan,
+                'jumlah_periode' => $request->jumlah_periode,
+                'laporan' => $laporan,
+                'kualitas' => $kualitas,
+                'realisasi' => $request->realisasi
+            ]);
+
+            return back()->with('success', 'Evalusai berhasil di simpan.');
+        } catch (\Exception $e) {
+            Log::error('Gagal mengupdate data evaluasi', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Terjadi kesalahan saat mengupdate data.');
+        }
     }
 
     /**

@@ -20,7 +20,13 @@ return new class extends Migration
             $table->foreignId('kegiatan_harian_id')->constrained('kegiatan_harians')->onDelete('cascade')->nullable();
             $table->date('bulan')->nullable();
             $table->date('tanggal_capaian')->nullable();
-            $table->enum('status', ['review', 'selesai', 'revisi'])->default('review');
+            $table->enum('status', ['review', 'selesai', 'revisi', 'nonaktif'])->default('nonaktif');
+            $table->string('laporan')->nullable();
+            $table->string('realisasi')->nullable();
+            $table->string('kualitas')->nullable();
+            $table->string('kuantitas_output')->nullable();
+            $table->string('jumlah_periode')->nullable();
+            $table->string('permasalahan')->nullable();
             $table->timestamps();
         });
     }

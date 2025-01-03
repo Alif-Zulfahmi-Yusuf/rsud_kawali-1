@@ -21,6 +21,12 @@ class EvaluasiPegawai extends Model
         'bulan',
         'tanggal_capaian',
         'status',
+        'kuantitas_output',
+        'permasalahan',
+        'kualitas',
+        'realisasi',
+        'jumlah_periode',
+        'laporan'
     ];
 
 
@@ -67,4 +73,13 @@ class EvaluasiPegawai extends Model
     {
         return $this->belongsTo(SkpAtasan::class, 'skp_atasan_id');
     }
+
+    // cast
+    protected $casts = [
+        'tanggal_capaian' => 'date',
+        'laporan' => 'array',
+        'kuantitas_output' => 'array',
+        'kualitas' => 'array',
+        'realisasi' => 'array',
+    ];
 }

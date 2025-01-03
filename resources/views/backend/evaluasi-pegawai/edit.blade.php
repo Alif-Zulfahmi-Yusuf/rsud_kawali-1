@@ -105,7 +105,10 @@
             </div>
         </div>
     </div>
-    <form action="">
+    <form action="{{ route('evaluasi-pegawai.update', $evaluasi->uuid) }}" method="POST">
+        @csrf
+        @method('PUT')
+        <input type="hidden" name="id" value="{{ $evaluasi->id }}">
         <div class="card shadow rounded-lg mb-4">
             <div class="card-body">
                 <h5>Realisasi Rencana Aksi</h5>
@@ -137,22 +140,27 @@
                                     {{ $item->satuan}}
                                 </td>
                                 <td class="text-center align-middle" width="5%">
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="kuantitas_output[{{ $item->rencana_pegawai_id }}]"
+                                        class="form-control"
+                                        value="{{ $evaluasi->kuantitas_output[$loop->index] ?? '' }}">
                                 </td>
                                 <td class="text-center align-middle">
                                     {{ $item->satuan}}
                                 </td>
                                 <td>
-                                    <input type="radio" id="ada" name="fav_language{{ $item->rencana_pegawai_id }}"
-                                        value="ada">
+                                    <input type="radio" id="ada" name="laporan[{{ $item->rencana_pegawai_id }}]"
+                                        value="ada" {{ $evaluasi->laporan[$loop->index] == 'ada' ? 'checked' : '' }}>
                                     <label for="ada">Ada</label><br>
-                                    <input type="radio" id="tidak_ada"
-                                        name="fav_language{{ $item->rencana_pegawai_id }}" value="tidak_ada">
+                                    <input type="radio" id="tidak_ada" name="laporan[{{ $item->rencana_pegawai_id }}]"
+                                        value="tidak_ada"
+                                        {{ $evaluasi->laporan[$loop->index] == 'tidak_ada' ? 'checked' : '' }}>
                                     <label for="tidak_ada">Tidak Ada</label><br>
                                 </td>
                                 <td>
-                                    <select name="evaluasi" class="form-select">
-                                        <option value="">Pilih</option>
+                                    <select name="kualitas[{{ $item->rencana_pegawai_id }}]" class="form-select">
+                                        <option value="{{ $evaluasi->kualitas[$loop->index] ?? '' }}">
+                                            {{ ucwords(str_replace('_', ' ', $evaluasi->kualitas[$loop->index])) ?? 'Pilih' }}
+                                        </option>
                                         <option value="sangat_kuat">Sangat Kuat</option>
                                         <option value="kurang">Kurang</option>
                                         <option value="butuh_perbaikan">Butuh Perbaikan</option>
@@ -167,6 +175,11 @@
                                     : '-' }}
                                 </td>
                                 <td class="text-center align-middle">
+                                    @if ($item->file_realisasi)
+                                    <a href="{{ asset('storage/' . $item->file_realisasi) }}" target="_blank"
+                                        class="btn btn-link btn-sm">Lihat
+                                        File</a>
+                                    @endif
                                     <a href="#" class="btn btn-outline-warning btn-sm upload-btn"
                                         data-evaluasi-id="{{ $item->evaluasi_pegawai_id }}"
                                         data-rencana-id="{{ $item->rencana_pegawai_id }}">
@@ -191,12 +204,15 @@
                                 <th class="text-center" width="5%">No</th>
                                 <th width="10%">Rencana Hasil Kerja Pimpinan</th>
                                 <th width="10%">Rencana Hasil Kerja</th>
-                                <th class="text-center" width="7%">Aspek</th>
-                                <th width="30%">Indikator Kinerja Individu</th>
-                                <th class="text-center" width="10%">Target</th>
-                                <th class="text-center" width="30%">Realisasi</th>
+                                <th class="text-center align-middle" width="7%">Aspek</th>
+                                <th class="text-center align-middle" width="20%">Indikator Kinerja Individu</th>
+                                <th class="text-center align-middle" width="10%">Target</th>
+                                <th class="text-center align-middle" width="30%">Realisasi</th>
                             </tr>
                         </thead>
+                        @php
+                        $i = 0;
+                        @endphp
                         <tbody>
                             @foreach ($groupedDataEvaluasi as $rencanaPimpinan => $pegawaiItems)
                             @foreach ($pegawaiItems as $rencanaPegawai => $items)
@@ -220,7 +236,8 @@
                                     {{ $item->satuan ?? '-' }}
                                 </td>
                                 <td class="align-middle text-center">
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="realisasi[]" class="form-control"
+                                        value="{{ $evaluasi->realisasi[$i++] ?? '' }}">
                                 </td>
                             </tr>
                             @endforeach
@@ -244,15 +261,18 @@
                         </div>
                         <div class="mb-3">
                             <label for="">Jumlah Periode Penilai Bulanan</label>
-                            <input type="text" class="form-control">
+                            <input type="text" name="jumlah_periode" class="form-control"
+                                value="{{ $evaluasi->jumlah_periode ?? '' }}">
                         </div>
                         <div class="mb-3">
                             <label for="">Tanggal Capai</label>
-                            <input type="date" name="tanggal_capai" id="" class="form-control">
+                            <input type="date" name="tanggal_capai" id="" class="form-control"
+                                value="{{ \Carbon\Carbon::parse($evaluasi->tanggal_capaian)->format('Y-m-d') ?? '' }}">
                         </div>
                         <div class="mb-3">
                             <label for="">Permasalahan Jika Ada</label>
-                            <textarea name="" class="form-control" id="" style="height: 150px;"></textarea>
+                            <textarea name="permasalahan" class="form-control" id=""
+                                style="height: 150px;">{{ $evaluasi->permasalahan ?? '' }}</textarea>
                         </div>
                         <div class="d-flex justify-content-end mt-3">
                             <a href="{{ route('evaluasi-pegawai.index') }}" class="btn btn-outline-danger me-2">
@@ -315,6 +335,67 @@ toastSuccess("{{ session('success') }}");
 @if(session('error'))
 toastError("{{ session('error') }}");
 @endif
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Buka modal dengan data
+    document.querySelectorAll('.upload-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const evaluasiId = this.getAttribute('data-evaluasi-id');
+            const rencanaId = this.getAttribute('data-rencana-id');
+
+            // Set data ke modal
+            document.getElementById('evaluasi_pegawai_id').value = evaluasiId;
+            document.getElementById('rencana_pegawai_id').value = rencanaId;
+
+            // Tampilkan modal
+            const uploadFileModal = new bootstrap.Modal(document.getElementById(
+                'uploadFileModal'));
+            uploadFileModal.show();
+        });
+    });
+
+    // Proses upload file
+    document.getElementById('uploadFileForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetch('{{ route("realisasi.store") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'File berhasil diupload!',
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                const error = await response.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: error.message || 'Terjadi kesalahan.',
+                });
+            }
+        } catch (err) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Tidak dapat menghubungi server.',
+            });
+        }
+    });
+});
 </script>
 
 @endpush
