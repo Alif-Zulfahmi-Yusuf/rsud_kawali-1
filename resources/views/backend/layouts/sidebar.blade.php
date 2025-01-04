@@ -216,6 +216,14 @@
                                         </div>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('validasi-harian.*') ? 'active' : '' }}"
+                                        href="{{ route('validasi-harian.index') }}">
+                                        <div class="d-flex align-items-center">
+                                            <span class="nav-link-text">Rencana Harian</span>
+                                        </div>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>

@@ -194,19 +194,18 @@ class EvaluasiController extends Controller
                 ->whereMonth('tanggal', $bulan) // Filter bulan
                 ->whereYear('tanggal', $tahun) // Filter tahun
                 ->get();
+
             $kuantitas = [];
             $laporan = [];
             $kualitas = [];
 
-
             foreach ($kegiatan as $item) {
-                // dd($item->id);
                 $kuantitas[] = $request->kuantitas_output[$item->rencana_pegawai_id];
                 $laporan[] = $request->laporan[$item->rencana_pegawai_id];
                 $kualitas[] = $request->kualitas[$item->rencana_pegawai_id];
             }
 
-
+            // Update data evaluasi
             $evaluasi->update([
                 'tanggal_capaian' => $request->tanggal_capai,
                 'kuantitas_output' => $kuantitas,
@@ -214,15 +213,17 @@ class EvaluasiController extends Controller
                 'jumlah_periode' => $request->jumlah_periode,
                 'laporan' => $laporan,
                 'kualitas' => $kualitas,
-                'realisasi' => $request->realisasi
+                'realisasi' => $request->realisasi,
+                'is_submit' => $request->action === 'submit' ? true : $evaluasi->is_submit, // Ubah `is_submit` jika tombol "Ajukan" ditekan
             ]);
 
-            return back()->with('success', 'Evalusai berhasil di simpan.');
+            return back()->with('success', 'Evaluasi berhasil disimpan' . ($request->action === 'submit' ? ' dan diajukan.' : '.'));
         } catch (\Exception $e) {
             Log::error('Gagal mengupdate data evaluasi', ['error' => $e->getMessage()]);
             return back()->with('error', 'Terjadi kesalahan saat mengupdate data.');
         }
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -26,7 +26,8 @@ class EvaluasiPegawai extends Model
         'kualitas',
         'realisasi',
         'jumlah_periode',
-        'laporan'
+        'laporan',
+        'is_submit',
     ];
 
 

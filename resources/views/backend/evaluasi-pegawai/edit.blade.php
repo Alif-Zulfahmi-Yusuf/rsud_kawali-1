@@ -149,24 +149,38 @@
                                 </td>
                                 <td>
                                     <input type="radio" id="ada" name="laporan[{{ $item->rencana_pegawai_id }}]"
-                                        value="ada" {{ $evaluasi->laporan[$loop->index] == 'ada' ? 'checked' : '' }}>
+                                        value="ada"
+                                        {{ isset($evaluasi->laporan[$loop->index]) && $evaluasi->laporan[$loop->index] == 'ada' ? 'checked' : '' }}>
                                     <label for="ada">Ada</label><br>
+
                                     <input type="radio" id="tidak_ada" name="laporan[{{ $item->rencana_pegawai_id }}]"
                                         value="tidak_ada"
-                                        {{ $evaluasi->laporan[$loop->index] == 'tidak_ada' ? 'checked' : '' }}>
+                                        {{ isset($evaluasi->laporan[$loop->index]) && $evaluasi->laporan[$loop->index] == 'tidak_ada' ? 'checked' : '' }}>
                                     <label for="tidak_ada">Tidak Ada</label><br>
+
                                 </td>
                                 <td>
                                     <select name="kualitas[{{ $item->rencana_pegawai_id }}]" class="form-select">
                                         <option value="{{ $evaluasi->kualitas[$loop->index] ?? '' }}">
-                                            {{ ucwords(str_replace('_', ' ', $evaluasi->kualitas[$loop->index])) ?? 'Pilih' }}
+                                            {{ isset($evaluasi->kualitas[$loop->index]) ? ucwords(str_replace('_', ' ', $evaluasi->kualitas[$loop->index])) : 'Pilih' }}
                                         </option>
-                                        <option value="sangat_kuat">Sangat Kuat</option>
-                                        <option value="kurang">Kurang</option>
-                                        <option value="butuh_perbaikan">Butuh Perbaikan</option>
-                                        <option value="baik">Baik</option>
-                                        <option value="sangat_baik">Sangat Baik</option>
+                                        <option value="sangat_kuat"
+                                            {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'sangat_kuat' ? 'selected' : '' }}>
+                                            Sangat Kuat</option>
+                                        <option value="kurang"
+                                            {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'kurang' ? 'selected' : '' }}>
+                                            Kurang</option>
+                                        <option value="butuh_perbaikan"
+                                            {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'butuh_perbaikan' ? 'selected' : '' }}>
+                                            Butuh Perbaikan</option>
+                                        <option value="baik"
+                                            {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'baik' ? 'selected' : '' }}>
+                                            Baik</option>
+                                        <option value="sangat_baik"
+                                            {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'sangat_baik' ? 'selected' : '' }}>
+                                            Sangat Baik</option>
                                     </select>
+
 
                                 </td>
                                 <td class="text-center align-middle">
@@ -278,7 +292,10 @@
                             <a href="{{ route('evaluasi-pegawai.index') }}" class="btn btn-outline-danger me-2">
                                 <i class="fas fa-arrow-left"></i> Back
                             </a>
-                            <button type="submit" class="btn btn-outline-secondary">Simpan & Ajukan Preview</button>
+                            <button type="submit" class="btn btn-outline-secondary" name="action" value="submit">
+                                Simpan & Ajukan Preview
+                            </button>
+
                         </div>
                     </div>
                 </div>
