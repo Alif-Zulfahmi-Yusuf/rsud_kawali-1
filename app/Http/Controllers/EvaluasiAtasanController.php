@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Skp;
+use App\Models\Ekspetasi;
 use Illuminate\Http\Request;
 use App\Models\EvaluasiPegawai;
-use Illuminate\Support\Facades\Log;
+use App\Models\CategoryPerilaku;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class EvaluasiAtasanController extends Controller
@@ -41,9 +44,13 @@ class EvaluasiAtasanController extends Controller
                 if ($tahun) {
                     $query->whereYear('bulan', $tahun);
                 }
-            })
-            ->get()
-            ->unique('user_id'); // Pastikan hanya satu data per user
+            });
+
+        if (!$bulan && !$tahun) {
+            $EvaluasiAtasan = $EvaluasiAtasan->orWhereDoesntHave('rencanaPegawai');
+        }
+
+        $EvaluasiAtasan = $EvaluasiAtasan->get()->unique('user_id');
 
         Log::info('Query SQL:', DB::getQueryLog());
         DB::disableQueryLog();
@@ -80,30 +87,34 @@ class EvaluasiAtasanController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $uuid)
+    public function edit($uuid)
     {
-        //
+        try {
+            // Mendapatkan detail Evaluasi Pegawai berdasarkan UUID
+            $evaluasiPegawai = EvaluasiPegawai::where('uuid', $uuid)->firstOrFail();
 
-        return view('backend.evaluasi-atasan.edit', compact('uuid'));
+            // Mendapatkan detail SKP berdasarkan skp_id yang ada di Evaluasi Pegawai
+            $skpDetail = Skp::findOrFail($evaluasiPegawai->skp_id);
+
+            // Mendapatkan kategori perilaku beserta perilaku yang terkait
+            $categories = CategoryPerilaku::with('perilakus')
+                ->whereHas('perilakus')
+                ->get();
+
+            // Mendapatkan data ekspektasi berdasarkan skp_id dari Evaluasi Pegawai
+            $ekspektasis = Ekspetasi::where('skp_id', $skpDetail->id)->get();
+
+            // Return ke view dengan data yang dibutuhkan
+            return view('backend.evaluasi-atasan.edit', compact('categories', 'ekspektasis', 'skpDetail', 'evaluasiPegawai'));
+        } catch (\Exception $e) {
+            // Logging error jika terjadi masalah
+            Log::error('Gagal mengambil data evaluasi kinerja untuk uuid ' . $uuid, ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengambil data.');
+        }
     }
+
 
     /**
      * Update the specified resource in storage.

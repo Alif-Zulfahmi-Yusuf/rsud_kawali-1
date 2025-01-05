@@ -2,13 +2,10 @@
 
 namespace App\Http\Services;
 
-use App\Models\Skp;
-use App\Models\Atasan;
-use App\Models\SkpAtasan;
 use App\Models\EvaluasiPegawai;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+
 
 class EvaluasiService
 {

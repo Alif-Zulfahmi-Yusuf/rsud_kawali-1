@@ -27,6 +27,11 @@ return new class extends Migration
             $table->string('kuantitas_output')->nullable();
             $table->string('jumlah_periode')->nullable();
             $table->string('permasalahan')->nullable();
+            $table->string('rating')->nullable();
+            $table->string('nilai')->nullable();
+            $table->string('umpan_balik')->nullable();
+            $table->string('keterangan')->nullable();
+            $table->date('tanggal_terbit')->nullable();
             $table->timestamps();
         });
     }

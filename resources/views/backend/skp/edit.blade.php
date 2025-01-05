@@ -441,15 +441,15 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-$(document).ready(function() {
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+    $(document).ready(function() {
+        @if(session('success'))
+        toastSuccess("{{ session('success') }}");
+        @endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}");
-    @endif
-});
+        @if(session('error'))
+        toastError("{{ session('error') }}");
+        @endif
+    });
 </script>
 
 @endpush
