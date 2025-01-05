@@ -58,7 +58,7 @@
 
             <!-- Tombol Filter -->
             <div class="mb-2">
-                <button type="submit" class="btn btn-primary">Filter</button>
+                <button type="submit" class="btn btn-outline-secondary">Filter</button>
             </div>
         </form>
     </div>

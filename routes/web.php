@@ -17,6 +17,7 @@ use App\Http\Controllers\RealisasiController;
 use App\Http\Controllers\SkpAtasanController;
 use App\Http\Controllers\RencanaKerjaController;
 use App\Http\Controllers\PerilakuKerjaController;
+use App\Http\Controllers\EvaluasiAtasanController;
 use App\Http\Controllers\KegiatanHarianController;
 use App\Http\Controllers\ValidasiHarianController;
 use App\Http\Controllers\IndikatorKinerjaController;
@@ -95,14 +96,20 @@ Route::group(['middleware' => ['auth']], function () {
     // Rute untuk update
     Route::put('/validasi-harian/{user_id}', [ValidasiHarianController::class, 'update'])->name('validasi-harian.update');
 
+    // bagian harian
     Route::resource('harian-pegawai', KegiatanHarianController::class);
     Route::delete('/harian-pegawai/destroy/{uuid}', [KegiatanHarianController::class, 'destroy'])->name('harian-pegawai.destroy');
     Route::patch('/harian-pegawai/{uuid}/update', [KegiatanHarianController::class, 'update'])->name('harian-pegawai.update');
 
+    // upload file realisasi
     Route::post('/realisasi/store', [RealisasiController::class, 'store'])->name('realisasi.store');
 
+    // bagian evaluasi
     Route::resource('evaluasi-pegawai', EvaluasiController::class);
     Route::delete('/evaluasi-pegawai/destroy/{uuid}', [EvaluasiController::class, 'destroy'])->name('evaluasi-pegawai.destroy');
+
+    Route::resource('evaluasi-atasan', EvaluasiAtasanController::class);
+    Route::get('/evaluasi-atasan/user/{userId}', [EvaluasiAtasanController::class, 'getByUser']);
 });
 
 require __DIR__ . '/auth.php';

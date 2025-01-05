@@ -195,7 +195,7 @@
                             </div>
                         </a>
                         <div class="parent-wrapper label-1">
-                            <ul class="nav collapse parent {{ request()->routeIs('validasi.*') || request()->routeIs('validasi-harian.*') ? 'show' : '' }}"
+                            <ul class="nav collapse parent {{ request()->routeIs('validasi.*') || request()->routeIs('validasi-harian.*') || request()->routeIs('evaluasi-atasan.*') ? 'show' : '' }}"
                                 data-bs-parent="#navbarVerticalCollapse" id="nv-validasi">
                                 <li class="collapsed-nav-item-title d-none">Validasi Data</li>
 
@@ -217,10 +217,10 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('validasi-harian.*') ? 'active' : '' }}"
-                                        href="{{ route('validasi-harian.index') }}">
+                                    <a class="nav-link {{ request()->routeIs('evaluasi-atasan.*') ? 'active' : '' }}"
+                                        href="{{ route('evaluasi-atasan.index') }}">
                                         <div class="d-flex align-items-center">
-                                            <span class="nav-link-text">Rencana Harian</span>
+                                            <span class="nav-link-text">Evaluasi Kinerja</span>
                                         </div>
                                     </a>
                                 </li>
