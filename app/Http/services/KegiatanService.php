@@ -63,6 +63,7 @@ class KegiatanService
             EvaluasiPegawai::create([
                 'kegiatan_harian_id' => $kegiatanHarian->id,
                 'user_id' => $user->id,
+                'atasan_id' => $user->atasan_id,
                 'bulan' => date('Y-m-d', strtotime($kegiatanHarian->tanggal)),
             ]);
         }

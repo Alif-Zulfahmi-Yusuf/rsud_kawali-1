@@ -51,6 +51,7 @@
                         </tr>
                     </thead>
                     <tbody>
+
                     </tbody>
                 </table>
             </div>
@@ -120,7 +121,7 @@
                                 {{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
                                 {{ $indikator->satuan ?? '-' }}
                             </td>
-                            <td>
+                            <td class="align-middle text-center">
                                 <input type="text" class="form-control" name="realisasi[]"
                                     value="{{ $evaluasi->realisasi[$i++] ?? '' }}">
                             </td>

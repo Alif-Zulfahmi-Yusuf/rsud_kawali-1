@@ -10,12 +10,22 @@ use App\Models\CategoryPerilaku;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Services\EvaluasiAtasanService;
 
 class EvaluasiAtasanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    protected $evaluasiService;
+
+    public function __construct(EvaluasiAtasanService $evaluasiService)
+    {
+
+        $this->evaluasiService = $evaluasiService;
+    }
+
     public function index(Request $request)
     {
         Log::info('Memulai proses index validasi harian.', [
@@ -89,31 +99,39 @@ class EvaluasiAtasanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($uuid)
+    public function edit($uuid, EvaluasiAtasanService $evaluasiAtasanService)
     {
         try {
-            // Mendapatkan detail Evaluasi Pegawai berdasarkan UUID
-            $evaluasiPegawai = EvaluasiPegawai::where('uuid', $uuid)->firstOrFail();
-
-            // Mendapatkan detail SKP berdasarkan skp_id yang ada di Evaluasi Pegawai
-            $skpDetail = Skp::findOrFail($evaluasiPegawai->skp_id);
+            // Ambil data evaluasi (Realisasi Rencana Aksi dan Evaluasi Kinerja Tahunan)
+            $evaluasiData = $evaluasiAtasanService->getEvaluasiData($uuid);
+            $evaluasi = EvaluasiPegawai::where('uuid', $uuid)->firstOrFail();
+            $dataRencanaAksi = $evaluasiData['dataRencanaAksi'];
+            $groupedDataEvaluasi = $evaluasiData['groupedDataEvaluasi'];
 
             // Mendapatkan kategori perilaku beserta perilaku yang terkait
             $categories = CategoryPerilaku::with('perilakus')
-                ->whereHas('perilakus')
+                ->whereHas('perilakus') // Hanya kategori dengan perilaku terkait
                 ->get();
 
-            // Mendapatkan data ekspektasi berdasarkan skp_id dari Evaluasi Pegawai
-            $ekspektasis = Ekspetasi::where('skp_id', $skpDetail->id)->get();
+            // Mendapatkan ekspektasi berdasarkan SKP yang terhubung
+            $skpId = optional($dataRencanaAksi->first())->skp_id ?? null;
+            $ekspektasis = $skpId
+                ? Ekspetasi::where('skp_id', $skpId)->get()
+                : collect(); // Return collection kosong jika skp_id tidak ditemukan
 
-            // Return ke view dengan data yang dibutuhkan
-            return view('backend.evaluasi-atasan.edit', compact('categories', 'ekspektasis', 'skpDetail', 'evaluasiPegawai'));
+            // Kirim data ke view
+            return view('backend.evaluasi-atasan.edit', compact(
+                'evaluasi',
+                'dataRencanaAksi',
+                'groupedDataEvaluasi',
+                'categories',
+                'ekspektasis'
+            ));
         } catch (\Exception $e) {
-            // Logging error jika terjadi masalah
-            Log::error('Gagal mengambil data evaluasi kinerja untuk uuid ' . $uuid, ['error' => $e->getMessage()]);
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengambil data.');
+            return back()->with('error', $e->getMessage());
         }
     }
+
 
 
     /**
