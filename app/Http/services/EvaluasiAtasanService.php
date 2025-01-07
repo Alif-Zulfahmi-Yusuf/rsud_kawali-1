@@ -17,15 +17,20 @@ class EvaluasiAtasanService
     public function getEvaluasiData(string $uuid)
     {
         try {
-            // Ambil evaluasi pegawai berdasarkan UUID
-            $evaluasi = EvaluasiPegawai::where('uuid', $uuid)->first();
+            // Ambil evaluasi pegawai berdasarkan UUID beserta relasi yang diperlukan
+            $evaluasi = EvaluasiPegawai::with(['rencanaPegawai', 'rencanaPegawai.rencanaAtasan'])
+                ->where('uuid', $uuid)
+                ->first();
 
             if (!$evaluasi) {
                 throw new \Exception('Evaluasi tidak ditemukan.');
             }
 
-            // Verifikasi atasan langsung berdasarkan kolom atasan_id
-            if ($evaluasi->atasan_id !== Auth::id()) {
+            // Verifikasi apakah atasan yang login sesuai dengan relasi rencana atasan
+            $atasanUserId = Auth::id();
+            $rencanaAtasanUserId = $evaluasi->rencanaPegawai->rencanaAtasan->user_id ?? null;
+
+            if ($atasanUserId !== $rencanaAtasanUserId) {
                 throw new \Exception('Evaluasi tidak terhubung dengan atasan yang login.');
             }
 

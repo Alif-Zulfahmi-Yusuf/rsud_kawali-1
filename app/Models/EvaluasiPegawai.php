@@ -21,6 +21,7 @@ class EvaluasiPegawai extends Model
         'kegiatan_harian_id',
         'bulan',
         'tanggal_capaian',
+        'tanggal_terbit',
         'status',
         'kuantitas_output',
         'permasalahan',
@@ -29,6 +30,10 @@ class EvaluasiPegawai extends Model
         'jumlah_periode',
         'laporan',
         'is_submit',
+        'nilai',
+        'rating',
+        'umpan_balik',
+        'umpan_balik_berkelanjutan',
     ];
 
 

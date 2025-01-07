@@ -30,7 +30,9 @@
     </div>
 </div>
 
-<form action="">
+<form action="{{ route('evaluasi-atasan.update', $evaluasi->uuid) }}" method="POST">
+    @csrf
+    @method('PUT')
     <div class="card shadow rounded-lg mb-4">
         <div class="card-body">
             <h5>Realisasi Rencana Aksi</h5>
@@ -51,7 +53,69 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($dataRencanaAksi as $item)
+                        <tr>
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
+                            <td class="text-center align-middle" width="5%">
+                                {{ $item->target_bulanan ?? '-' }}
+                            </td>
+                            <td class="text-center align-middle">
+                                {{ $item->satuan}}
+                            </td>
+                            <td class="text-center align-middle" width="5%">
+                                <input type="text" name="kuantitas_output[{{ $item->rencana_pegawai_id }}]"
+                                    class="form-control" value="{{ $evaluasi->kuantitas_output[$loop->index] ?? '' }}">
+                            </td>
+                            <td class="text-center align-middle">
+                                {{ $item->satuan}}
+                            </td>
+                            <td>
+                                <input type="radio" id="ada" name="laporan[{{ $item->rencana_pegawai_id }}]" value="ada"
+                                    {{ isset($evaluasi->laporan[$loop->index]) && $evaluasi->laporan[$loop->index] == 'ada' ? 'checked' : '' }}>
+                                <label for="ada">Ada</label><br>
 
+                                <input type="radio" id="tidak_ada" name="laporan[{{ $item->rencana_pegawai_id }}]"
+                                    value="tidak_ada"
+                                    {{ isset($evaluasi->laporan[$loop->index]) && $evaluasi->laporan[$loop->index] == 'tidak_ada' ? 'checked' : '' }}>
+                                <label for="tidak_ada">Tidak Ada</label><br>
+                            </td>
+                            <td>
+                                <select name="kualitas[{{ $item->rencana_pegawai_id }}]" class="form-select">
+                                    <option value="{{ $evaluasi->kualitas[$loop->index] ?? '' }}">
+                                        {{ isset($evaluasi->kualitas[$loop->index]) ? ucwords(str_replace('_', ' ', $evaluasi->kualitas[$loop->index])) : 'Pilih' }}
+                                    </option>
+                                    <option value="sangat_kuat"
+                                        {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'sangat_kuat' ? 'selected' : '' }}>
+                                        Sangat Kuat</option>
+                                    <option value="kurang"
+                                        {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'kurang' ? 'selected' : '' }}>
+                                        Kurang</option>
+                                    <option value="butuh_perbaikan"
+                                        {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'butuh_perbaikan' ? 'selected' : '' }}>
+                                        Butuh Perbaikan</option>
+                                    <option value="baik"
+                                        {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'baik' ? 'selected' : '' }}>
+                                        Baik</option>
+                                    <option value="sangat_baik"
+                                        {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'sangat_baik' ? 'selected' : '' }}>
+                                        Sangat Baik</option>
+                                </select>
+                            </td>
+                            <td class="text-center align-middle">
+                                {{ isset($item->waktu_mulai, $item->waktu_selesai) 
+                                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
+                                    : '-' }}
+                            </td>
+                            <td class="text-center align-middle">
+
+                                <a href="{{ asset('storage/' . $item->file_realisasi) }}" target="_blank"
+                                    class="btn btn-outline-warning btn-sm">
+                                    <i class="fa fa-eye"></i></a>
+
+                            </td>
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -78,72 +142,37 @@
                     $i = 0;
                     @endphp
                     <tbody>
-                        @foreach (\App\Models\RencanaHasilKinerja::where('skp_atasan_id',
-                        $skpDetail->skp_atasan_id)->get() ?? [] as $rencana)
+                        @foreach ($groupedDataEvaluasi as $rencanaPimpinan => $pegawaiItems)
+                        @foreach ($pegawaiItems as $rencanaPegawai => $items)
                         @php
-                        $pegawaiList = \App\Models\RencanaHasilKinerjaPegawai::where('skp_id', $skpDetail->id)
-                        ->where('rencana_atasan_id', $rencana->id)
-                        ->get();
+                        $rowspan = count($items); // Hitung jumlah item dalam grup
                         @endphp
-
-                        @foreach ($pegawaiList as $pegawai)
-                        @php
-                        $indikatorList = \App\Models\IndikatorKinerja::where('rencana_kerja_pegawai_id',
-                        $pegawai->id)->get();
-                        $rowspanIndikator = $indikatorList->count() ?: 1;
-
-                        // Ambil data evaluasi pegawai yang terkait
-                        $evaluasiPegawai = \App\Models\EvaluasiPegawai::where('skp_id', $skpDetail->id)
-                        ->where('rencana_pegawai_id', $pegawai->id)
-                        ->first();
-                        @endphp
-
-                        @foreach ($indikatorList as $indikator)
+                        @foreach ($items as $index => $item)
                         <tr>
-                            @if ($loop->parent->first && $loop->first)
-                            <td class="align-middle text-center"
-                                rowspan="{{ $pegawaiList->count() * $rowspanIndikator }}">
-                                {{ $loop->iteration }}
+                            @if ($index == 0) {{-- Hanya render rowspan pada baris pertama --}}
+                            <td class="align-middle text-center" rowspan="{{ $rowspan }}">
+                                {{ $loop->parent->parent->iteration }}
                             </td>
-                            <td class="align-middle" rowspan="{{ $pegawaiList->count() * $rowspanIndikator }}">
-                                {{ $rencana->rencana ?? 'Data Tidak Tersedia' }}
-                            </td>
-                            @endif
-                            @if ($loop->first)
-                            <td class="align-middle" rowspan="{{ $rowspanIndikator }}">
-                                {{ $pegawai->rencana ?? 'Data Tidak Tersedia' }}
+                            <td class="align-middle" rowspan="{{ $rowspan }}">{{ $rencanaPimpinan }}</td>
+                            <td class="align-middle" rowspan="{{ $rowspan }}">{{ $item->rencana_pegawai ?? '-' }}
                             </td>
                             @endif
-
-                            <td class="align-middle text-center">{{ $indikator->aspek ?? '-' }}</td>
-                            <td>{{ $indikator->indikator_kinerja ?? '-' }}</td>
+                            <td class="align-middle text-center">{{ $item->aspek_indikator ?? '-' }}</td>
+                            <td class="align-middle">{{ $item->nama_indikator ?? '-' }}</td>
                             <td class="align-middle text-center">
-                                {{ $indikator->target_minimum ?? 0 }} - {{ $indikator->target_maksimum ?? 0 }}<br>
-                                {{ $indikator->satuan ?? '-' }}
+                                {{ $item->target_minimum ?? 0 }} - {{ $item->target_maksimum ?? 0 }}<br>
+                                {{ $item->satuan ?? '-' }}
                             </td>
                             <td class="align-middle text-center">
-                                <input type="text" class="form-control" name="realisasi[]"
+                                <input type="text" name="realisasi[]" class="form-control"
                                     value="{{ $evaluasi->realisasi[$i++] ?? '' }}">
                             </td>
-                            <td>
-                                <textarea name="umpan_balik[]" id="" class="form-control">
-                                {{ $evaluasiPegawai->umpan_balik ?? '' }}
-                                </textarea>
+                            <td class="align-middle">
+                                <input type="text" name="umpan_balik[{{ $item->rencana_pegawai }}]" class="form-control"
+                                    value="{{ $evaluasi->umpan_balik[$loop->index] ?? '' }}">
                             </td>
                         </tr>
                         @endforeach
-                        @if ($indikatorList->isEmpty())
-                        <tr>
-                            @if ($loop->first)
-                            <td class="align-middle" rowspan="1">
-                                {{ $pegawai->rencana ?? 'Data Tidak Tersedia' }}
-                            </td>
-                            @endif
-                            <td class="align-middle text-center">-</td>
-                            <td>-</td>
-                            <td class="align-middle text-center">-</td>
-                        </tr>
-                        @endif
                         @endforeach
                         @endforeach
                     </tbody>
@@ -155,9 +184,18 @@
                             <td colspan="2">
                                 <select style="width: 40%;" name="rating" id="" class="form-select form-select-sm">
                                     <option value="">Pilih</option>
-                                    <option value="dibawah_expektasi">Di Bawah Expektasi</option>
-                                    <option value="sesuai_expektasi">Sesuai Expektasi</option>
-                                    <option value="diatas_expektasi">Di Atas Expektasi</option>
+                                    <option value="dibawah_expektasi"
+                                        {{ $evaluasi->rating == 'dibawah_expektasi' ? 'selected' : '' }}>
+                                        Di Bawah Expektasi
+                                    </option>
+                                    <option value="sesuai_expektasi"
+                                        {{ $evaluasi->rating == 'sesuai_expektasi' ? 'selected' : '' }}>
+                                        Sesuai Expektasi
+                                    </option>
+                                    <option value="diatas_expektasi"
+                                        {{ $evaluasi->rating == 'diatas_expektasi' ? 'selected' : '' }}>
+                                        Di Atas Expektasi
+                                    </option>
                                 </select>
                             </td>
                         </tr>
@@ -178,6 +216,9 @@
                             <th class="text-center">Umpan Balik</th>
                         </tr>
                     </thead>
+                    @php
+                    $i = 0;
+                    @endphp
                     <tbody>
                         @foreach ($categories as $category)
                         <tr class="bg-light">
@@ -204,17 +245,28 @@
                                 </li>
                             </td>
                             <td class="align-middle">
-                                <select name="nilai" id="" class="form-select">
-                                    <option value="">Pilih</option>
-                                    <option value="dibawah_expektasi">Di Bawah Expektasi</option>
-                                    <option value="sesuai_expektasi">Sesuai Expektasi</option>
-                                    <option value="diatas_expektasi">Di Atas Expektasi</option>
-
+                                <select name="nilai[{{ $perilaku->id }}]" class="form-select">
+                                    <option value="{{ $evaluasi->nilai[$loop->index] ?? '' }}">
+                                        {{ isset($evaluasi->nilai[$loop->index]) ? ucwords(str_replace('_', ' ', $evaluasi->nilai[$loop->index])) : 'Pilih' }}
+                                    </option>
+                                    <option value="dibawah_expektasi"
+                                        {{ isset($evaluasi->nilai[$loop->index]) && $evaluasi->nilai[$loop->index] == 'dibawah_expektasi' ? 'selected' : '' }}>
+                                        Di Bawah Ekspektasi
+                                    </option>
+                                    <option value="sesuai_expektasi"
+                                        {{ isset($evaluasi->nilai[$loop->index]) && $evaluasi->nilai[$loop->index] == 'sesuai_expektasi' ? 'selected' : '' }}>
+                                        Sesuai Ekspektasi
+                                    </option>
+                                    <option value="diatas_expektasi"
+                                        {{ isset($evaluasi->nilai[$loop->index]) && $evaluasi->nilai[$loop->index] == 'diatas_expektasi' ? 'selected' : '' }}>
+                                        Di Atas Ekspektasi
+                                    </option>
                                 </select>
+
                             </td>
                             <td class="align-middle">
-                                <textarea name="umpan_balik_berkelanjutan" id="" class="form-control">
-
+                                <textarea name="umpan_balik_berkelanjutan[]" id="" class="form-control">
+                                {{ $evaluasi->umpan_balik_berkelanjutan[$i++] ?? '' }}
                                 </textarea>
                             </td>
                         </tr>
@@ -258,7 +310,8 @@
                         <label for="">
                             <small>Jumlah Periode Penilai Bulanan</small>
                         </label>
-                        <input style="width: 40%;" type="text" readonly class="form-control" value="">
+                        <input style="width: 40%;" type="text" readonly class="form-control"
+                            value="{{ $evaluasi->jumlah_periode ?? '' }}">
                     </div>
                     <div class="mb-3">
                         <h5>Form Review</h5>
@@ -270,8 +323,10 @@
                             </label>
                             <select style="width: 30%;" name="status" id="rating" class="form-select form-select-sm">
                                 <option value="">Pilih</option>
-                                <option value="approve">Approve</option>
-                                <option value="revisi">Revisi</option>
+                                <option value="selesai" {{ $evaluasi->status == 'selesai' ? 'selected' : '' }}>Approve
+                                </option>
+                                <option value="revisi" {{ $evaluasi->status == 'revisi' ? 'selected' : '' }}>Revisi
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -280,7 +335,8 @@
                             <label for="">
                                 <small>Tanggal Terbit</small>
                             </label>
-                            <input style="width: 50%;" type="date" name="tanggal_terbit" id="" class="form-control">
+                            <input style="width: 50%;" type="date" name="tanggal_terbit" id="" class="form-control"
+                                value="{{ \Carbon\Carbon::parse($evaluasi->tanggal_terbit)->format('Y-m-d') ?? '' }}">
                         </div>
                     </div>
                     <div class="mb-3">
@@ -309,5 +365,20 @@
 @endsection
 
 @push('js')
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
 
+<script>
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
+
+@if(session('error'))
+toastError("{{ session('error') }}");
+@endif
+</script>
 @endpush

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Skp;
 use App\Models\Ekspetasi;
 use Illuminate\Http\Request;
+use App\Models\KegiatanHarian;
 use App\Models\EvaluasiPegawai;
 use App\Models\CategoryPerilaku;
 use Illuminate\Support\Facades\DB;
@@ -139,8 +140,89 @@ class EvaluasiAtasanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            // Validasi request
+            $request->validate([
+                'tanggal_terbit' => 'nullable|date',
+                'kuantitas_output' => 'array',
+                'laporan' => 'array',
+                'kualitas' => 'array',
+                'nilai' => 'array',
+                'status' => 'required|in:review,selesai,revisi,nonaktif', // Pastikan nilai sesuai ENUM
+                'umpan_balik' => 'array',
+                'umpan_balik_berkelanjutan' => 'array',
+                'realisasi' => 'array',
+                'jumlah_periode' => 'nullable|integer',
+                'rating' => 'nullable|string',
+                'permasalahan' => 'nullable|string',
+            ]);
+
+            $evaluasi = EvaluasiPegawai::where('uuid', $id)->firstOrFail();
+
+            // Ambil data bulan dan tahun
+            $bulan = \Carbon\Carbon::parse($evaluasi->bulan)->format('m');
+            $tahun = \Carbon\Carbon::parse($evaluasi->bulan)->format('Y');
+            $kegiatan = KegiatanHarian::where('user_id', $evaluasi->user_id)
+                ->whereMonth('tanggal', $bulan) // Filter bulan
+                ->whereYear('tanggal', $tahun) // Filter tahun
+                ->get();
+
+            $kuantitas = [];
+            $laporan = [];
+            $kualitas = [];
+            $nilai = [];
+            $umpanBalik = [];
+            $umpanBalikBerkelanjutan = [];
+            $realisasi = [];
+
+            // Loop untuk mengisi data kegiatan
+            foreach ($kegiatan as $item) {
+                $kuantitas[] = $request->kuantitas_output[$item->rencana_pegawai_id] ?? null;
+                $laporan[] = $request->laporan[$item->rencana_pegawai_id] ?? null;
+                $kualitas[] = $request->kualitas[$item->rencana_pegawai_id] ?? null;
+            }
+
+            // Mengisi data realisasi dan umpan balik secara terpisah
+            foreach ($request->realisasi as $index => $value) {
+                $realisasi[] = $value ?? null;
+            }
+
+            foreach ($request->umpan_balik as $index => $value) {
+                $umpanBalik[] = $value ?? null;
+            }
+
+            foreach ($request->umpan_balik_berkelanjutan as $index => $value) {
+                $umpanBalikBerkelanjutan[] = $value ?? null;
+            }
+
+            // Update data evaluasi
+            $evaluasi->update([
+                'tanggal_terbit' => $request->tanggal_terbit,
+                'kuantitas_output' => $kuantitas,
+                'permasalahan' => $request->permasalahan,
+                'jumlah_periode' => $request->jumlah_periode,
+                'rating' => $request->rating,
+                'nilai' => $nilai,
+                'laporan' => $laporan,
+                'kualitas' => $kualitas,
+                'status' => $request->status, // Update status dari request
+                'umpan_balik' => $umpanBalik,
+                'umpan_balik_berkelanjutan' => $umpanBalikBerkelanjutan,
+                'realisasi' => $realisasi,
+                'is_submit' => $request->action === 'submit' ? true : $evaluasi->is_submit, // Update is_submit jika tombol "Ajukan" ditekan
+            ]);
+
+            return back()->with(
+                'success',
+                'Evaluasi berhasil disimpan' . ($request->action === 'submit' ? ' dan di Review.' : '.')
+            );
+        } catch (\Exception $e) {
+            Log::error('Gagal mengupdate data evaluasi', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Terjadi kesalahan saat mengupdate data.');
+        }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
