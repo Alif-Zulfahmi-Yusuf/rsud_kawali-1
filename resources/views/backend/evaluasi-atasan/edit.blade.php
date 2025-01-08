@@ -140,12 +140,15 @@
                     </thead>
                     @php
                     $i = 0;
+                    $k = 0;
                     @endphp
                     <tbody>
                         @foreach ($groupedDataEvaluasi as $rencanaPimpinan => $pegawaiItems)
                         @foreach ($pegawaiItems as $rencanaPegawai => $items)
                         @php
                         $rowspan = count($items); // Hitung jumlah item dalam grup
+                        $umpanIndit = json_decode($evaluasi->umpan_balik, true);
+
                         @endphp
                         @foreach ($items as $index => $item)
                         <tr>
@@ -168,8 +171,8 @@
                                     value="{{ $evaluasi->realisasi[$i++] ?? '' }}">
                             </td>
                             <td class="align-middle">
-                                <input type="text" name="umpan_balik[{{ $item->rencana_pegawai }}]" class="form-control"
-                                    value="{{ $evaluasi->umpan_balik[$loop->index] ?? '' }}">
+                                <input type="text" name="umpan_balik[]" class="form-control"
+                                    value="{{ $umpanIndit[$k++] ?? '' }}">
                             </td>
                         </tr>
                         @endforeach
@@ -246,19 +249,19 @@
                             </td>
                             <td class="align-middle">
                                 <select name="nilai[{{ $perilaku->id }}]" class="form-select">
-                                    <option value="{{ $evaluasi->nilai[$loop->index] ?? '' }}">
-                                        {{ isset($evaluasi->nilai[$loop->index]) ? ucwords(str_replace('_', ' ', $evaluasi->nilai[$loop->index])) : 'Pilih' }}
+                                    <option value="{{ $evaluasi->nilai ?? '' }}">
+                                        {{ ucwords(str_replace('_', ' ', json_decode($evaluasi->nilai, true)[$loop->index])) ?? 'Pilih' }}
                                     </option>
                                     <option value="dibawah_expektasi"
-                                        {{ isset($evaluasi->nilai[$loop->index]) && $evaluasi->nilai[$loop->index] == 'dibawah_expektasi' ? 'selected' : '' }}>
+                                        {{  json_decode($evaluasi->nilai, true)[$loop->index] == 'dibawah_expektasi' ? 'selected' : '' }}>
                                         Di Bawah Ekspektasi
                                     </option>
                                     <option value="sesuai_expektasi"
-                                        {{ isset($evaluasi->nilai[$loop->index]) && $evaluasi->nilai[$loop->index] == 'sesuai_expektasi' ? 'selected' : '' }}>
+                                        {{  json_decode($evaluasi->nilai, true)[$loop->index] == 'sesuai_expektasi' ? 'selected' : '' }}>
                                         Sesuai Ekspektasi
                                     </option>
                                     <option value="diatas_expektasi"
-                                        {{ isset($evaluasi->nilai[$loop->index]) && $evaluasi->nilai[$loop->index] == 'diatas_expektasi' ? 'selected' : '' }}>
+                                        {{  json_decode($evaluasi->nilai, true)[$loop->index] == 'diatas_expektasi' ? 'selected' : '' }}>
                                         Di Atas Ekspektasi
                                     </option>
                                 </select>
@@ -266,7 +269,7 @@
                             </td>
                             <td class="align-middle">
                                 <textarea name="umpan_balik_berkelanjutan[]" id="" class="form-control">
-                                {{ $evaluasi->umpan_balik_berkelanjutan[$i++] ?? '' }}
+                                {{ json_decode($evaluasi->umpan_balik_berkelanjutan, true)[$loop->index] ?? '' }}
                                 </textarea>
                             </td>
                         </tr>

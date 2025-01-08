@@ -182,17 +182,23 @@ class EvaluasiAtasanController extends Controller
                 $kualitas[] = $request->kualitas[$item->rencana_pegawai_id] ?? null;
             }
 
+            // Mengisi data umpan balik secara terpisah
+            foreach ($request->umpan_balik as $index => $value) {
+                $umpanBalik[] = $value ?? null;
+            }
+
             // Mengisi data realisasi dan umpan balik secara terpisah
             foreach ($request->realisasi as $index => $value) {
                 $realisasi[] = $value ?? null;
             }
 
-            foreach ($request->umpan_balik as $index => $value) {
-                $umpanBalik[] = $value ?? null;
-            }
 
             foreach ($request->umpan_balik_berkelanjutan as $index => $value) {
                 $umpanBalikBerkelanjutan[] = $value ?? null;
+            }
+
+            foreach ($request->nilai as $index => $value) {
+                $nilai[] = $value ?? null;
             }
 
             // Update data evaluasi
