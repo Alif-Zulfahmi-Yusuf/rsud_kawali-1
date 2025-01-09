@@ -35,11 +35,28 @@ class EvaluasiController extends Controller
         $evaluasiPegawai = EvaluasiPegawai::where('user_id', $user->id)
             ->where('status', '!=', 'nonaktif')
             ->with(['skp']) // Pastikan relasi dengan tabel SKP tersedia di model EvaluasiPegawai
-            ->get();
+            ->get()
+            ->map(function ($evaluasi) {
+                // Pastikan kuantitas_output adalah array, jika tidak kosong
+                $nilaiArray = is_array($evaluasi->kuantitas_output) ? $evaluasi->kuantitas_output : [];
+                $rataRata = !empty($nilaiArray) ? array_sum($nilaiArray) / count($nilaiArray) : 0;
+
+                // Tentukan kategori berdasarkan rata-rata
+                if ($rataRata < 1.5) {
+                    $evaluasi->nilai = 'dibawah_ekspetasi';
+                } elseif ($rataRata <= 2.5) {
+                    $evaluasi->nilai = 'sesuai_ekspetasi';
+                } else {
+                    $evaluasi->nilai = 'diatas_ekspetasi';
+                }
+
+                return $evaluasi;
+            });
 
         // Kirim data ke view
         return view('backend.evaluasi-pegawai.index', compact('evaluasiPegawai'));
     }
+
 
 
     /**

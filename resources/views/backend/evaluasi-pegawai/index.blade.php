@@ -159,8 +159,12 @@
                             <td class="text-center align-middle">{{ $evaluasi->h }}</td>
                             <td class="text-center align-middle">{{ $evaluasi->l }}</td>
                             <td class="text-center align-middle">{{ $evaluasi->ak }}</td>
-                            <td class="text-center align-middle">{{ $evaluasi->hasil_kerja }}</td>
-                            <td class="text-center align-middle">{{ $evaluasi->perilaku }}</td>
+                            <td class="text-center align-middle">
+                                {{ ucwords(str_replace('_', ' ', $evaluasi->rating)) }}
+                            </td>
+                            <td class="text-center align-middle">
+                                {{ ucwords(str_replace('_', ' ', $evaluasi->nilai)) }}
+                            </td>
                             <td class="text-center align-middle">{{ $evaluasi->posisi }}</td>
                             <td class="text-center align-middle">
                                 @if ($evaluasi->status === 'review')
@@ -219,12 +223,12 @@
 <script src="{{ asset('/assets/backend/js/evaluasi-pegawai.js') }}"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 <script>
-@if(session('success'))
-toastSuccess("{{ session('success') }}");
-@endif
+    @if(session('success'))
+    toastSuccess("{{ session('success') }}");
+    @endif
 
-@if(session('error'))
-toastError("{{ session('error') }}");
-@endif
+    @if(session('error'))
+    toastError("{{ session('error') }}");
+    @endif
 </script>
 @endpush

@@ -133,8 +133,8 @@
                             @endif
                         </td>
                         <td class="text-center align-middle">
-                            <a href="{{ route('evaluasi-atasan.edit', $data->uuid) }}"
-                                class="btn btn-link btn-sm">edit</a>
+                            <a href="{{ route('evaluasi-atasan.edit', ['uuid' => $data->uuid, 'pegawai_id' => $data->user_id]) }}"
+                                class="btn btn-link btn-sm">Edit</a>
                         </td>
                     </tr>
                     @endforeach
@@ -154,14 +154,14 @@
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
 
 <script>
-$(document).ready(function() {
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+    $(document).ready(function() {
+        @if(session('success'))
+        toastSuccess("{{ session('success') }}");
+        @endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}");
-    @endif
-});
+        @if(session('error'))
+        toastError("{{ session('error') }}");
+        @endif
+    });
 </script>
 @endpush

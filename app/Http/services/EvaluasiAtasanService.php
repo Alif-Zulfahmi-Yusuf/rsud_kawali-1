@@ -14,12 +14,13 @@ class EvaluasiAtasanService
 {
     //
 
-    public function getEvaluasiData(string $uuid)
+    public function getEvaluasiData(string $uuid, ?int $pegawaiId = null)
     {
         try {
             // Ambil evaluasi pegawai berdasarkan UUID beserta relasi yang diperlukan
             $evaluasi = EvaluasiPegawai::with(['rencanaPegawai', 'rencanaPegawai.rencanaAtasan'])
                 ->where('uuid', $uuid)
+                ->where('user_id', $pegawaiId) // Tambahkan filter berdasarkan pegawai ID
                 ->first();
 
             if (!$evaluasi) {
@@ -63,10 +64,15 @@ class EvaluasiAtasanService
                     'kegiatan_harians.waktu_selesai',
                     'realisasi_rencanas.file as file_realisasi'
                 )
+                ->where('rencana_hasil_kerja_pegawai.rencana_atasan_id', $evaluasi->rencana_pegawai_id)
+                ->where('rencana_indikator_kinerja.rencana_atasan_id', $evaluasi->rencana_pegawai_id)
                 ->where('rencana_indikator_kinerja.satuan', 'laporan') // Filter satuan "laporan"
                 ->where('rencana_indikator_kinerja.target_minimum', 12) // Filter target_minimum "12"
                 ->whereMonth('kegiatan_harians.tanggal', $bulan) // Filter bulan
                 ->whereYear('kegiatan_harians.tanggal', $tahun) // Filter tahun
+                ->when($pegawaiId, function ($query) use ($pegawaiId) {
+                    return $query->where('rencana_hasil_kerja_pegawai.user_id', $pegawaiId); // Filter berdasarkan pegawai
+                })
                 ->get()
                 ->map(function ($item) {
                     // Hitung target bulanan (dibagi 12 bulan)
@@ -89,10 +95,15 @@ class EvaluasiAtasanService
                     'rencana_indikator_kinerja.target_minimum',
                     'rencana_indikator_kinerja.target_maksimum'
                 )
+                ->where('rencana_hasil_kerja_pegawai.rencana_atasan_id', $evaluasi->rencana_pegawai_id)
+                ->where('rencana_indikator_kinerja.rencana_atasan_id', $evaluasi->rencana_pegawai_id)
                 ->whereMonth('kegiatan_harians.tanggal', $bulan)
                 ->whereYear('kegiatan_harians.tanggal', $tahun)
+                ->when($pegawaiId, function ($query) use ($pegawaiId) {
+                    return $query->where('rencana_hasil_kerja_pegawai.user_id', $pegawaiId); // Filter berdasarkan pegawai
+                })
                 ->get()
-                ->groupBy(['rencana_pimpinan', 'rencana_pegawai']); // Grup data berdasarkan rencana pimpinan dan rencana pegawai
+                ->groupBy(['rencana_pimpinan', 'rencana_pegawai']);
 
             return compact('dataRencanaAksi', 'groupedDataEvaluasi');
         } catch (\Exception $e) {

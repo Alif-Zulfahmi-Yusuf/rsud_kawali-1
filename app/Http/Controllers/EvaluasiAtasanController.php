@@ -100,11 +100,18 @@ class EvaluasiAtasanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($uuid, EvaluasiAtasanService $evaluasiAtasanService)
+    public function edit($uuid, Request $request, EvaluasiAtasanService $evaluasiAtasanService)
     {
         try {
+            // Ambil pegawai ID dari query parameter
+            $pegawaiId = $request->query('pegawai_id');
+
+            if (!$pegawaiId) {
+                throw new \Exception('Pegawai ID tidak ditemukan.');
+            }
+
             // Ambil data evaluasi (Realisasi Rencana Aksi dan Evaluasi Kinerja Tahunan)
-            $evaluasiData = $evaluasiAtasanService->getEvaluasiData($uuid);
+            $evaluasiData = $evaluasiAtasanService->getEvaluasiData($uuid, $pegawaiId);
             $evaluasi = EvaluasiPegawai::where('uuid', $uuid)->firstOrFail();
             $dataRencanaAksi = $evaluasiData['dataRencanaAksi'];
             $groupedDataEvaluasi = $evaluasiData['groupedDataEvaluasi'];
@@ -126,7 +133,8 @@ class EvaluasiAtasanController extends Controller
                 'dataRencanaAksi',
                 'groupedDataEvaluasi',
                 'categories',
-                'ekspektasis'
+                'ekspektasis',
+                'pegawaiId'
             ));
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

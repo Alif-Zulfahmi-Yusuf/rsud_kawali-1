@@ -108,7 +108,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('evaluasi-pegawai', EvaluasiController::class);
     Route::delete('/evaluasi-pegawai/destroy/{uuid}', [EvaluasiController::class, 'destroy'])->name('evaluasi-pegawai.destroy');
 
-    Route::resource('evaluasi-atasan', EvaluasiAtasanController::class);
+    Route::resource('evaluasi-atasan', EvaluasiAtasanController::class)
+        ->parameters(['evaluasi-atasan' => 'uuid']);
+
+
     Route::get('/evaluasi-atasan/user/{userId}', [EvaluasiAtasanController::class, 'getByUser']);
 });
 

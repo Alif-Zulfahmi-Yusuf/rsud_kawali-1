@@ -251,22 +251,22 @@
                                 <select name="nilai[{{ $perilaku->id }}]" class="form-select nilai-select">
                                     <option value="">Pilih</option>
                                     <option value="dibawah_expektasi"
-                                        {{ json_decode($evaluasi->nilai, true)[$loop->index] == 'dibawah_expektasi' ? 'selected' : '' }}>
+                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'dibawah_expektasi' ? 'selected' : '' }}>
                                         Di Bawah Ekspektasi
                                     </option>
                                     <option value="sesuai_expektasi"
-                                        {{ json_decode($evaluasi->nilai, true)[$loop->index] == 'sesuai_expektasi' ? 'selected' : '' }}>
+                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'sesuai_expektasi' ? 'selected' : '' }}>
                                         Sesuai Ekspektasi
                                     </option>
                                     <option value="diatas_expektasi"
-                                        {{ json_decode($evaluasi->nilai, true)[$loop->index] == 'diatas_expektasi' ? 'selected' : '' }}>
+                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'diatas_expektasi' ? 'selected' : '' }}>
                                         Di Atas Ekspektasi
                                     </option>
                                 </select>
                             </td>
                             <td class="align-middle">
                                 <textarea name="umpan_balik_berkelanjutan[]" id="" class="form-control">
-                                {{ json_decode($evaluasi->umpan_balik_berkelanjutan, true)[$loop->index] ?? '' }}
+                                {{ isset(json_decode($evaluasi->umpan_balik_berkelanjutan, true)[$loop->index]) ? json_decode($evaluasi->umpan_balik_berkelanjutan, true)[$loop->index] : '' }}
                                 </textarea>
                             </td>
                         </tr>
@@ -373,65 +373,64 @@
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
 
 <script>
-@if(session('success'))
-toastSuccess("{{ session('success') }}");
-@endif
+    @if(session('success'))
+    toastSuccess("{{ session('success') }}");
+    @endif
 
-@if(session('error'))
-toastError("{{ session('error') }}");
-@endif
+    @if(session('error'))
+    toastError("{{ session('error') }}");
+    @endif
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Map nilai ke angka
-    const nilaiMap = {
-        dibawah_expektasi: 1,
-        sesuai_expektasi: 2,
-        diatas_expektasi: 3,
-    };
+    document.addEventListener("DOMContentLoaded", function() {
+        // Map nilai ke angka
+        const nilaiMap = {
+            dibawah_expektasi: 1,
+            sesuai_expektasi: 2,
+            diatas_expektasi: 3,
+        };
 
-    // Map angka rata-rata ke teks
-    const averageTextMap = (average) => {
-        if (average < 1.5) {
-            return "Di Bawah Ekspektasi";
-        } else if (average <= 2.5) {
-            return "Sesuai Ekspektasi";
-        } else {
-            return "Di Atas Ekspektasi";
-        }
-    };
-
-    // Targetkan semua dropdown dengan class `nilai-select`
-    const dropdowns = document.querySelectorAll(".nilai-select");
-
-    // Fungsi untuk menghitung rata-rata
-    const calculateAverage = () => {
-        let total = 0;
-        let count = 0;
-
-        dropdowns.forEach((dropdown) => {
-            const value = dropdown.value;
-            if (nilaiMap[value] !== undefined) {
-                total += nilaiMap[value];
-                count++;
+        // Map angka rata-rata ke teks
+        const averageTextMap = (average) => {
+            if (average < 1.5) {
+                return "Di Bawah Ekspektasi";
+            } else if (average <= 2.5) {
+                return "Sesuai Ekspektasi";
+            } else {
+                return "Di Atas Ekspektasi";
             }
+        };
+
+        // Targetkan semua dropdown dengan class `nilai-select`
+        const dropdowns = document.querySelectorAll(".nilai-select");
+
+        // Fungsi untuk menghitung rata-rata
+        const calculateAverage = () => {
+            let total = 0;
+            let count = 0;
+
+            dropdowns.forEach((dropdown) => {
+                const value = dropdown.value;
+                if (nilaiMap[value] !== undefined) {
+                    total += nilaiMap[value];
+                    count++;
+                }
+            });
+
+            if (count > 0) {
+                const average = total / count;
+                document.getElementById("rating_perilaku").value = averageTextMap(average); // Konversi ke teks
+            } else {
+                document.getElementById("rating_perilaku").value = ""; // Kosongkan jika tidak ada nilai
+            }
+        };
+
+        // Tambahkan event listener ke setiap dropdown
+        dropdowns.forEach((dropdown) => {
+            dropdown.addEventListener("change", calculateAverage);
         });
 
-        if (count > 0) {
-            const average = total / count;
-            document.getElementById("rating_perilaku").value = averageTextMap(average); // Konversi ke teks
-        } else {
-            document.getElementById("rating_perilaku").value = ""; // Kosongkan jika tidak ada nilai
-        }
-    };
-
-    // Tambahkan event listener ke setiap dropdown
-    dropdowns.forEach((dropdown) => {
-        dropdown.addEventListener("change", calculateAverage);
+        // Hitung rata-rata saat halaman dimuat (untuk nilai default dari array)
+        calculateAverage();
     });
-
-    // Hitung rata-rata saat halaman dimuat (untuk nilai default dari array)
-    calculateAverage();
-});
-
 </script>
 @endpush
