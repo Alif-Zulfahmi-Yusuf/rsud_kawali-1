@@ -185,7 +185,7 @@
                                 Rating Hasil kinerja :
                             </td>
                             <td colspan="2">
-                                <select style="width: 40%;" name="rating" id="" class="form-select form-select-sm">
+                                <select style="width: 45%;" name="rating" id="" class="form-select form-select-sm">
                                     <option value="">Pilih</option>
                                     <option value="dibawah_expektasi"
                                         {{ $evaluasi->rating == 'dibawah_expektasi' ? 'selected' : '' }}>
@@ -248,24 +248,21 @@
                                 </li>
                             </td>
                             <td class="align-middle">
-                                <select name="nilai[{{ $perilaku->id }}]" class="form-select">
-                                    <option value="{{ $evaluasi->nilai ?? '' }}">
-                                        {{ ucwords(str_replace('_', ' ', json_decode($evaluasi->nilai, true)[$loop->index])) ?? 'Pilih' }}
-                                    </option>
+                                <select name="nilai[{{ $perilaku->id }}]" class="form-select nilai-select">
+                                    <option value="">Pilih</option>
                                     <option value="dibawah_expektasi"
-                                        {{  json_decode($evaluasi->nilai, true)[$loop->index] == 'dibawah_expektasi' ? 'selected' : '' }}>
+                                        {{ json_decode($evaluasi->nilai, true)[$loop->index] == 'dibawah_expektasi' ? 'selected' : '' }}>
                                         Di Bawah Ekspektasi
                                     </option>
                                     <option value="sesuai_expektasi"
-                                        {{  json_decode($evaluasi->nilai, true)[$loop->index] == 'sesuai_expektasi' ? 'selected' : '' }}>
+                                        {{ json_decode($evaluasi->nilai, true)[$loop->index] == 'sesuai_expektasi' ? 'selected' : '' }}>
                                         Sesuai Ekspektasi
                                     </option>
                                     <option value="diatas_expektasi"
-                                        {{  json_decode($evaluasi->nilai, true)[$loop->index] == 'diatas_expektasi' ? 'selected' : '' }}>
+                                        {{ json_decode($evaluasi->nilai, true)[$loop->index] == 'diatas_expektasi' ? 'selected' : '' }}>
                                         Di Atas Ekspektasi
                                     </option>
                                 </select>
-
                             </td>
                             <td class="align-middle">
                                 <textarea name="umpan_balik_berkelanjutan[]" id="" class="form-control">
@@ -281,7 +278,7 @@
                                 Rating Perilaku Kerja :
                             </td>
                             <td>
-                                <input type="text" class="form-control" readonly>
+                                <input type="text" id="rating_perilaku" class="form-control" readonly>
                             </td>
                         </tr>
                     </tfoot>
@@ -383,5 +380,58 @@ toastSuccess("{{ session('success') }}");
 @if(session('error'))
 toastError("{{ session('error') }}");
 @endif
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Map nilai ke angka
+    const nilaiMap = {
+        dibawah_expektasi: 1,
+        sesuai_expektasi: 2,
+        diatas_expektasi: 3,
+    };
+
+    // Map angka rata-rata ke teks
+    const averageTextMap = (average) => {
+        if (average < 1.5) {
+            return "Di Bawah Ekspektasi";
+        } else if (average <= 2.5) {
+            return "Sesuai Ekspektasi";
+        } else {
+            return "Di Atas Ekspektasi";
+        }
+    };
+
+    // Targetkan semua dropdown dengan class `nilai-select`
+    const dropdowns = document.querySelectorAll(".nilai-select");
+
+    // Fungsi untuk menghitung rata-rata
+    const calculateAverage = () => {
+        let total = 0;
+        let count = 0;
+
+        dropdowns.forEach((dropdown) => {
+            const value = dropdown.value;
+            if (nilaiMap[value] !== undefined) {
+                total += nilaiMap[value];
+                count++;
+            }
+        });
+
+        if (count > 0) {
+            const average = total / count;
+            document.getElementById("rating_perilaku").value = averageTextMap(average); // Konversi ke teks
+        } else {
+            document.getElementById("rating_perilaku").value = ""; // Kosongkan jika tidak ada nilai
+        }
+    };
+
+    // Tambahkan event listener ke setiap dropdown
+    dropdowns.forEach((dropdown) => {
+        dropdown.addEventListener("change", calculateAverage);
+    });
+
+    // Hitung rata-rata saat halaman dimuat (untuk nilai default dari array)
+    calculateAverage();
+});
+
 </script>
 @endpush

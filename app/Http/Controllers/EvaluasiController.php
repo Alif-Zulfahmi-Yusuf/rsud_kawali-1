@@ -158,26 +158,6 @@ class EvaluasiController extends Controller
         }
     }
 
-    public function uploadFile(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,png,jpg|max:2048',
-            'id' => 'required|integer'
-        ]);
-
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('uploads', $fileName, 'public');
-
-            // Simpan informasi file ke database jika diperlukan
-            //File::create(['item_id' => $request->id, 'file_name' => $fileName]);
-
-            return response()->json(['success' => true, 'file' => $fileName]);
-        }
-
-        return response()->json(['success' => false]);
-    }
 
 
     /**

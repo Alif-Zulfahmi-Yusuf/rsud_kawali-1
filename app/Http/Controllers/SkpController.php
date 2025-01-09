@@ -129,7 +129,7 @@ class SkpController extends Controller
         $skp->is_active = !$skp->is_active;
         $skp->save();
 
-        return redirect()->route('skp.index')->with('success', 'Status SKP berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Status SKP berhasil diperbarui.');
     }
 
     /**

@@ -41,7 +41,7 @@ class EvaluasiAtasanController extends Controller
         $tahun = $request->tahun;
 
         $EvaluasiAtasan = EvaluasiPegawai::with(['user', 'user.pangkat'])
-            ->where('status', 'review')
+            ->whereIn('status', ['review', 'revisi'])
             ->where('is_submit', 1)
             ->whereHas('rencanaPegawai', function ($query) use ($bulan, $tahun) {
                 $query->whereHas('rencanaAtasan', function ($queryAtasan) {

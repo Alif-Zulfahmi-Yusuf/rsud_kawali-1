@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\EvaluasiPegawai;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 
 class EvaluasiService
@@ -21,8 +22,18 @@ class EvaluasiService
                 throw new \Exception('Evaluasi tidak ditemukan.');
             }
 
+            // Ambil user ID pegawai yang sedang login
+            $currentUserId = auth()->id(); // Menggunakan Auth Laravel untuk mendapatkan user ID
+
+            // Pastikan evaluasi milik pegawai yang sedang login
+            if ($evaluasi->user_id != $currentUserId) {
+                throw new \Exception('Anda tidak berhak mengakses evaluasi ini.');
+            }
+
             // Ambil bulan dan tahun dari tabel kegiatan_harians
-            $kegiatanHarian = DB::table('kegiatan_harians')->where('rencana_pegawai_id', $evaluasi->rencana_pegawai_id)->first();
+            $kegiatanHarian = DB::table('kegiatan_harians')
+                ->where('rencana_pegawai_id', $evaluasi->rencana_pegawai_id)
+                ->first();
 
             if (!$kegiatanHarian) {
                 throw new \Exception('Tidak ada data kegiatan harian yang terkait.');
@@ -50,16 +61,18 @@ class EvaluasiService
                     'kegiatan_harians.waktu_selesai',
                     'realisasi_rencanas.file as file_realisasi'
                 )
+                ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId) // Filter berdasarkan user_id
+                ->where('evaluasi_pegawais.user_id', $currentUserId) // Filter berdasarkan user_id
                 ->where('rencana_indikator_kinerja.satuan', 'laporan') // Filter satuan "laporan"
                 ->where('rencana_indikator_kinerja.target_minimum', 12) // Filter target_minimum "12"
                 ->whereMonth('kegiatan_harians.tanggal', $bulan) // Filter bulan
                 ->whereYear('kegiatan_harians.tanggal', $tahun) // Filter tahun
                 ->get()
                 ->map(function ($item) {
-                    // Hitung target bulanan (dibagi 12 bulan)
-                    $item->target_bulanan = $item->target_minimum / 12;
+                    $item->target_bulanan = $item->target_minimum / 12; // Hitung target bulanan
                     return $item;
                 });
+
 
             $groupedDataEvaluasi = DB::table('rencana_hasil_kerja_pegawai')
                 ->leftJoin('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
@@ -76,10 +89,12 @@ class EvaluasiService
                     'rencana_indikator_kinerja.target_minimum',
                     'rencana_indikator_kinerja.target_maksimum'
                 )
-                ->whereMonth('kegiatan_harians.tanggal', $bulan)
-                ->whereYear('kegiatan_harians.tanggal', $tahun)
+                ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId) // Filter berdasarkan user_id
+                ->where('rencana_indikator_kinerja.user_id', $currentUserId) // Filter satuan "laporan"
+                ->whereMonth('kegiatan_harians.tanggal', $bulan) // Filter bulan
+                ->whereYear('kegiatan_harians.tanggal', $tahun) // Filter tahun
                 ->get()
-                ->groupBy(['rencana_pimpinan', 'rencana_pegawai']); // Grup data berdasarkan rencana pimpinan dan rencana pegawai
+                ->groupBy(['rencana_pimpinan', 'rencana_pegawai']); // Grup data berdasarkan rencana
 
 
             return compact('dataRencanaAksi', 'groupedDataEvaluasi');
@@ -92,6 +107,8 @@ class EvaluasiService
             throw new \RuntimeException('Gagal mengambil data evaluasi. Pastikan data sudah benar.');
         }
     }
+
+
 
 
     public function delete($uuid)

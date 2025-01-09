@@ -249,7 +249,7 @@
                                     {{ $item->target_minimum ?? 0 }} - {{ $item->target_maksimum ?? 0 }}<br>
                                     {{ $item->satuan ?? '-' }}
                                 </td>
-                                <td class="align-middle text-center">
+                                <td class="align-middle">
                                     <input type="text" name="realisasi[]" class="form-control"
                                         value="{{ $evaluasi->realisasi[$i++] ?? '' }}">
                                 </td>
@@ -345,74 +345,74 @@
 <script src="{{ asset('/assets/backend/js/evaluasi-pegawai.js') }}"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 <script>
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}");
-    @endif
+@if(session('error'))
+toastError("{{ session('error') }}");
+@endif
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Buka modal dengan data
-        document.querySelectorAll('.upload-btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const evaluasiId = this.getAttribute('data-evaluasi-id');
-                const rencanaId = this.getAttribute('data-rencana-id');
-
-                // Set data ke modal
-                document.getElementById('evaluasi_pegawai_id').value = evaluasiId;
-                document.getElementById('rencana_pegawai_id').value = rencanaId;
-
-                // Tampilkan modal
-                const uploadFileModal = new bootstrap.Modal(document.getElementById(
-                    'uploadFileModal'));
-                uploadFileModal.show();
-            });
-        });
-
-        // Proses upload file
-        document.getElementById('uploadFileForm').addEventListener('submit', async function(e) {
+document.addEventListener('DOMContentLoaded', function() {
+    // Buka modal dengan data
+    document.querySelectorAll('.upload-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
+            const evaluasiId = this.getAttribute('data-evaluasi-id');
+            const rencanaId = this.getAttribute('data-rencana-id');
 
-            const formData = new FormData(this);
+            // Set data ke modal
+            document.getElementById('evaluasi_pegawai_id').value = evaluasiId;
+            document.getElementById('rencana_pegawai_id').value = rencanaId;
 
-            try {
-                const response = await fetch('{{ route("realisasi.store") }}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    },
-                    body: formData
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: 'File berhasil diupload!',
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    const error = await response.json();
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: error.message || 'Terjadi kesalahan.',
-                    });
-                }
-            } catch (err) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Tidak dapat menghubungi server.',
-                });
-            }
+            // Tampilkan modal
+            const uploadFileModal = new bootstrap.Modal(document.getElementById(
+                'uploadFileModal'));
+            uploadFileModal.show();
         });
     });
+
+    // Proses upload file
+    document.getElementById('uploadFileForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetch('{{ route("realisasi.store") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'File berhasil diupload!',
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                const error = await response.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: error.message || 'Terjadi kesalahan.',
+                });
+            }
+        } catch (err) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Tidak dapat menghubungi server.',
+            });
+        }
+    });
+});
 </script>
 
 @endpush
