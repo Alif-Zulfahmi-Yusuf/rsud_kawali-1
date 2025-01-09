@@ -62,7 +62,7 @@ class EvaluasiService
                     'realisasi_rencanas.file as file_realisasi'
                 )
                 ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId) // Filter berdasarkan user_id
-                ->where('evaluasi_pegawais.user_id', $currentUserId) // Filter berdasarkan user_id
+                ->where('rencana_indikator_kinerja.user_id', $currentUserId) // Filter satuan "laporan"
                 ->where('rencana_indikator_kinerja.satuan', 'laporan') // Filter satuan "laporan"
                 ->where('rencana_indikator_kinerja.target_minimum', 12) // Filter target_minimum "12"
                 ->whereMonth('kegiatan_harians.tanggal', $bulan) // Filter bulan
@@ -72,7 +72,6 @@ class EvaluasiService
                     $item->target_bulanan = $item->target_minimum / 12; // Hitung target bulanan
                     return $item;
                 });
-
 
             $groupedDataEvaluasi = DB::table('rencana_hasil_kerja_pegawai')
                 ->leftJoin('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
