@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Ekspetasi;
+use App\Models\KegiatanHarian;
 use App\Models\EvaluasiPegawai;
 use App\Models\CategoryPerilaku;
 use Illuminate\Support\Facades\DB;
@@ -14,32 +15,22 @@ class EvaluasiAtasanService
 {
     //
 
-    public function getEvaluasiData(string $uuid, ?int $pegawaiId = null)
+    public function getEvaluasiData(string $uuid, int $userId)
     {
         try {
-            // Ambil evaluasi pegawai berdasarkan UUID beserta relasi yang diperlukan
-            $evaluasi = EvaluasiPegawai::with(['rencanaPegawai', 'rencanaPegawai.rencanaAtasan'])
+            // Ambil evaluasi berdasarkan UUID dan user_id
+            $evaluasi = EvaluasiPegawai::with(['rencanaPegawai', 'skp'])
                 ->where('uuid', $uuid)
-                ->where('user_id', $pegawaiId) // Tambahkan filter berdasarkan pegawai ID
+                ->where('user_id', $userId)
+                ->firstOrFail();
+
+            // Pastikan data kegiatan harian terkait ada
+            $kegiatanHarian = KegiatanHarian::where('user_id', $userId)
+                ->where('rencana_pegawai_id', $evaluasi->rencana_pegawai_id)
                 ->first();
 
-            if (!$evaluasi) {
-                throw new \Exception('Evaluasi tidak ditemukan.');
-            }
-
-            // Verifikasi apakah atasan yang login sesuai dengan relasi rencana atasan
-            $atasanUserId = Auth::id();
-            $rencanaAtasanUserId = $evaluasi->rencanaPegawai->rencanaAtasan->user_id ?? null;
-
-            if ($atasanUserId !== $rencanaAtasanUserId) {
-                throw new \Exception('Evaluasi tidak terhubung dengan atasan yang login.');
-            }
-
-            // Ambil bulan dan tahun dari tabel kegiatan_harians
-            $kegiatanHarian = DB::table('kegiatan_harians')->where('rencana_pegawai_id', $evaluasi->rencana_pegawai_id)->first();
-
             if (!$kegiatanHarian) {
-                throw new \Exception('Tidak ada data kegiatan harian yang terkait.');
+                throw new \Exception('Kegiatan harian tidak ditemukan.');
             }
 
             $bulan = \Carbon\Carbon::parse($kegiatanHarian->tanggal)->format('m');
@@ -64,14 +55,14 @@ class EvaluasiAtasanService
                     'kegiatan_harians.waktu_selesai',
                     'realisasi_rencanas.file as file_realisasi'
                 )
-                ->where('rencana_hasil_kerja_pegawai.rencana_atasan_id', $evaluasi->rencana_pegawai_id)
-                ->where('rencana_indikator_kinerja.rencana_atasan_id', $evaluasi->rencana_pegawai_id)
+                ->where('rencana_hasil_kerja_pegawai.user_id', $userId)
+                ->where('rencana_indikator_kinerja.user_id', $userId)
                 ->where('rencana_indikator_kinerja.satuan', 'laporan') // Filter satuan "laporan"
                 ->where('rencana_indikator_kinerja.target_minimum', 12) // Filter target_minimum "12"
                 ->whereMonth('kegiatan_harians.tanggal', $bulan) // Filter bulan
                 ->whereYear('kegiatan_harians.tanggal', $tahun) // Filter tahun
-                ->when($pegawaiId, function ($query) use ($pegawaiId) {
-                    return $query->where('rencana_hasil_kerja_pegawai.user_id', $pegawaiId); // Filter berdasarkan pegawai
+                ->when($userId, function ($query) use ($userId) {
+                    return $query->where('rencana_hasil_kerja_pegawai.user_id', $userId); // Filter berdasarkan pegawai
                 })
                 ->get()
                 ->map(function ($item) {
@@ -95,12 +86,12 @@ class EvaluasiAtasanService
                     'rencana_indikator_kinerja.target_minimum',
                     'rencana_indikator_kinerja.target_maksimum'
                 )
-                ->where('rencana_hasil_kerja_pegawai.rencana_atasan_id', $evaluasi->rencana_pegawai_id)
-                ->where('rencana_indikator_kinerja.rencana_atasan_id', $evaluasi->rencana_pegawai_id)
+                ->where('rencana_hasil_kerja_pegawai.user_id', $userId)
+                ->where('rencana_indikator_kinerja.user_id', $userId)
                 ->whereMonth('kegiatan_harians.tanggal', $bulan)
                 ->whereYear('kegiatan_harians.tanggal', $tahun)
-                ->when($pegawaiId, function ($query) use ($pegawaiId) {
-                    return $query->where('rencana_hasil_kerja_pegawai.user_id', $pegawaiId); // Filter berdasarkan pegawai
+                ->when($userId, function ($query) use ($userId) {
+                    return $query->where('rencana_hasil_kerja_pegawai.user_id', $userId); // Filter berdasarkan pegawai
                 })
                 ->get()
                 ->groupBy(['rencana_pimpinan', 'rencana_pegawai']);

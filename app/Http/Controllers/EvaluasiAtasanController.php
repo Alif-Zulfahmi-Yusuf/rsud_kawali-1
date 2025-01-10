@@ -103,31 +103,24 @@ class EvaluasiAtasanController extends Controller
     public function edit($uuid, Request $request, EvaluasiAtasanService $evaluasiAtasanService)
     {
         try {
-            // Ambil pegawai ID dari query parameter
-            $pegawaiId = $request->query('pegawai_id');
+            $pegawaiId = $request->query('pegawai_id'); // Ambil pegawai ID dari query parameter
 
             if (!$pegawaiId) {
                 throw new \Exception('Pegawai ID tidak ditemukan.');
             }
 
-            // Ambil data evaluasi (Realisasi Rencana Aksi dan Evaluasi Kinerja Tahunan)
             $evaluasiData = $evaluasiAtasanService->getEvaluasiData($uuid, $pegawaiId);
             $evaluasi = EvaluasiPegawai::where('uuid', $uuid)->firstOrFail();
             $dataRencanaAksi = $evaluasiData['dataRencanaAksi'];
             $groupedDataEvaluasi = $evaluasiData['groupedDataEvaluasi'];
 
-            // Mendapatkan kategori perilaku beserta perilaku yang terkait
+            // Ambil kategori perilaku dan ekspektasi
             $categories = CategoryPerilaku::with('perilakus')
-                ->whereHas('perilakus') // Hanya kategori dengan perilaku terkait
+                ->whereHas('perilakus')
                 ->get();
 
-            // Mendapatkan ekspektasi berdasarkan SKP yang terhubung
-            $skpId = optional($dataRencanaAksi->first())->skp_id ?? null;
-            $ekspektasis = $skpId
-                ? Ekspetasi::where('skp_id', $skpId)->get()
-                : collect(); // Return collection kosong jika skp_id tidak ditemukan
+            $ekspektasis = Ekspetasi::where('skp_id', optional($evaluasi->skp)->id ?? null)->get();
 
-            // Kirim data ke view
             return view('backend.evaluasi-atasan.edit', compact(
                 'evaluasi',
                 'dataRencanaAksi',
@@ -140,7 +133,6 @@ class EvaluasiAtasanController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
-
 
 
     /**
