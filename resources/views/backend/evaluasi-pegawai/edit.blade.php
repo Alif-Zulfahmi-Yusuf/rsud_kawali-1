@@ -111,7 +111,13 @@
         <input type="hidden" name="id" value="{{ $evaluasi->id }}">
         <div class="card shadow rounded-lg mb-4">
             <div class="card-body">
-                <h5>Realisasi Rencana Aksi</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
+                    <h5>Realisasi Rencana Aksi</h5>
+                    <a href="{{ route('evaluasi-pegawai.pdf', $evaluasi->uuid) }}" class="btn btn-primary"
+                        target="_blank">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </a>
+                </div>
                 <div class="table-responsive scrollbar">
                     <table class="table small">
                         <thead class="table-dark">
@@ -180,8 +186,6 @@
                                             {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'sangat_baik' ? 'selected' : '' }}>
                                             Sangat Baik</option>
                                     </select>
-
-
                                 </td>
                                 <td class="text-center align-middle">
                                     {{ isset($item->waktu_mulai, $item->waktu_selesai) 
@@ -345,74 +349,74 @@
 <script src="{{ asset('/assets/backend/js/evaluasi-pegawai.js') }}"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 <script>
-@if(session('success'))
-toastSuccess("{{ session('success') }}");
-@endif
+    @if(session('success'))
+    toastSuccess("{{ session('success') }}");
+    @endif
 
-@if(session('error'))
-toastError("{{ session('error') }}");
-@endif
+    @if(session('error'))
+    toastError("{{ session('error') }}");
+    @endif
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Buka modal dengan data
-    document.querySelectorAll('.upload-btn').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const evaluasiId = this.getAttribute('data-evaluasi-id');
-            const rencanaId = this.getAttribute('data-rencana-id');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Buka modal dengan data
+        document.querySelectorAll('.upload-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const evaluasiId = this.getAttribute('data-evaluasi-id');
+                const rencanaId = this.getAttribute('data-rencana-id');
 
-            // Set data ke modal
-            document.getElementById('evaluasi_pegawai_id').value = evaluasiId;
-            document.getElementById('rencana_pegawai_id').value = rencanaId;
+                // Set data ke modal
+                document.getElementById('evaluasi_pegawai_id').value = evaluasiId;
+                document.getElementById('rencana_pegawai_id').value = rencanaId;
 
-            // Tampilkan modal
-            const uploadFileModal = new bootstrap.Modal(document.getElementById(
-                'uploadFileModal'));
-            uploadFileModal.show();
-        });
-    });
-
-    // Proses upload file
-    document.getElementById('uploadFileForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const formData = new FormData(this);
-
-        try {
-            const response = await fetch('{{ route("realisasi.store") }}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                body: formData
+                // Tampilkan modal
+                const uploadFileModal = new bootstrap.Modal(document.getElementById(
+                    'uploadFileModal'));
+                uploadFileModal.show();
             });
+        });
 
-            if (response.ok) {
-                const result = await response.json();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: 'File berhasil diupload!',
-                }).then(() => {
-                    location.reload();
+        // Proses upload file
+        document.getElementById('uploadFileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('{{ route("realisasi.store") }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: formData
                 });
-            } else {
-                const error = await response.json();
+
+                if (response.ok) {
+                    const result = await response.json();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'File berhasil diupload!',
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    const error = await response.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: error.message || 'Terjadi kesalahan.',
+                    });
+                }
+            } catch (err) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Gagal',
-                    text: error.message || 'Terjadi kesalahan.',
+                    title: 'Error',
+                    text: 'Tidak dapat menghubungi server.',
                 });
             }
-        } catch (err) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Tidak dapat menghubungi server.',
-            });
-        }
+        });
     });
-});
 </script>
 
 @endpush

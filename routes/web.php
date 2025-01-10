@@ -107,6 +107,8 @@ Route::group(['middleware' => ['auth']], function () {
     // bagian evaluasi
     Route::resource('evaluasi-pegawai', EvaluasiController::class);
     Route::delete('/evaluasi-pegawai/destroy/{uuid}', [EvaluasiController::class, 'destroy'])->name('evaluasi-pegawai.destroy');
+    Route::get('evaluasi-pegawai/{uuid}/pdf', [EvaluasiController::class, 'generatePdf'])->name('evaluasi-pegawai.pdf');
+
 
     Route::resource('evaluasi-atasan', EvaluasiAtasanController::class)
         ->parameters(['evaluasi-atasan' => 'uuid']);

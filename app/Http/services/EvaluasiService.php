@@ -86,7 +86,9 @@ class EvaluasiService
                     'rencana_indikator_kinerja.aspek as aspek_indikator',
                     'rencana_indikator_kinerja.satuan',
                     'rencana_indikator_kinerja.target_minimum',
-                    'rencana_indikator_kinerja.target_maksimum'
+                    'rencana_indikator_kinerja.target_maksimum',
+                    'kegiatan_harians.waktu_mulai',
+                    'kegiatan_harians.waktu_selesai',
                 )
                 ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId) // Filter berdasarkan user_id
                 ->where('rencana_indikator_kinerja.user_id', $currentUserId) // Filter satuan "laporan"
@@ -106,8 +108,6 @@ class EvaluasiService
             throw new \RuntimeException('Gagal mengambil data evaluasi. Pastikan data sudah benar.');
         }
     }
-
-
 
 
     public function delete($uuid)

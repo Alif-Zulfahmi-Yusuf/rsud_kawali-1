@@ -11,6 +11,7 @@ use App\Models\EvaluasiPegawai;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Services\EvaluasiService;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class EvaluasiController extends Controller
 {
@@ -221,6 +222,26 @@ class EvaluasiController extends Controller
         }
     }
 
+    public function generatePdf($uuid)
+    {
+        try {
+            // Fetch evaluation data using service
+            $evaluasiData = $this->evaluasiService->getEvaluasiData($uuid);
+            $evaluasi = EvaluasiPegawai::where('uuid', $uuid)->firstOrFail();
+            $dataRencanaAksi = $evaluasiData['dataRencanaAksi'];
+            $groupedDataEvaluasi = $evaluasiData['groupedDataEvaluasi'];
+
+            // Load view with data
+            $pdf = Pdf::loadView('backend.evaluasi-pegawai.pdf', compact('evaluasi', 'dataRencanaAksi', 'groupedDataEvaluasi'))
+                ->setPaper('A4', 'portrait');
+
+            // Stream or Download
+            return $pdf->stream("Laporan_Kinerja_{$evaluasi->uuid}.pdf");
+        } catch (\Exception $e) {
+            Log::error('Gagal membuat PDF', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Terjadi kesalahan saat membuat PDF.');
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
