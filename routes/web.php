@@ -104,12 +104,12 @@ Route::group(['middleware' => ['auth']], function () {
     // upload file realisasi
     Route::post('/realisasi/store', [RealisasiController::class, 'store'])->name('realisasi.store');
 
-    // bagian evaluasi
+    // bagian evaluasi pegawai
     Route::resource('evaluasi-pegawai', EvaluasiController::class);
     Route::delete('/evaluasi-pegawai/destroy/{uuid}', [EvaluasiController::class, 'destroy'])->name('evaluasi-pegawai.destroy');
     Route::get('evaluasi-pegawai/{uuid}/pdf', [EvaluasiController::class, 'generatePdf'])->name('evaluasi-pegawai.pdf');
 
-
+    // bagian evaluasi atasan
     Route::resource('evaluasi-atasan', EvaluasiAtasanController::class)
         ->parameters(['evaluasi-atasan' => 'uuid']);
 

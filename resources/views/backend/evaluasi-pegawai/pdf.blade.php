@@ -6,16 +6,36 @@
     <title>Laporan Kinerja Bulanan</title>
     <style>
     body {
-        font-family: Arial, sans-serif;
-        font-size: 12px;
+        font-family: DejaVu Sans, sans-serif;
+        /* Pastikan font mendukung Unicode */
         line-height: 1.6;
         margin: 0;
+    }
+
+    p {
+        font-size: 11px;
+    }
+
+    h1 {
+        font-size: 16px;
+    }
+
+    h3 {
+
+        font-size: 14px;
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
         page-break-inside: avoid;
+        font-size: 9px;
+
+    }
+
+    thead {
+        background-color: #f2f2f2;
+
     }
 
     th,
@@ -37,7 +57,7 @@
         }
 
         table {
-            font-size: 10px;
+            font-size: 8px;
         }
     }
     </style>
@@ -49,7 +69,8 @@
     </h1>
     <p>Nama: {{ $evaluasi->user->name }}</p>
     <p>NIP: {{ $evaluasi->user->nip }}</p>
-    <p>Jabatan: {{ $evaluasi->user->jabatan }}</p>
+    <p>Golongan: {{ $evaluasi->user->pangkat->name }}</p>
+    <p>Atasan Langung: {{ $evaluasi->user->atasan->name }}</p>
 
     <h3>A. Capaian Kinerja Bulanan</h3>
     <table>
@@ -71,7 +92,7 @@
             @foreach ($dataRencanaAksi as $index => $item)
             <tr>
                 <td class="text-center align-middle">{{ $index + 1 }}</td>
-                <td>{{ $item->rencana_pegawai_id }}</td>
+                <td>{{ $item->nama_rencana_pimpinan }}</td>
                 <td>{{ $item->nama_rencana_pegawai }}</td>
                 <td>
                     {{ $item->target_bulanan }}
@@ -99,22 +120,19 @@
             @endforeach
         </tbody>
     </table>
-
     <h3>B. Laporan Aktivitas Harian</h3>
-
-
     <table>
         <thead>
             <tr>
                 <th rowspan="2" width="5%">NO.</th>
-                <th rowspan="2" width="10%">HARI/TANGGAL</th>
-                <th rowspan="2" width="10%">AKTIVITAS</th>
-                <th rowspan="2" width="5%">KUANTITAS/OUTPUT</th>
+                <th rowspan="2" width="7%">HARI/TANGGAL</th>
+                <th rowspan="2" class="text-center" width="20%">AKTIVITAS</th>
+                <th rowspan="2" width="5%">KUANTITAS / OUTPUT</th>
                 <th rowspan="2" width="5%">WAKTU</th>
-                <th rowspan="2" width="10%">JUMLAH JAM KERJA EFEKTIF</th>
-                <th colspan="3" width="10%">VERIFIKASI WAKTU DAN AKTIVITAS
+                <th rowspan="2" class="text-center" width="10%">JUMLAH JAM KERJA EFEKTIF</th>
+                <th colspan="3" class="text-center" width="10%">VERIFIKASI WAKTU DAN AKTIVITAS
                 </th>
-                <th rowspan="2" width="10%">NOMOR RENCANA AKSI YANG DI
+                <th rowspan="2" class="text-center" width="10%">NOMOR RENCANA AKSI YANG DI
                     INTERVENSI</th>
                 <th rowspan="2" width="10%">KETERANGAN</th>
             </tr>
@@ -125,18 +143,34 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Table body goes here -->
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            @foreach ($filteredKegiatanHarian as $item)
+            <tr>
+                <td>
+                    {{ $loop->iteration }}
+                </td>
+                <td>
+                    {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                </td>
+                <td>{{ $item->uraian }}</td>
+                <td>
+                    {{ $item->jumlah }}
+                    {{ $item->output }}
+                </td>
+                <td>
+                    {{ $item->waktu_mulai }} - {{ $item->waktu_selesai }}
+                </td>
+                <td>
+                    {{ isset($item->waktu_mulai, $item->waktu_selesai) 
+                                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
+                                    : '-' }}
+                </td>
+                <td>{{ $item->penilaian == 'logis' ? '✔' : '' }}</td>
+                <td>{{ $item->penilaian == 'kurang_logis' ? '✔' : '' }}</td>
+                <td>{{ $item->penilaian == 'tidak_logis' ? '✔' : '' }}</td>
+                <td></td>
+                <td>{{ ucwords(str_replace('_', ' ', $item->jenis_kegiatan)) }}</td>
+            </tr>
+            @endforeach
         </tbody>
     </table>
 </body>
