@@ -135,6 +135,11 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if ($dataRencanaAksi->isEmpty())
+                            <tr>
+                                <td colspan="10" class="text-center">Tidak ada data untuk bulan dan tahun ini.</td>
+                            </tr>
+                            @else
                             @foreach ($dataRencanaAksi as $item)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
@@ -143,7 +148,7 @@
                                     {{ $item->target_bulanan ?? '-' }}
                                 </td>
                                 <td class="text-center align-middle">
-                                    {{ $item->satuan}}
+                                    {{ $item->satuan }}
                                 </td>
                                 <td class="text-center align-middle" width="5%">
                                     <input type="text" name="kuantitas_output[{{ $item->rencana_pegawai_id }}]"
@@ -151,7 +156,7 @@
                                         value="{{ $evaluasi->kuantitas_output[$loop->index] ?? '' }}">
                                 </td>
                                 <td class="text-center align-middle">
-                                    {{ $item->satuan}}
+                                    {{ $item->satuan }}
                                 </td>
                                 <td>
                                     <input type="radio" id="ada" name="laporan[{{ $item->rencana_pegawai_id }}]"
@@ -163,7 +168,6 @@
                                         value="tidak_ada"
                                         {{ isset($evaluasi->laporan[$loop->index]) && $evaluasi->laporan[$loop->index] == 'tidak_ada' ? 'checked' : '' }}>
                                     <label for="tidak_ada">Tidak Ada</label><br>
-
                                 </td>
                                 <td>
                                     <select name="kualitas[{{ $item->rencana_pegawai_id }}]" class="form-select">
@@ -189,8 +193,8 @@
                                 </td>
                                 <td class="text-center align-middle">
                                     {{ isset($item->waktu_mulai, $item->waktu_selesai) 
-                                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
-                                    : '-' }}
+                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
+                    : '-' }}
                                 </td>
                                 <td class="text-center align-middle">
                                     @if ($item->file_realisasi)
@@ -206,6 +210,7 @@
                                 </td>
                             </tr>
                             @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -349,74 +354,74 @@
 <script src="{{ asset('/assets/backend/js/evaluasi-pegawai.js') }}"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 <script>
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}");
-    @endif
+@if(session('error'))
+toastError("{{ session('error') }}");
+@endif
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Buka modal dengan data
-        document.querySelectorAll('.upload-btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const evaluasiId = this.getAttribute('data-evaluasi-id');
-                const rencanaId = this.getAttribute('data-rencana-id');
-
-                // Set data ke modal
-                document.getElementById('evaluasi_pegawai_id').value = evaluasiId;
-                document.getElementById('rencana_pegawai_id').value = rencanaId;
-
-                // Tampilkan modal
-                const uploadFileModal = new bootstrap.Modal(document.getElementById(
-                    'uploadFileModal'));
-                uploadFileModal.show();
-            });
-        });
-
-        // Proses upload file
-        document.getElementById('uploadFileForm').addEventListener('submit', async function(e) {
+document.addEventListener('DOMContentLoaded', function() {
+    // Buka modal dengan data
+    document.querySelectorAll('.upload-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
             e.preventDefault();
+            const evaluasiId = this.getAttribute('data-evaluasi-id');
+            const rencanaId = this.getAttribute('data-rencana-id');
 
-            const formData = new FormData(this);
+            // Set data ke modal
+            document.getElementById('evaluasi_pegawai_id').value = evaluasiId;
+            document.getElementById('rencana_pegawai_id').value = rencanaId;
 
-            try {
-                const response = await fetch('{{ route("realisasi.store") }}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    },
-                    body: formData
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: 'File berhasil diupload!',
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    const error = await response.json();
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: error.message || 'Terjadi kesalahan.',
-                    });
-                }
-            } catch (err) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Tidak dapat menghubungi server.',
-                });
-            }
+            // Tampilkan modal
+            const uploadFileModal = new bootstrap.Modal(document.getElementById(
+                'uploadFileModal'));
+            uploadFileModal.show();
         });
     });
+
+    // Proses upload file
+    document.getElementById('uploadFileForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetch('{{ route("realisasi.store") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'File berhasil diupload!',
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                const error = await response.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: error.message || 'Terjadi kesalahan.',
+                });
+            }
+        } catch (err) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Tidak dapat menghubungi server.',
+            });
+        }
+    });
+});
 </script>
 
 @endpush

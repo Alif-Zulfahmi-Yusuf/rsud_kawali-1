@@ -66,7 +66,6 @@ class EvaluasiService
             }
 
 
-            // Data Realisasi Rencana Aksi
             $dataRencanaAksi = DB::table('rencana_hasil_kerja_pegawai')
                 ->join('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
                 ->join('rencana_indikator_kinerja', 'rencana_hasil_kerja.id', '=', 'rencana_indikator_kinerja.rencana_atasan_id')
@@ -89,12 +88,14 @@ class EvaluasiService
                 ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId) // Filter berdasarkan user_id
                 ->where('rencana_indikator_kinerja.user_id', $currentUserId) // Filter satuan "laporan"
                 ->where('rencana_indikator_kinerja.satuan', 'laporan') // Filter satuan "laporan"
-                ->where('rencana_indikator_kinerja.target_minimum', 12) // Filter target_minimum "12"
+                ->whereIn('rencana_indikator_kinerja.target_minimum', [4, 12]) // Filter target_minimum "4" dan "12"
                 ->whereMonth('kegiatan_harians.tanggal', $bulan) // Filter bulan
                 ->whereYear('kegiatan_harians.tanggal', $tahun) // Filter tahun
+                ->distinct() // Menambahkan distinct untuk menghindari duplikasi
                 ->get()
                 ->map(function ($item) {
-                    $item->target_bulanan = $item->target_minimum / 12; // Hitung target bulanan
+                    // Hitung target bulanan berdasarkan target_minimum
+                    $item->target_bulanan = $item->target_minimum > 0 ? ceil(12 / $item->target_minimum) : 0;
                     return $item;
                 });
 
@@ -115,10 +116,11 @@ class EvaluasiService
                     'kegiatan_harians.waktu_mulai',
                     'kegiatan_harians.waktu_selesai',
                 )
-                ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId) // Filter berdasarkan user_id
-                ->where('rencana_indikator_kinerja.user_id', $currentUserId) // Filter satuan "laporan"
-                ->whereMonth('kegiatan_harians.tanggal', $bulan) // Filter bulan
-                ->whereYear('kegiatan_harians.tanggal', $tahun) // Filter tahun
+                ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId)
+                ->where('rencana_indikator_kinerja.user_id', $currentUserId)
+                ->whereMonth('kegiatan_harians.tanggal', $bulan)
+                ->whereYear('kegiatan_harians.tanggal', $tahun)
+                ->distinct() // Menambahkan distinct untuk menghindari duplikasi
                 ->get()
                 ->groupBy(['rencana_pimpinan', 'rencana_pegawai']); // Grup data berdasarkan rencana
 

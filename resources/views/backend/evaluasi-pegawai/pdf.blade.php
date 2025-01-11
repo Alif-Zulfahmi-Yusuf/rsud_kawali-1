@@ -164,15 +164,37 @@
                                     ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
                                     : '-' }}
                 </td>
-                <td>{{ $item->penilaian == 'logis' ? '✔' : '' }}</td>
-                <td>{{ $item->penilaian == 'kurang_logis' ? '✔' : '' }}</td>
-                <td>{{ $item->penilaian == 'tidak_logis' ? '✔' : '' }}</td>
+                <td class="text-center">
+                    {{ $item->penilaian == 'logis' ? '✔' : '' }}
+                </td>
+                <td class="text-center">
+                    {{ $item->penilaian == 'kurang_logis' ? '✔' : '' }}
+                </td>
+                <td class="text-center">
+                    {{ $item->penilaian == 'tidak_logis' ? '✔' : '' }}
+                </td>
                 <td></td>
                 <td>{{ ucwords(str_replace('_', ' ', $item->jenis_kegiatan)) }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
+
+    <div style="display: flex; justify-content: space-between;">
+        <div>
+            <p>Pejabat Penilai,</p>
+            <br>
+            <p>{{ Auth::user()->atasan->name }}</p>
+            <p>{{ Auth::user()->atasan->nip }}</p>
+        </div>
+        <div style="text-align: right;">
+            <p>Ciamis, {{ \Carbon\Carbon::parse($evaluasi->tanggal_capaian)->translatedFormat('Y-m-d') ?? '' }}</p>
+            <p>Pegawai Negri Sipil Yang Dinilai</p>
+            <br>
+            <p>{{ Auth::user()->name }}</p>
+            <p>{{ Auth::user()->nip }}</p>
+        </div>
+    </div>
 </body>
 
 </html>
