@@ -42,6 +42,30 @@ class EvaluasiService
             $bulan = \Carbon\Carbon::parse($kegiatanHarian->tanggal)->format('m');
             $tahun = \Carbon\Carbon::parse($kegiatanHarian->tanggal)->format('Y');
 
+            // Filter kegiatan harian berdasarkan user_id, bulan, dan tahun
+            $filteredKegiatanHarian = DB::table('kegiatan_harians')
+                ->select(
+                    'id',
+                    'rencana_pegawai_id',
+                    'tanggal',
+                    'uraian',
+                    'waktu_mulai',
+                    'waktu_selesai',
+                    'jenis_kegiatan',
+                    'penilaian',
+                    'output',
+                    'jumlah'
+                )
+                ->where('user_id', $currentUserId) // Filter berdasarkan user_id pegawai yang sedang login
+                ->whereMonth('tanggal', $bulan)   // Filter berdasarkan bulan
+                ->whereYear('tanggal', $tahun)    // Filter berdasarkan tahun
+                ->get();
+
+            if ($filteredKegiatanHarian->isEmpty()) {
+                throw new \Exception('Tidak ada kegiatan harian yang ditemukan pada bulan dan tahun ini.');
+            }
+
+
             // Data Realisasi Rencana Aksi
             $dataRencanaAksi = DB::table('rencana_hasil_kerja_pegawai')
                 ->join('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
@@ -52,6 +76,7 @@ class EvaluasiService
                 ->select(
                     'rencana_hasil_kerja_pegawai.id as rencana_pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as nama_rencana_pegawai',
+                    'rencana_hasil_kerja.rencana as nama_rencana_pimpinan',
                     'rencana_indikator_kinerja.indikator_kinerja as nama_indikator',
                     'rencana_indikator_kinerja.satuan',
                     'rencana_indikator_kinerja.target_minimum',
@@ -98,7 +123,7 @@ class EvaluasiService
                 ->groupBy(['rencana_pimpinan', 'rencana_pegawai']); // Grup data berdasarkan rencana
 
 
-            return compact('dataRencanaAksi', 'groupedDataEvaluasi');
+            return compact('dataRencanaAksi', 'groupedDataEvaluasi', 'filteredKegiatanHarian');
         } catch (\Exception $e) {
             // Log error jika terjadi masalah
             Log::error('Gagal mendapatkan detail evaluasi', [
