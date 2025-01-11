@@ -145,7 +145,7 @@
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
                                 <td class="text-center align-middle" width="5%">
-                                    {{ $item->target_bulanan ?? '-' }}
+                                    {{ $item->bulan_muncul ?? '-' }}
                                 </td>
                                 <td class="text-center align-middle">
                                     {{ $item->satuan }}
@@ -252,7 +252,7 @@
                                 <td class="align-middle" rowspan="{{ $rowspan }}">{{ $item->rencana_pegawai ?? '-' }}
                                 </td>
                                 @endif
-                                <td class="align-middle text-center">{{ $item->aspek_indikator ?? '-' }}</td>
+                                <td class="align-middle text-center">{{ $item->aspek ?? '-' }}</td>
                                 <td class="align-middle">{{ $item->nama_indikator ?? '-' }}</td>
                                 <td class="align-middle text-center">
                                     {{ $item->target_minimum ?? 0 }} - {{ $item->target_maksimum ?? 0 }}<br>

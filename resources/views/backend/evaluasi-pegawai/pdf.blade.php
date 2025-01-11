@@ -95,11 +95,11 @@
                 <td>{{ $item->nama_rencana_pimpinan }}</td>
                 <td>{{ $item->nama_rencana_pegawai }}</td>
                 <td>
-                    {{ $item->target_bulanan }}
+                    {{ $item->bulan_muncul }}
                     {{ $item->satuan }}
                 </td>
                 <td>
-                    {{ $item->target_bulanan }}
+                    {{ $item->bulan_muncul }}
                     {{ $item->satuan }}
                 </td>
                 <td>

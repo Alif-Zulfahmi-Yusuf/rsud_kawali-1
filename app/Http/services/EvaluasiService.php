@@ -66,63 +66,77 @@ class EvaluasiService
             }
 
 
+            // Subquery untuk indikator dengan filter pembagian target_minimum
+            $indikatorSubquery = DB::table('rencana_indikator_kinerja')
+                ->selectRaw('
+                    rencana_atasan_id, 
+                    GROUP_CONCAT(indikator_kinerja SEPARATOR ", ") as indikator_kinerja, 
+                    satuan,target_maksimum,aspek, 
+                    target_minimum,
+                    CASE 
+                        WHEN target_minimum = 12 AND satuan = "laporan" THEN 1 
+                        WHEN target_minimum = 4 AND satuan = "laporan" THEN CEIL(MONTH(CURRENT_DATE) / 3) 
+                    ELSE 0 
+                    END as bulan_muncul
+                ')
+                ->where('user_id', $currentUserId)
+                ->groupBy('rencana_atasan_id', 'satuan', 'target_minimum', 'target_maksimum', 'aspek');
+
+
+            // Query utama untuk data rencana aksi dengan filter
             $dataRencanaAksi = DB::table('rencana_hasil_kerja_pegawai')
                 ->join('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
-                ->join('rencana_indikator_kinerja', 'rencana_hasil_kerja.id', '=', 'rencana_indikator_kinerja.rencana_atasan_id')
+                ->leftJoinSub($indikatorSubquery, 'indikator', 'rencana_hasil_kerja.id', '=', 'indikator.rencana_atasan_id')
                 ->leftJoin('evaluasi_pegawais', 'evaluasi_pegawais.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
-                ->leftJoin('kegiatan_harians', 'kegiatan_harians.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->leftJoin('realisasi_rencanas', 'realisasi_rencanas.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
+                ->leftJoin('kegiatan_harians', 'kegiatan_harians.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->select(
                     'rencana_hasil_kerja_pegawai.id as rencana_pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as nama_rencana_pegawai',
                     'rencana_hasil_kerja.rencana as nama_rencana_pimpinan',
-                    'rencana_indikator_kinerja.indikator_kinerja as nama_indikator',
-                    'rencana_indikator_kinerja.satuan',
-                    'rencana_indikator_kinerja.target_minimum',
-                    'rencana_indikator_kinerja.target_maksimum',
+                    'indikator.indikator_kinerja as nama_indikator',
+                    'indikator.satuan',
+                    'indikator.target_minimum',
+                    'indikator.bulan_muncul',
                     'evaluasi_pegawais.id as evaluasi_pegawai_id',
+                    'realisasi_rencanas.id as realisasi_rencana_id',
+                    'realisasi_rencanas.file as file_realisasi',
                     'kegiatan_harians.waktu_mulai',
-                    'kegiatan_harians.waktu_selesai',
-                    'realisasi_rencanas.file as file_realisasi'
+                    'kegiatan_harians.waktu_selesai'
                 )
-                ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId) // Filter berdasarkan user_id
-                ->where('rencana_indikator_kinerja.user_id', $currentUserId) // Filter satuan "laporan"
-                ->where('rencana_indikator_kinerja.satuan', 'laporan') // Filter satuan "laporan"
-                ->whereIn('rencana_indikator_kinerja.target_minimum', [4, 12]) // Filter target_minimum "4" dan "12"
-                ->whereMonth('kegiatan_harians.tanggal', $bulan) // Filter bulan
-                ->whereYear('kegiatan_harians.tanggal', $tahun) // Filter tahun
-                ->distinct() // Menambahkan distinct untuk menghindari duplikasi
-                ->get()
-                ->map(function ($item) {
-                    // Hitung target bulanan berdasarkan target_minimum
-                    $item->target_bulanan = $item->target_minimum > 0 ? ceil(12 / $item->target_minimum) : 0;
-                    return $item;
-                });
+                ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId)
+                ->where(function ($query) use ($bulan) {
+                    $query->whereRaw('indikator.target_minimum = 12 AND indikator.satuan = "laporan" AND MONTH(CURRENT_DATE) = ?', [$bulan])
+                        ->orWhereRaw('indikator.target_minimum = 4 AND indikator.satuan = "laporan" AND CEIL(? / 3) = indikator.bulan_muncul', [$bulan]);
+                })
+                ->whereYear('kegiatan_harians.tanggal', $tahun)
+                ->get();
+
+
 
             $groupedDataEvaluasi = DB::table('rencana_hasil_kerja_pegawai')
                 ->leftJoin('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
-                ->leftJoin('rencana_indikator_kinerja', 'rencana_hasil_kerja.id', '=', 'rencana_indikator_kinerja.rencana_atasan_id')
+                ->leftJoinSub($indikatorSubquery, 'indikator', 'rencana_hasil_kerja.id', '=', 'indikator.rencana_atasan_id')
                 ->leftJoin('kegiatan_harians', 'rencana_hasil_kerja_pegawai.id', '=', 'kegiatan_harians.rencana_pegawai_id')
                 ->select(
                     'rencana_hasil_kerja_pegawai.id as pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as rencana_pegawai',
                     'rencana_hasil_kerja.rencana as rencana_pimpinan',
-                    'rencana_indikator_kinerja.id as indikator_id',
-                    'rencana_indikator_kinerja.indikator_kinerja as nama_indikator',
-                    'rencana_indikator_kinerja.aspek as aspek_indikator',
-                    'rencana_indikator_kinerja.satuan',
-                    'rencana_indikator_kinerja.target_minimum',
-                    'rencana_indikator_kinerja.target_maksimum',
+                    'indikator.indikator_kinerja as nama_indikator',
+                    'indikator.satuan',
+                    'indikator.aspek',
+                    'indikator.target_minimum',
+                    'indikator.target_maksimum',
                     'kegiatan_harians.waktu_mulai',
-                    'kegiatan_harians.waktu_selesai',
+                    'kegiatan_harians.waktu_selesai'
                 )
                 ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId)
-                ->where('rencana_indikator_kinerja.user_id', $currentUserId)
                 ->whereMonth('kegiatan_harians.tanggal', $bulan)
                 ->whereYear('kegiatan_harians.tanggal', $tahun)
-                ->distinct() // Menambahkan distinct untuk menghindari duplikasi
                 ->get()
-                ->groupBy(['rencana_pimpinan', 'rencana_pegawai']); // Grup data berdasarkan rencana
+                ->groupBy(['rencana_pimpinan', 'rencana_pegawai']);
+
+
 
 
             return compact('dataRencanaAksi', 'groupedDataEvaluasi', 'filteredKegiatanHarian');
