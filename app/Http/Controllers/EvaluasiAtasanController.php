@@ -152,7 +152,7 @@ class EvaluasiAtasanController extends Controller
                 'umpan_balik' => 'array',
                 'umpan_balik_berkelanjutan' => 'array',
                 'realisasi' => 'array',
-                'jumlah_periode' => 'nullable|integer',
+                'jumlah_periode' => 'nullable|string',
                 'rating' => 'nullable|string',
                 'permasalahan' => 'nullable|string',
             ]);

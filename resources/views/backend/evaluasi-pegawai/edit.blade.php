@@ -141,6 +141,10 @@
                             </tr>
                             @else
                             @foreach ($dataRencanaAksi as $item)
+                            @php
+                            #idEvaluasi = [];
+                            $idEvaluasi[] = $item->evaluasi_pegawai_id;
+                            @endphp
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
@@ -203,7 +207,7 @@
                                         File</a>
                                     @endif
                                     <a href="#" class="btn btn-outline-warning btn-sm upload-btn"
-                                        data-evaluasi-id="{{ $item->evaluasi_pegawai_id }}"
+                                        data-evaluasi-id="{{ $idEvaluasi[0] }}"
                                         data-rencana-id="{{ $item->rencana_pegawai_id }}">
                                         <i class="fa fa-upload"></i>
                                     </a>
