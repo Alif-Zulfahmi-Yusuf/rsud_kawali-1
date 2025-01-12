@@ -83,6 +83,8 @@
                     <h6 class="m-0">Rating Kinerja Bulanan</h6>
                 </div>
                 <div class="card-body">
+                    <input type="hidden" id="hasilKerjaData" value="{{ $hasilKerjaData }}">
+                    <input type="hidden" id="perilakuKerjaData" value="{{ $perilakuKerjaData }}">
                     <div class="echart-basic-bar-chart-example" style="min-height:350px"></div>
                 </div>
             </div>
@@ -93,7 +95,7 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('assets/backend/js/echarts-example.js') }}"></script>
+<script src="{{ asset('assets/backend/js/dash.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>

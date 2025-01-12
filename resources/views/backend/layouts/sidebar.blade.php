@@ -5,8 +5,8 @@
             <ul class="navbar-nav flex-column" id="navbarVerticalNav">
                 <li class="nav-item">
                     <div class="nav-item-wrapper">
-                        <a class="nav-link label-1 {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                            href="{{ route('dashboard') }}" role="button" data-bs-toggle="" aria-expanded="false">
+                        <a class="nav-link label-1 {{ request()->routeIs('dashboard.*') ? 'active' : '' }}"
+                            href="{{ route('dashboard.index') }}" role="button" data-bs-toggle="" aria-expanded="false">
                             <div class="d-flex align-items-center">
                                 <span class="nav-link-icon"><span data-feather="pie-chart"></span></span>
                                 <span class="nav-link-text-wrapper"><span class="nav-link-text">Dashboard</span></span>
