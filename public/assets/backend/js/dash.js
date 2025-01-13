@@ -9,7 +9,15 @@ document.addEventListener('DOMContentLoaded', function () {
         'November', 'December'
     ];
 
-    const mapToCategoryIndex = (data) => data.map(item => categories.indexOf(item));
+    // Pastikan data sesuai panjang bulan dan tambahkan null jika "Tidak Ada Data"
+    const normalizeData = (data) =>
+        months.map((month, index) => {
+            if (data[index] === "Tidak Ada Data") return { month, value: null }; // Tidak ada data
+            return { month, value: categories.indexOf(data[index]) };
+        });
+
+    const normalizedHasilKerja = normalizeData(hasilKerjaData);
+    const normalizedPerilakuKerja = normalizeData(perilakuKerjaData);
 
     const $chartEl = document.querySelector('.echart-basic-bar-chart-example');
 
@@ -23,7 +31,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     return params.map(item => `
                         <div>
                             <span style="color:${item.color}">●</span>
-                            ${item.seriesName}: ${categories[item.data]}
+                            ${item.seriesName}: ${
+                                item.data.value !== null
+                                    ? categories[item.data.value]
+                                    : 'Tidak Ada Data'
+                            }
                         </div>
                     `).join('');
                 },
@@ -41,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             xAxis: {
                 type: 'category',
-                data: months,
+                data: months, // Selalu gunakan semua bulan
                 axisLabel: { formatter: value => value.substring(0, 3) }
             },
             yAxis: {
@@ -53,13 +65,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 {
                     name: 'Hasil Kerja',
                     type: 'bar',
-                    data: mapToCategoryIndex(hasilKerjaData),
+                    data: normalizedHasilKerja.map(item => ({ value: item.value })),
                     barWidth: '35%'
                 },
                 {
                     name: 'Perilaku Kerja',
                     type: 'bar',
-                    data: mapToCategoryIndex(perilakuKerjaData),
+                    data: normalizedPerilakuKerja.map(item => ({ value: item.value })),
                     barWidth: '35%'
                 }
             ]
