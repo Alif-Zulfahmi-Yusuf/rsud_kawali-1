@@ -58,7 +58,7 @@
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
                             <td class="text-center align-middle" width="5%">
-                                {{ $item->target_bulanan ?? '-' }}
+                                {{ $item->bulan_muncul ?? '-' }}
                             </td>
                             <td class="text-center align-middle">
                                 {{ $item->satuan}}
@@ -160,7 +160,7 @@
                             <td class="align-middle" rowspan="{{ $rowspan }}">{{ $item->rencana_pegawai ?? '-' }}
                             </td>
                             @endif
-                            <td class="align-middle text-center">{{ $item->aspek_indikator ?? '-' }}</td>
+                            <td class="align-middle text-center">{{ $item->aspek ?? '-' }}</td>
                             <td class="align-middle">{{ $item->nama_indikator ?? '-' }}</td>
                             <td class="align-middle text-center">
                                 {{ $item->target_minimum ?? 0 }} - {{ $item->target_maksimum ?? 0 }}<br>
@@ -187,16 +187,16 @@
                             <td colspan="2">
                                 <select style="width: 45%;" name="rating" id="" class="form-select form-select-sm">
                                     <option value="">Pilih</option>
-                                    <option value="dibawah_expektasi"
-                                        {{ $evaluasi->rating == 'dibawah_expektasi' ? 'selected' : '' }}>
+                                    <option value="dibawah_ekspektasi"
+                                        {{ $evaluasi->rating == 'dibawah_ekspektasi' ? 'selected' : '' }}>
                                         Di Bawah Expektasi
                                     </option>
-                                    <option value="sesuai_expektasi"
-                                        {{ $evaluasi->rating == 'sesuai_expektasi' ? 'selected' : '' }}>
+                                    <option value="sesuai_ekspektasi"
+                                        {{ $evaluasi->rating == 'sesuai_ekspektasi' ? 'selected' : '' }}>
                                         Sesuai Expektasi
                                     </option>
-                                    <option value="diatas_expektasi"
-                                        {{ $evaluasi->rating == 'diatas_expektasi' ? 'selected' : '' }}>
+                                    <option value="diatas_ekspektasi"
+                                        {{ $evaluasi->rating == 'diatas_ekspektasi' ? 'selected' : '' }}>
                                         Di Atas Expektasi
                                     </option>
                                 </select>
@@ -250,16 +250,16 @@
                             <td class="align-middle">
                                 <select name="nilai[{{ $perilaku->id }}]" class="form-select nilai-select">
                                     <option value="">Pilih</option>
-                                    <option value="dibawah_expektasi"
-                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'dibawah_expektasi' ? 'selected' : '' }}>
+                                    <option value="dibawah_ekspektasi"
+                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'dibawah_ekspektasi' ? 'selected' : '' }}>
                                         Di Bawah Ekspektasi
                                     </option>
-                                    <option value="sesuai_expektasi"
-                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'sesuai_expektasi' ? 'selected' : '' }}>
+                                    <option value="sesuai_ekspektasi"
+                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'sesuai_ekspektasi' ? 'selected' : '' }}>
                                         Sesuai Ekspektasi
                                     </option>
-                                    <option value="diatas_expektasi"
-                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'diatas_expektasi' ? 'selected' : '' }}>
+                                    <option value="diatas_ekspektasi"
+                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'diatas_ekspektasi' ? 'selected' : '' }}>
                                         Di Atas Ekspektasi
                                     </option>
                                 </select>
@@ -373,64 +373,64 @@
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
 
 <script>
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}");
-    @endif
+@if(session('error'))
+toastError("{{ session('error') }}");
+@endif
 
-    document.addEventListener("DOMContentLoaded", function() {
-        // Map nilai ke angka
-        const nilaiMap = {
-            dibawah_expektasi: 1,
-            sesuai_expektasi: 2,
-            diatas_expektasi: 3,
-        };
+document.addEventListener("DOMContentLoaded", function() {
+    // Map nilai ke angka
+    const nilaiMap = {
+        dibawah_ekspektasi: 1,
+        sesuai_ekspektasi: 2,
+        diatas_ekspektasi: 3,
+    };
 
-        // Map angka rata-rata ke teks
-        const averageTextMap = (average) => {
-            if (average < 1.5) {
-                return "Di Bawah Ekspektasi";
-            } else if (average <= 2.5) {
-                return "Sesuai Ekspektasi";
-            } else {
-                return "Di Atas Ekspektasi";
-            }
-        };
+    // Map angka rata-rata ke teks
+    const averageTextMap = (average) => {
+        if (average < 1.5) {
+            return "Di Bawah Ekspektasi";
+        } else if (average <= 2.5) {
+            return "Sesuai Ekspektasi";
+        } else {
+            return "Di Atas Ekspektasi";
+        }
+    };
 
-        // Targetkan semua dropdown dengan class `nilai-select`
-        const dropdowns = document.querySelectorAll(".nilai-select");
+    // Targetkan semua dropdown dengan class `nilai-select`
+    const dropdowns = document.querySelectorAll(".nilai-select");
 
-        // Fungsi untuk menghitung rata-rata
-        const calculateAverage = () => {
-            let total = 0;
-            let count = 0;
+    // Fungsi untuk menghitung rata-rata
+    const calculateAverage = () => {
+        let total = 0;
+        let count = 0;
 
-            dropdowns.forEach((dropdown) => {
-                const value = dropdown.value;
-                if (nilaiMap[value] !== undefined) {
-                    total += nilaiMap[value];
-                    count++;
-                }
-            });
-
-            if (count > 0) {
-                const average = total / count;
-                document.getElementById("rating_perilaku").value = averageTextMap(average); // Konversi ke teks
-            } else {
-                document.getElementById("rating_perilaku").value = ""; // Kosongkan jika tidak ada nilai
-            }
-        };
-
-        // Tambahkan event listener ke setiap dropdown
         dropdowns.forEach((dropdown) => {
-            dropdown.addEventListener("change", calculateAverage);
+            const value = dropdown.value;
+            if (nilaiMap[value] !== undefined) {
+                total += nilaiMap[value];
+                count++;
+            }
         });
 
-        // Hitung rata-rata saat halaman dimuat (untuk nilai default dari array)
-        calculateAverage();
+        if (count > 0) {
+            const average = total / count;
+            document.getElementById("rating_perilaku").value = averageTextMap(average); // Konversi ke teks
+        } else {
+            document.getElementById("rating_perilaku").value = ""; // Kosongkan jika tidak ada nilai
+        }
+    };
+
+    // Tambahkan event listener ke setiap dropdown
+    dropdowns.forEach((dropdown) => {
+        dropdown.addEventListener("change", calculateAverage);
     });
+
+    // Hitung rata-rata saat halaman dimuat (untuk nilai default dari array)
+    calculateAverage();
+});
 </script>
 @endpush

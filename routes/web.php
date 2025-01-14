@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SkpController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AtasanController;
@@ -28,11 +29,10 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('backend.dash.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard.index');
+
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     // bagian pangkat
