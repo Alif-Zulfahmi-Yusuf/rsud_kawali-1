@@ -39,7 +39,6 @@ class HomeController extends Controller
 
         $perilakuKerjaData = $evaluasi->pluck('nilai');
 
-        dd($hasilKerjaData, $perilakuKerjaData);
 
         return view('backend.dash.dashboard', [
             'hasilKerjaData' => json_encode($hasilKerjaData),

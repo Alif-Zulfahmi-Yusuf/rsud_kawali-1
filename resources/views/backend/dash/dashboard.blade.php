@@ -83,8 +83,8 @@
                     <h6 class="m-0">Rating Kinerja Bulanan</h6>
                 </div>
                 <div class="card-body">
-                    <input type="" id="hasilKerjaData" value="{{ $hasilKerjaData }}">
-                    <input type="" id="perilakuKerjaData" value="{{ $perilakuKerjaData }}">
+                    <input type="hidden" id="hasilKerjaData" value="{{ $hasilKerjaData }}">
+                    <input type="hidden" id="perilakuKerjaData" value="{{ $perilakuKerjaData }}">
                     <div class="echart-basic-bar-chart-example" style="min-height:350px"></div>
                 </div>
             </div>
