@@ -86,7 +86,7 @@
                             <h2 class="text-body-secondary fw-bolder mb-3">Access Forbidden!</h2>
                             <p class="text-body mb-5">Halt! Thou art endeavouring to trespass upon a realm not granted
                                 unto thee.<br class="d-none d-md-block d-lg-none" />granted unto thee.</p><a
-                                class="btn btn-lg btn-outline-primary" href="{{ route('dashboard') }}">Go Home</a>
+                                class="btn btn-lg btn-outline-primary" href="{{ route('dashboard.index') }}">Go Home</a>
                         </div>
                     </div>
                 </div>

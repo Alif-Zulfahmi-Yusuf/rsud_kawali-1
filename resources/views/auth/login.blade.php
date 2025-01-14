@@ -118,7 +118,7 @@
                                     </div>
                                     <div class="position-relative">
                                         <hr class="bg-body-secondary mt-5 mb-4" />
-                                        <div class="divider-content-center bg-body-emphasis">Use Nip</div>
+                                        <div class="divider-content-center bg-body-emphasis">Gunakan Nip</div>
                                     </div>
                                     <form method="POST" action="{{ route('login') }}">
                                         @csrf

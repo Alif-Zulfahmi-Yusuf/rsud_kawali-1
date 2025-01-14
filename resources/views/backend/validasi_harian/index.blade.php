@@ -172,34 +172,34 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}");
-    @endif
+@if(session('error'))
+toastError("{{ session('error') }}");
+@endif
 
-    $(document).ready(function() {
-        $('#bulan').select2({
-            theme: "bootstrap-5",
-            placeholder: "Pilih opsi",
-        });
+$(document).ready(function() {
+    $('#bulan').select2({
+        theme: "bootstrap-5",
+        placeholder: "Pilih opsi",
     });
+});
 
-    $(document).ready(function() {
-        $('#tahun').select2({
-            theme: "bootstrap-5",
-            placeholder: "Pilih opsi",
-        });
+$(document).ready(function() {
+    $('#tahun').select2({
+        theme: "bootstrap-5",
+        placeholder: "Pilih opsi",
     });
+});
 
-    function editDataHarianByUser(userId) {
-        $.ajax({
-            url: `/validasi-harian/user/${userId}`,
-            method: 'GET',
-            success: function(response) {
-                let tableBody = `
+function editDataHarianByUser(userId) {
+    $.ajax({
+        url: `/validasi-harian/user/${userId}`,
+        method: 'GET',
+        success: function(response) {
+            let tableBody = `
                 <tr>
                     <td colspan="6" class="text-center"><strong>Pilihan untuk Semua sebagai Logis</strong></td>
                     <td class="text-center">
@@ -210,8 +210,8 @@
                     </td>
                 </tr>`;
 
-                response.forEach((item, index) => {
-                    tableBody += `
+            response.forEach((item, index) => {
+                tableBody += `
                     <tr>
                         <td class="text-center align-middle">${index + 1}</td>
                         <td class="text-center align-middle">${new Date(item.tanggal).toLocaleDateString('id-ID')}</td>
@@ -230,21 +230,21 @@
                             </select>
                         </td>
                     </tr>`;
-                });
+            });
 
-                $('#modalTableBody').html(tableBody);
+            $('#modalTableBody').html(tableBody);
 
-                $('#pilih-semua-logis').on('change', function() {
-                    const isChecked = $(this).is(':checked');
-                    $('.penilaian-select').val(isChecked ? 'logis' : '');
-                });
+            $('#pilih-semua-logis').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('.penilaian-select').val(isChecked ? 'logis' : '');
+            });
 
-                $('#modalEditHarian').modal('show');
-            },
-            error: function() {
-                alert('Gagal memuat data kegiatan harian.');
-            }
-        });
-    }
+            $('#modalEditHarian').modal('show');
+        },
+        error: function() {
+            alert('Gagal memuat data kegiatan harian.');
+        }
+    });
+}
 </script>
 @endpush

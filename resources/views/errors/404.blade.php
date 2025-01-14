@@ -89,7 +89,7 @@
                             <h2 class="text-body-secondary fw-bolder mb-3">Page Missing!</h2>
                             <p class="text-body mb-5">But no worries! Our ostrich is looking everywhere while you wait
                                 safely.</p>
-                            <a class="btn btn-lg btn-outline-primary" href="{{ route('dashboard') }}">Go Home</a>
+                            <a class="btn btn-lg btn-outline-primary" href="{{ route('dashboard.index') }}">Go Home</a>
                         </div>
                     </div>
                 </div>
@@ -100,9 +100,6 @@
     <!-- ===============================================-->
     <!--    End of Main Content-->
     <!-- ===============================================-->
-
-
-
 
 
     <!-- ===============================================-->
