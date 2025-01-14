@@ -187,16 +187,16 @@
                             <td colspan="2">
                                 <select style="width: 45%;" name="rating" id="" class="form-select form-select-sm">
                                     <option value="">Pilih</option>
-                                    <option value="dibawah_expektasi"
-                                        {{ $evaluasi->rating == 'dibawah_expektasi' ? 'selected' : '' }}>
+                                    <option value="dibawah_ekspektasi"
+                                        {{ $evaluasi->rating == 'dibawah_ekspektasi' ? 'selected' : '' }}>
                                         Di Bawah Expektasi
                                     </option>
-                                    <option value="sesuai_expektasi"
-                                        {{ $evaluasi->rating == 'sesuai_expektasi' ? 'selected' : '' }}>
+                                    <option value="sesuai_ekspektasi"
+                                        {{ $evaluasi->rating == 'sesuai_ekspektasi' ? 'selected' : '' }}>
                                         Sesuai Expektasi
                                     </option>
-                                    <option value="diatas_expektasi"
-                                        {{ $evaluasi->rating == 'diatas_expektasi' ? 'selected' : '' }}>
+                                    <option value="diatas_ekspektasi"
+                                        {{ $evaluasi->rating == 'diatas_ekspektasi' ? 'selected' : '' }}>
                                         Di Atas Expektasi
                                     </option>
                                 </select>
@@ -250,16 +250,16 @@
                             <td class="align-middle">
                                 <select name="nilai[{{ $perilaku->id }}]" class="form-select nilai-select">
                                     <option value="">Pilih</option>
-                                    <option value="dibawah_expektasi"
-                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'dibawah_expektasi' ? 'selected' : '' }}>
+                                    <option value="dibawah_ekspektasi"
+                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'dibawah_ekspektasi' ? 'selected' : '' }}>
                                         Di Bawah Ekspektasi
                                     </option>
-                                    <option value="sesuai_expektasi"
-                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'sesuai_expektasi' ? 'selected' : '' }}>
+                                    <option value="sesuai_ekspektasi"
+                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'sesuai_ekspektasi' ? 'selected' : '' }}>
                                         Sesuai Ekspektasi
                                     </option>
-                                    <option value="diatas_expektasi"
-                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'diatas_expektasi' ? 'selected' : '' }}>
+                                    <option value="diatas_ekspektasi"
+                                        {{ isset(json_decode($evaluasi->nilai, true)[$loop->index]) && json_decode($evaluasi->nilai, true)[$loop->index] == 'diatas_ekspektasi' ? 'selected' : '' }}>
                                         Di Atas Ekspektasi
                                     </option>
                                 </select>
@@ -384,9 +384,9 @@ toastError("{{ session('error') }}");
 document.addEventListener("DOMContentLoaded", function() {
     // Map nilai ke angka
     const nilaiMap = {
-        dibawah_expektasi: 1,
-        sesuai_expektasi: 2,
-        diatas_expektasi: 3,
+        dibawah_ekspektasi: 1,
+        sesuai_ekspektasi: 2,
+        diatas_ekspektasi: 3,
     };
 
     // Map angka rata-rata ke teks
