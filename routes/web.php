@@ -32,6 +32,7 @@ Route::get('/', function () {
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard.index');
+    Route::post('/uwu', [HomeController::class, 'uwu'])->name('uwu');
     Route::get('/dashboard/atasan/{id}', [HomeController::class, 'getEvaluasiPegawai']);
 
     Route::resource('roles', RoleController::class);
