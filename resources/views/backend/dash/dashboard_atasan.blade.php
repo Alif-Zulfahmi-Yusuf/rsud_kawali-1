@@ -41,10 +41,10 @@
     <div class="col-12 col-lg-9">
         <div class="card shadow-sm rounded">
             <div class="card-header">
-                <form action="{{route('uwu')}}" method="POST">
+                <form action="{{route('getEvaluasiPegawai')}}" method="POST">
                     @csrf
                     <div class="input-group">
-                        <select id="select-pegawai" name="pegawai" class="form-select" required>
+                        <select id="select-pegawai" name="pegawai" class="form-select">
                             <option value="">--Pilih--</option>
                             @foreach($pegawaiList as $pegawai)
                             <option value="{{ $pegawai->user_id }}"

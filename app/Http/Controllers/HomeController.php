@@ -123,18 +123,8 @@ class HomeController extends Controller
         abort(403, 'Akses ditolak');
     }
 
-    public function getEvaluasiPegawai($id, MonthlyUsersChart $chart)
-    {
-        try {
-            $chartData = $chart->build($id);
-            return view('backend.dash.dashboard_atasan', compact('chartData'));
-        } catch (\Exception $e) {
-            Log::error('Gagal mengambil data evaluasi pegawai.', ['exception' => $e]);
-            return redirect()->back()->with('error', 'Gagal mengambil data evaluasi pegawai.');
-        }
-    }
 
-    public function uwu(Request $request)
+    public function getEvaluasiPegawai(Request $request)
     {
         $request->validate([
             'pegawai' => 'required',
