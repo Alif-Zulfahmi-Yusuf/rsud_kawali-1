@@ -88,7 +88,7 @@
                                 src="assets/img/spot-illustrations/dark_500.png" alt="" />
                             <h2 class="text-body-secondary fw-bolder mb-3">Unknow error!</h2>
                             <p class="text-body mb-5">But relax! Our cat is here to play you some music.</p><a
-                                class="btn btn-lg btn-primary" href="{{ route('dashboard') }}">Go Home</a>
+                                class="btn btn-lg btn-primary" href="{{ route('dashboard.index') }}">Go Home</a>
                         </div>
                     </div>
                 </div>
