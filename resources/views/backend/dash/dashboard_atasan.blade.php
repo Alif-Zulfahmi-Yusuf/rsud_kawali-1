@@ -82,12 +82,7 @@
             </div>
             <div class="card-body">
                 {{ $chart->container() }}
-                Keterangan:
-                <ol>
-                    <li>Di Bawah Ekspektasi = 1</li>
-                    <li>Sesuai Ekspektasi = 2</li>
-                    <li>Diatas Ekspektasi = 3</li>
-                </ol>
+                1 . Di Bawah Ekspektasi 2 . Sesuai Ekspektasi 3 . Di Atas Ekspektasi
             </div>
         </div>
     </div>

@@ -85,8 +85,8 @@
                                     <option value="{{ $evaluasi->kualitas[$loop->index] ?? '' }}">
                                         {{ isset($evaluasi->kualitas[$loop->index]) ? ucwords(str_replace('_', ' ', $evaluasi->kualitas[$loop->index])) : 'Pilih' }}
                                     </option>
-                                    <option value="sangat_kuat"
-                                        {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'sangat_kuat' ? 'selected' : '' }}>
+                                    <option value="sangat_kurang"
+                                        {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'sangat_kurang' ? 'selected' : '' }}>
                                         Sangat Kuat</option>
                                     <option value="kurang"
                                         {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'kurang' ? 'selected' : '' }}>

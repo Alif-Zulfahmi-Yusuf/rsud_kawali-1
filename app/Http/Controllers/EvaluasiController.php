@@ -8,10 +8,11 @@ use App\Models\SkpAtasan;
 use Illuminate\Http\Request;
 use App\Models\KegiatanHarian;
 use App\Models\EvaluasiPegawai;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Services\EvaluasiService;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class EvaluasiController extends Controller
 {
@@ -38,18 +39,84 @@ class EvaluasiController extends Controller
             ->with(['skp']) // Pastikan relasi dengan tabel SKP tersedia di model EvaluasiPegawai
             ->get()
             ->map(function ($evaluasi) {
-                // Pastikan kuantitas_output adalah array, jika tidak kosong
-                $nilaiArray = is_array($evaluasi->kuantitas_output) ? $evaluasi->kuantitas_output : [];
-                $rataRata = !empty($nilaiArray) ? array_sum($nilaiArray) / count($nilaiArray) : 0;
+                // Pastikan data laporan berupa array
+                $laporanArray = is_array($evaluasi->laporan) ? $evaluasi->laporan : (is_string($evaluasi->laporan) ? json_decode($evaluasi->laporan, true) : []);
+                $totalAda = collect($laporanArray)->filter(fn($item) => $item === 'ada')->count();
+                $evaluasi->capaian_qty = count($laporanArray) > 0
+                    ? round(($totalAda / count($laporanArray)) * 100, 2) . '%'
+                    : '-';
 
-                // Tentukan kategori berdasarkan rata-rata
-                if ($rataRata < 1.5) {
-                    $evaluasi->nilai = 'dibawah_ekspetasi';
-                } elseif ($rataRata <= 2.5) {
-                    $evaluasi->nilai = 'sesuai_ekspetasi';
+                // Pastikan data kualitas berupa array
+                $kualitasArray = is_array($evaluasi->kualitas) ? $evaluasi->kualitas : (is_string($evaluasi->kualitas) ? json_decode($evaluasi->kualitas, true) : []);
+                $nilaiMap = [
+                    'sangat_kurang' => 20,
+                    'kurang' => 40,
+                    'butuh_perbaikan' => 60,
+                    'baik' => 80,
+                    'sangat_baik' => 100,
+                ];
+                $mappedValues = collect($kualitasArray)->map(fn($item) => $nilaiMap[$item] ?? 0);
+                $evaluasi->capaian_qlty = $mappedValues->isNotEmpty()
+                    ? round($mappedValues->avg(), 2)
+                    : '-';
+
+                // Perhitungan total waktu
+                $totalWaktu = DB::table('kegiatan_harians')
+                    ->where('user_id', $evaluasi->user_id)
+                    ->where('rencana_pegawai_id', $evaluasi->rencana_pegawai_id)
+                    ->whereMonth('tanggal', now()->month)
+                    ->whereYear('tanggal', now()->year)
+                    ->get()
+                    ->reduce(function ($carry, $item) {
+                        if (isset($item->waktu_mulai, $item->waktu_selesai)) {
+                            $carry += \Carbon\Carbon::parse($item->waktu_mulai)
+                                ->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai));
+                        }
+                        return $carry;
+                    }, 0);
+                $evaluasi->capaian_wkt = $totalWaktu . ' Jam';
+
+                // Perhitungan rating
+                $evaluasi->rating = $evaluasi->capaian_qlty >= 80
+                    ? 'diatas_ekspektasi'
+                    : ($evaluasi->capaian_qlty >= 60 ? 'sesuai_ekspektasi' : 'dibawah_ekspektasi');
+
+                // Pastikan data nilai berupa array
+                $nilaiArray = is_array($evaluasi->nilai) ? $evaluasi->nilai : (is_string($evaluasi->nilai) ? json_decode($evaluasi->nilai, true) : []);
+                $mappedNilai = collect($nilaiArray)->map(fn($item) => $nilaiMap[$item] ?? 0);
+                $averageNilai = $mappedNilai->isNotEmpty() ? $mappedNilai->avg() : 0;
+
+                // Map rata-rata ke teks
+                if ($averageNilai < 40) {
+                    $evaluasi->nilai = 'dibawah_ekspektasi';
+                } elseif ($averageNilai <= 80) {
+                    $evaluasi->nilai = 'sesuai_ekspektasi';
                 } else {
-                    $evaluasi->nilai = 'diatas_ekspetasi';
+                    $evaluasi->nilai = 'diatas_ekspektasi';
                 }
+
+                // Map perilaku kerja
+                $perilakuKerjaData = collect([$evaluasi->nilai])->map(function ($nilai) {
+                    $nilaiMap = [
+                        'dibawah_ekspektasi' => 1,
+                        'sesuai_ekspektasi' => 2,
+                        'diatas_ekspektasi' => 3,
+                    ];
+
+                    $mappedValues = collect([$nilai])->map(fn($item) => $nilaiMap[$item] ?? 0)->filter(fn($val) => $val > 0);
+
+                    $average = $mappedValues->isNotEmpty() ? $mappedValues->avg() : 0;
+
+                    if ($average < 1.5) {
+                        return "Di Bawah Ekspektasi";
+                    } elseif ($average <= 2.5) {
+                        return "Sesuai Ekspektasi";
+                    } else {
+                        return "Di Atas Ekspektasi";
+                    }
+                });
+
+                $evaluasi->perilaku_kerja = $perilakuKerjaData->first();
 
                 return $evaluasi;
             });
@@ -185,9 +252,10 @@ class EvaluasiController extends Controller
             $dataRencanaAksi = $evaluasiData['dataRencanaAksi'];
             $groupedDataEvaluasi = $evaluasiData['groupedDataEvaluasi'];
             $filteredKegiatanHarian = $evaluasiData['filteredKegiatanHarian'];
+            $totalWaktu = $evaluasiData['totalWaktu'];
 
             // Load view with data
-            $pdf = Pdf::loadView('backend.evaluasi-pegawai.pdf', compact('evaluasi', 'dataRencanaAksi', 'groupedDataEvaluasi', 'filteredKegiatanHarian'))
+            $pdf = Pdf::loadView('backend.evaluasi-pegawai.pdf', compact('evaluasi', 'dataRencanaAksi', 'groupedDataEvaluasi', 'filteredKegiatanHarian', 'totalWaktu'))
                 ->setPaper('A4', 'portrait');
 
             // Stream or Download
