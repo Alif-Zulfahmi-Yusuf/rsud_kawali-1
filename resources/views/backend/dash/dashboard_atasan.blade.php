@@ -6,6 +6,26 @@
 {{ __('Dashboard Atasan') }}
 @endsection
 
+@push('css')
+<style>
+.profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.card-body hr {
+    margin: 1rem 0;
+}
+
+@media (max-width: 800px) {
+    .echart-basic-bar-chart-example {
+        min-height: 250px;
+    }
+}
+</style>
+@endpush
+
 @section('content')
 <div class="row g-4 mb-4">
 
@@ -55,25 +75,40 @@
                             @endforeach
                         </select>
                         <button type="submit" class="btn btn-primary">
-                            submit
+                            Submit
                         </button>
                     </div>
                 </form>
             </div>
             <div class="card-body">
-                <div class="p-6">
-                    {{ $chart->container() }}
-                </div>
+                {{ $chart->container() }}
             </div>
         </div>
     </div>
-
 
 </div>
 @endsection
 
 @push('js')
-
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="{{ $chart->cdn() }}"></script>
 {{ $chart->script() }}
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const categories = ['Di Bawah Ekspektasi', 'Sesuai Ekspektasi', 'Di Atas Ekspektasi'];
+
+    document.addEventListener('apexcharts:rendered', function() {
+        ApexCharts.exec('{{ $chart->id }}', 'updateOptions', {
+            yaxis: {
+                labels: {
+                    formatter: function(value) {
+                        return categories[value - 1] || 'Tidak Ada Data';
+                    }
+                }
+            }
+        });
+    });
+});
+</script>
 @endpush

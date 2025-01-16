@@ -85,15 +85,10 @@ class MonthlyUsersChart
             ->setTitle('Evaluasi Pegawai: ' . $pegawai->name)
             ->setSubtitle('Performa dalam 12 Bulan Terakhir')
             ->addData('Hasil Kerja', $hasilKerjaData)
-            ->addData('Perilaku Kerja', $perilakuKerjaData->toArray())
+            ->addData('Perilaku Kerja', json_decode($perilakuKerjaData))
             ->setXAxis($months)
             ->setGrid(false)
             ->setDataLabels(false)
-            ->setColors(['#007bff', '#28a745'])
-            ->setMarkers([
-                'Di Bawah Ekspektasi (1)',
-                'Sesuai Ekspektasi (2)',
-                'Di Atas Ekspektasi (3)'
-            ]);
+            ->setColors(['#007bff', '#28a745']);
     }
 }
