@@ -80,15 +80,65 @@ class MonthlyUsersChart
             $hasilKerjaData[] = 'Tidak Ada Data';
             $perilakuKerjaData[] = 'Tidak Ada Data';
         }
+        // dd($hasilKerjaData);
+        // dd($perilakuKerjaData);
+
+        $performanceResults = [
+            'January' => 'Sesuai Ekspektasi',
+            'February' => 'Di Atas Ekspektasi',
+            'March' => 'Sesuai Ekspektasi',
+            'April' => 'Di Bawah Ekspektasi',
+            'May' => 'Sesuai Ekspektasi',
+            'June' => 'Di Atas Ekspektasi',
+            'July' => 'Sesuai Ekspektasi',
+            'August' => 'Di Bawah Ekspektasi',
+            'September' => 'Sesuai Ekspektasi',
+            'October' => 'Di Atas Ekspektasi',
+            'November' => 'Sesuai Ekspektasi',
+            'December' => 'Di Bawah Ekspektasi',
+        ];
+
+        // Prepare data for the chart
+        $months = array_keys($performanceResults);
+        $hasilKerja = [];
+        $perilakuKerja = []; // Assuming you have a similar array for behavior
+
+        // Convert qualitative data to numerical values for the chart
+        foreach ($hasilKerjaData as $result) {
+            switch ($result) {
+                case 'Sesuai Ekspektasi':
+                    $hasilKerja[] = 2; // Assign a numerical value
+                    break;
+                case 'Di Atas Ekspektasi':
+                    $hasilKerja[] = 3; // Assign a numerical value
+                    break;
+                case 'Di Bawah Ekspektasi':
+                    $hasilKerja[] = 1; // Assign a numerical value
+                    break;
+            }
+        }
+
+        foreach ($perilakuKerjaData as $result) {
+            switch ($result) {
+                case 'Sesuai Ekspektasi':
+                    $perilakuKerja[] = 2; // Assign a numerical value
+                    break;
+                case 'Di Atas Ekspektasi':
+                    $perilakuKerja[] = 3; // Assign a numerical value
+                    break;
+                case 'Di Bawah Ekspektasi':
+                    $perilakuKerja[] = 1; // Assign a numerical value
+                    break;
+            }
+        }
 
         return $this->chart->barChart()
             ->setTitle('Evaluasi Pegawai: ' . $pegawai->name)
             ->setSubtitle('Performa dalam 12 Bulan Terakhir')
-            ->addData('Hasil Kerja', $hasilKerjaData)
-            ->addData('Perilaku Kerja', json_decode($perilakuKerjaData))
+            ->addData('Hasil Kerja', $hasilKerja) // 12 Data
+            ->addData('Perilaku Kerja', $perilakuKerja) // 12 Data
             ->setXAxis($months)
             ->setGrid(false)
-            ->setDataLabels(false)
             ->setColors(['#007bff', '#28a745']);
     }
 }
