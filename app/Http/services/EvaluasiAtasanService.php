@@ -114,17 +114,18 @@ class EvaluasiAtasanService
                     'rencana_hasil_kerja_pegawai.id as pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as rencana_pegawai',
                     'rencana_hasil_kerja.rencana as rencana_pimpinan',
-                    'indikator.indikator_kinerja as nama_indikator',
+                    DB::raw('GROUP_CONCAT(indikator.indikator_kinerja SEPARATOR ", ") as nama_indikator'),
                     'indikator.satuan',
                     'indikator.aspek',
                     'indikator.target_minimum',
                     'indikator.target_maksimum',
-                    'kegiatan_harians.waktu_mulai',
-                    'kegiatan_harians.waktu_selesai'
+                    DB::raw('MIN(kegiatan_harians.waktu_mulai) as waktu_mulai'),
+                    DB::raw('MAX(kegiatan_harians.waktu_selesai) as waktu_selesai')
                 )
                 ->where('rencana_hasil_kerja_pegawai.user_id', $userId)
                 ->whereMonth('kegiatan_harians.tanggal', $bulan)
                 ->whereYear('kegiatan_harians.tanggal', $tahun)
+                ->groupBy('pegawai_id', 'rencana_pegawai', 'rencana_pimpinan', 'indikator.satuan', 'indikator.aspek', 'indikator.target_minimum', 'indikator.target_maksimum') // Kelompokkan sesuai kebutuhan
                 ->get()
                 ->groupBy(['rencana_pimpinan', 'rencana_pegawai']);
 

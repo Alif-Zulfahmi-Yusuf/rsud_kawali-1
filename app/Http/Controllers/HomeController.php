@@ -120,6 +120,11 @@ class HomeController extends Controller
             return view('backend.dash.dashboard_atasan', compact('pegawaiList', 'chart'));
         }
 
+        if ($user->hasRole('Admin')) {
+
+            return view('backend.dash.dashboard_admin');
+        }
+
         abort(403, 'Akses ditolak');
     }
 

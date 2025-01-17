@@ -87,7 +87,7 @@
                                     </option>
                                     <option value="sangat_kurang"
                                         {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'sangat_kurang' ? 'selected' : '' }}>
-                                        Sangat Kuat</option>
+                                        Sangat Kurang</option>
                                     <option value="kurang"
                                         {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'kurang' ? 'selected' : '' }}>
                                         Kurang</option>
@@ -170,9 +170,10 @@
                                 <input type="text" name="realisasi[]" class="form-control"
                                     value="{{ $evaluasi->realisasi[$i++] ?? '' }}">
                             </td>
-                            <td class="align-middle">
-                                <input type="text" name="umpan_balik[]" class="form-control"
-                                    value="{{ $umpanIndit[$k++] ?? '' }}">
+                            <td class="text-left align-middle">
+                                <textarea name="umpan_balik[]" id="" class="form-control">
+                                {{ isset(json_decode($evaluasi->umpan_balik, true)[$k]) ? json_decode($evaluasi->umpan_balik, true)[$k] : '' }}
+                                </textarea>
                             </td>
                         </tr>
                         @endforeach
@@ -264,7 +265,7 @@
                                     </option>
                                 </select>
                             </td>
-                            <td class="align-middle">
+                            <td class="text-left align-middle">
                                 <textarea name="umpan_balik_berkelanjutan[]" id="" class="form-control">
                                 {{ isset(json_decode($evaluasi->umpan_balik_berkelanjutan, true)[$loop->index]) ? json_decode($evaluasi->umpan_balik_berkelanjutan, true)[$loop->index] : '' }}
                                 </textarea>

@@ -180,7 +180,7 @@
                                         </option>
                                         <option value="sangat_kurang"
                                             {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'sangat_kurang' ? 'selected' : '' }}>
-                                            Sangat Kuat</option>
+                                            Sangat Kurang</option>
                                         <option value="kurang"
                                             {{ isset($evaluasi->kualitas[$loop->index]) && $evaluasi->kualitas[$loop->index] == 'kurang' ? 'selected' : '' }}>
                                             Kurang</option>
