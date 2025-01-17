@@ -50,6 +50,17 @@
         text-align: center;
     }
 
+    #tableTTD {
+        width: 100%;
+        border-collapse: collapse;
+        page-break-inside: avoid;
+        border: 0px;
+    }
+
+    #info {
+        font-size: 11px;
+    }
+
     @media print {
         @page {
             size: A4;
@@ -67,11 +78,40 @@
     <h1 class="text-center">
         LAPORAN KINERJA BULAN {{ \Carbon\Carbon::parse($evaluasi->bulan)->translatedFormat('F Y') }}
     </h1>
-    <p>Nama: {{ $evaluasi->user->name }}</p>
-    <p>NIP: {{ $evaluasi->user->nip }}</p>
-    <p>Golongan: {{ $evaluasi->user->pangkat->name }}</p>
-    <p>Atasan Langung: {{ $evaluasi->user->atasan->name }}</p>
-
+    <table id="info">
+        <tr>
+            <td style="width: 20%; border: 0px solid #000;">
+                NAMA
+            </td>
+            <td style="border: 0px solid #000;">
+                {{ $evaluasi->user->name }}
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 20%; border: 0px solid #000;">
+                NIP
+            </td>
+            <td style="border: 0px solid #000;">
+                {{ $evaluasi->user->nip }}
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 20%; border: 0px solid #000;">
+                GOLONGAN
+            </td>
+            <td style="border: 0px solid #000;">
+                {{ $evaluasi->user->pangkat->name }}
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 20%; border: 0px solid #000;">
+                ATASAN LANGUNG
+            </td>
+            <td style="border: 0px solid #000;">
+                {{ $evaluasi->user->atasan->name }}
+            </td>
+        </tr>
+    </table>
     <h3>A. Capaian Kinerja Bulanan</h3>
     <table>
         <thead>
@@ -179,22 +219,28 @@
             @endforeach
         </tbody>
     </table>
-
-    <div style="display: flex; justify-content: space-between;">
-        <div>
-            <p>Pejabat Penilai,</p>
-            <br>
-            <p>{{ Auth::user()->atasan->name }}</p>
-            <p>{{ Auth::user()->atasan->nip }}</p>
-        </div>
-        <div style="text-align: right;">
-            <p>Ciamis, {{ \Carbon\Carbon::parse($evaluasi->tanggal_capaian)->translatedFormat('Y-m-d') ?? '' }}</p>
-            <p>Pegawai Negri Sipil Yang Dinilai</p>
-            <br>
-            <p>{{ Auth::user()->name }}</p>
-            <p>{{ Auth::user()->nip }}</p>
-        </div>
-    </div>
+    <table id="tableTTD">
+        <tr>
+            <td style="text-align: center; width: 45%; border: 0px solid #000; padding-top: 35px;">
+                <p style="margin: 0;">Pejabat Penilai, </p>
+                <div style="margin-top: 85px;">
+                    <p style="font-weight: bold; text-transform: uppercase; margin: 0;">{{ Auth::user()->atasan->name }}
+                    </p>
+                    <p style="margin: 0;">NIP: {{ Auth::user()->atasan->nip }}</p>
+                </div>
+            </td>
+            <td style="text-align: center; width: 45%; border: 0px solid #000; padding-top: 20px;">
+                <p style="margin: 0;">Ciamis,
+                    {{ \Carbon\Carbon::parse($evaluasi->tanggal_capaian)->translatedFormat('d F Y') ?? '' }}
+                </p>
+                <p style="margin: 0;">Pegawai Negeri Sipil Yang Dinilai</p>
+                <div style="margin-top: 80px;">
+                    <p style="font-weight: bold; text-transform: uppercase; margin: 0;">{{ Auth::user()->name }}</p>
+                    <p style="margin: 0;">NIP: {{ Auth::user()->nip }}</p>
+                </div>
+            </td>
+        </tr>
+    </table>
 </body>
 
 </html>

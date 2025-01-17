@@ -6,6 +6,26 @@
 {{ __('Dashboard Atasan') }}
 @endsection
 
+@push('css')
+<style>
+.profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.card-body hr {
+    margin: 1rem 0;
+}
+
+@media (max-width: 800px) {
+    .echart-basic-bar-chart-example {
+        min-height: 250px;
+    }
+}
+</style>
+@endpush
+
 @section('content')
 <div class="row g-4 mb-4">
 
@@ -41,23 +61,28 @@
     <div class="col-12 col-lg-9">
         <div class="card shadow-sm rounded">
             <div class="card-header">
-                <h6 class="m-0">Pilih Pegawai</h6>
+                <form action="{{route('getEvaluasiPegawai')}}" method="POST">
+                    @csrf
+                    <div class="input-group">
+                        <select id="select-pegawai" name="pegawai" class="form-select">
+                            <option value="">--Pilih--</option>
+                            @foreach($pegawaiList as $pegawai)
+                            <option value="{{ $pegawai->user_id }}"
+                                {{ old('pegawai', session('pegawai')) == $pegawai->user_id ? 'selected' : '' }}>
+                                {{ $pegawai->user->name }} -
+                                {{ $pegawai->user->nip }}
+                            </option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </div>
+                </form>
             </div>
             <div class="card-body">
-                <select id="select-pegawai" class="form-select">
-                    <option value="">--Pilih--</option>
-                    @foreach($pegawaiList as $pegawai)
-                    <option value="{{ $pegawai->user_id }}">
-                        {{ $pegawai->user->name }} -
-                        {{ $pegawai->user->nip }}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        <div class="col-12 mt-4">
-            <div id="grafik-container" class="mt-4">
-                <p class="text-center text-muted">Pilih pegawai untuk melihat grafik evaluasi.</p>
+                {{ $chart->container() }}
+                1 . Di Bawah Ekspektasi 2 . Sesuai Ekspektasi 3 . Di Atas Ekspektasi
             </div>
         </div>
     </div>
@@ -66,6 +91,25 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('assets/backend/js/dash_atasan.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="{{ $chart->cdn() }}"></script>
+{{ $chart->script() }}
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const categories = ['Di Bawah Ekspektasi', 'Sesuai Ekspektasi', 'Di Atas Ekspektasi'];
+
+    document.addEventListener('apexcharts:rendered', function() {
+        ApexCharts.exec('{{ $chart->id }}', 'updateOptions', {
+            yaxis: {
+                labels: {
+                    formatter: function(value) {
+                        return categories[value - 1] || 'Tidak Ada Data';
+                    }
+                }
+            }
+        });
+    });
+});
+</script>
 @endpush

@@ -223,12 +223,12 @@
 <script src="{{ asset('/assets/backend/js/evaluasi-pegawai.js') }}"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 <script>
-    @if(session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
+@if(session('success'))
+toastSuccess("{{ session('success') }}");
+@endif
 
-    @if(session('error'))
-    toastError("{{ session('error') }}");
-    @endif
+@if(session('error'))
+toastError("{{ session('error') }}");
+@endif
 </script>
 @endpush

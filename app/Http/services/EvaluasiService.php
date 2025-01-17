@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use Illuminate\Support\Carbon;
 use App\Models\EvaluasiPegawai;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -60,6 +61,17 @@ class EvaluasiService
                 ->whereMonth('tanggal', $bulan)   // Filter berdasarkan bulan
                 ->whereYear('tanggal', $tahun)    // Filter berdasarkan tahun
                 ->get();
+
+            // Hitung total waktu (dalam jam)
+            $totalWaktu = 0;
+
+            foreach ($filteredKegiatanHarian as $item) {
+                if (isset($item->waktu_mulai, $item->waktu_selesai)) {
+                    $waktuMulai = Carbon::parse($item->waktu_mulai);
+                    $waktuSelesai = Carbon::parse($item->waktu_selesai);
+                    $totalWaktu += $waktuMulai->diffInHours($waktuSelesai);
+                }
+            }
 
             if ($filteredKegiatanHarian->isEmpty()) {
                 throw new \Exception('Tidak ada kegiatan harian yang ditemukan pada bulan dan tahun ini.');
@@ -122,24 +134,26 @@ class EvaluasiService
                     'rencana_hasil_kerja_pegawai.id as pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as rencana_pegawai',
                     'rencana_hasil_kerja.rencana as rencana_pimpinan',
-                    'indikator.indikator_kinerja as nama_indikator',
+                    DB::raw('GROUP_CONCAT(indikator.indikator_kinerja SEPARATOR ", ") as nama_indikator'),
                     'indikator.satuan',
                     'indikator.aspek',
                     'indikator.target_minimum',
                     'indikator.target_maksimum',
-                    'kegiatan_harians.waktu_mulai',
-                    'kegiatan_harians.waktu_selesai'
+                    DB::raw('MIN(kegiatan_harians.waktu_mulai) as waktu_mulai'),
+                    DB::raw('MAX(kegiatan_harians.waktu_selesai) as waktu_selesai')
                 )
                 ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId)
                 ->whereMonth('kegiatan_harians.tanggal', $bulan)
                 ->whereYear('kegiatan_harians.tanggal', $tahun)
+                ->groupBy('pegawai_id', 'rencana_pegawai', 'rencana_pimpinan', 'indikator.satuan', 'indikator.aspek', 'indikator.target_minimum', 'indikator.target_maksimum') // Kelompokkan sesuai kebutuhan
                 ->get()
                 ->groupBy(['rencana_pimpinan', 'rencana_pegawai']);
 
 
 
 
-            return compact('dataRencanaAksi', 'groupedDataEvaluasi', 'filteredKegiatanHarian');
+
+            return compact('dataRencanaAksi', 'groupedDataEvaluasi', 'filteredKegiatanHarian', 'totalWaktu');
         } catch (\Exception $e) {
             // Log error jika terjadi masalah
             Log::error('Gagal mendapatkan detail evaluasi', [

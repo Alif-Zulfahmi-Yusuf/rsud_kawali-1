@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\EvaluasiPegawai;
-
 use function PHPSTORM_META\map;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Charts\MonthlyUsersChart;
 
 class HomeController extends Controller
 {
@@ -27,8 +27,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(MonthlyUsersChart $chart)
     {
+        $chart = $chart->build();
         $user = Auth::user();
 
         // Bagian Pegawai
@@ -88,6 +89,7 @@ class HomeController extends Controller
             return view('backend.dash.dashboard', [
                 'hasilKerjaData' => json_encode($hasilKerjaData),
                 'perilakuKerjaData' => json_encode($perilakuKerjaData),
+                'chart' => $chart
             ]);
         }
 
@@ -115,76 +117,21 @@ class HomeController extends Controller
                 ]);
             }
 
-            return view('backend.dash.dashboard_atasan', compact('pegawaiList'));
+            return view('backend.dash.dashboard_atasan', compact('pegawaiList', 'chart'));
         }
 
         abort(403, 'Akses ditolak');
     }
 
-    public function getEvaluasiPegawai($id)
+
+    public function getEvaluasiPegawai(Request $request)
     {
-        try {
-            $evaluasi = EvaluasiPegawai::where('user_id', $id)
-                ->whereRaw('bulan >= DATE_SUB(NOW(), INTERVAL 12 MONTH)')
-                ->selectRaw('MONTH(bulan) as month, YEAR(bulan) as year, nilai, rating')
-                ->first();
+        $request->validate([
+            'pegawai' => 'required',
+        ]);
 
-            // Inisialisasi data default jika evaluasi tidak ditemukan
-            $hasilKerjaData = [];
-            $perilakuKerjaData = collect();
+        session()->put('pegawai', $request->pegawai);
 
-            if ($evaluasi) {
-                // Proses data hasil kerja
-                if (substr($evaluasi->rating, 0, 2) == 'di') {
-                    $hasilKerjaData[] = 'Di ' . ucwords(str_replace('_', ' ', substr($evaluasi->rating, 2)));
-                } else {
-                    $hasilKerjaData[] = ucwords(str_replace('_', ' ', $evaluasi->rating));
-                }
-
-                // Proses data perilaku kerja
-                $perilakuKerjaData = collect([$evaluasi->nilai])->map(function ($nilai) {
-                    $nilaiMap = [
-                        'dibawah_ekspektasi' => 1,
-                        'sesuai_ekspektasi' => 2,
-                        'diatas_ekspektasi' => 3,
-                    ];
-
-                    // Ubah nilai JSON atau string menjadi array nilai
-                    $nilaiArray = is_array(json_decode($nilai, true)) ? json_decode($nilai, true) : [$nilai];
-
-                    // Map nilai ke angka menggunakan $nilaiMap
-                    $mappedValues = collect($nilaiArray)->map(function ($item) use ($nilaiMap) {
-                        return $nilaiMap[$item] ?? 0; // Default 0 jika nilai tidak valid
-                    })->filter(fn($val) => $val > 0); // Hanya gunakan nilai valid (> 0)
-
-                    // Hitung rata-rata
-                    $average = $mappedValues->isNotEmpty() ? $mappedValues->avg() : 0;
-
-                    // Map rata-rata ke teks
-                    if ($average < 1.5) {
-                        return "Di Bawah Ekspektasi";
-                    } elseif ($average <= 2.5) {
-                        return "Sesuai Ekspektasi";
-                    } else {
-                        return "Di Atas Ekspektasi";
-                    }
-                });
-            } else {
-                // Jika tidak ada data evaluasi, tambahkan placeholder data kosong
-                $hasilKerjaData[] = 'Tidak Ada Data';
-                $perilakuKerjaData[] = 'Tidak Ada Data';
-            }
-
-            return view('backend.dash.dashboard_atasan', [
-                'hasilKerjaData' => json_encode($hasilKerjaData),
-                'perilakuKerjaData' => json_encode($perilakuKerjaData),
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Gagal mengambil data evaluasi pegawai.', [
-                'exception' => $e,
-            ]);
-
-            return redirect()->back()->with('error', 'Gagal mengambil data evaluasi pegawai. Silakan coba lagi.');
-        }
+        return redirect()->route('dashboard.index');
     }
 }
