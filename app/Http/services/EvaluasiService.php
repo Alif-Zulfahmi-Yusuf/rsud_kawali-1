@@ -78,7 +78,6 @@ class EvaluasiService
             }
 
 
-            // Subquery untuk indikator dengan filter pembagian target_minimum
             $indikatorSubquery = DB::table('rencana_indikator_kinerja')
                 ->selectRaw('
                     rencana_atasan_id, 
@@ -86,20 +85,32 @@ class EvaluasiService
                     satuan, target_maksimum, aspek, 
                     target_minimum,
                     CASE 
-                    WHEN target_minimum BETWEEN 1 AND 12 THEN CEIL(MONTH(CURRENT_DATE) / (12 / target_minimum))
-                    ELSE 0 
-                END as bulan_muncul
+                        WHEN target_minimum BETWEEN 1 AND 12 THEN CEIL(MONTH(CURRENT_DATE) / (12 / target_minimum))
+                        ELSE 0 
+                    END as bulan_muncul
                 ')
                 ->where('user_id', $currentUserId)
+                ->where('satuan', 'laporan') // Filter hanya untuk satuan "laporan"
+                ->whereBetween('target_minimum', [1, 12]) // Filter target minimum dalam rentang 1-12
                 ->groupBy('rencana_atasan_id', 'satuan', 'target_minimum', 'target_maksimum', 'aspek');
 
-            // Query utama untuk data rencana aksi dengan filter
+
+            // Subquery untuk total waktu berdasarkan rencana pegawai dalam bulan tertentu
+            $totalWaktuSubquery = DB::table('kegiatan_harians')
+                ->selectRaw('
+                    rencana_pegawai_id,
+                        SUM(TIMESTAMPDIFF(HOUR, waktu_mulai, waktu_selesai)) as total_waktu
+                ')
+                ->whereMonth('tanggal', $bulan)
+                ->whereYear('tanggal', $tahun)
+                ->groupBy('rencana_pegawai_id');
+
             $dataRencanaAksi = DB::table('rencana_hasil_kerja_pegawai')
                 ->join('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
                 ->leftJoinSub($indikatorSubquery, 'indikator', 'rencana_hasil_kerja.id', '=', 'indikator.rencana_atasan_id')
+                ->leftJoinSub($totalWaktuSubquery, 'total_waktu', 'rencana_hasil_kerja_pegawai.id', '=', 'total_waktu.rencana_pegawai_id')
                 ->leftJoin('evaluasi_pegawais', 'evaluasi_pegawais.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->leftJoin('realisasi_rencanas', 'realisasi_rencanas.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
-                ->leftJoin('kegiatan_harians', 'kegiatan_harians.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->select(
                     'rencana_hasil_kerja_pegawai.id as rencana_pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as nama_rencana_pegawai',
@@ -111,27 +122,13 @@ class EvaluasiService
                     'evaluasi_pegawais.id as evaluasi_pegawai_id',
                     'realisasi_rencanas.id as realisasi_rencana_id',
                     'realisasi_rencanas.file as file_realisasi',
-                    DB::raw('MIN(kegiatan_harians.waktu_mulai) as waktu_mulai'), // Waktu mulai terendah
-                    DB::raw('MAX(kegiatan_harians.waktu_selesai) as waktu_selesai') // Waktu selesai tertinggi
+                    'total_waktu.total_waktu as waktu_total' // Total waktu yang dihitung
                 )
                 ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId)
                 ->where(function ($query) use ($bulan) {
                     $query->whereRaw('indikator.target_minimum = 12 AND indikator.satuan = "laporan" AND MONTH(CURRENT_DATE) = ?', [$bulan])
                         ->orWhereRaw('indikator.target_minimum BETWEEN 1 AND 12 AND indikator.bulan_muncul = CEIL(? / (12 / indikator.target_minimum))', [$bulan]);
                 })
-                ->whereYear('kegiatan_harians.tanggal', $tahun)
-                ->groupBy( // Kelompokkan berdasarkan rencana pegawai
-                    'rencana_pegawai_id',
-                    'nama_rencana_pegawai',
-                    'nama_rencana_pimpinan',
-                    'indikator.indikator_kinerja',
-                    'indikator.satuan',
-                    'indikator.target_minimum',
-                    'indikator.bulan_muncul',
-                    'evaluasi_pegawais.id',
-                    'realisasi_rencanas.id',
-                    'realisasi_rencanas.file'
-                )
                 ->get();
 
 

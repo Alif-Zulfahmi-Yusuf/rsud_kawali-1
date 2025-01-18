@@ -103,9 +103,7 @@
                                 </select>
                             </td>
                             <td class="text-center align-middle">
-                                {{ isset($item->waktu_mulai, $item->waktu_selesai) 
-                                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
-                                    : '-' }}
+                                {{ $item->waktu_total ? $item->waktu_total . ' Jam' : '-' }}
                             </td>
                             <td class="text-center align-middle">
 

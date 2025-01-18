@@ -150,9 +150,15 @@
                                 -
                                 @endif
                             </td>
-                            <td class="text-center align-middle">{{ $evaluasi->capaian_qty }}</td>
-                            <td class="text-center align-middle">{{ $evaluasi->capaian_qlty }}</td>
-                            <td class="text-center align-middle">{{ $evaluasi->capaian_wkt }}</td>
+                            <td class="text-center align-middle">
+                                {{ isset($evaluasi->capaian_qty) ? $evaluasi->capaian_qty : '-' }}
+                            </td>
+                            <td class="text-center align-middle">
+                                {{ isset($evaluasi->capaian_qlty) ? $evaluasi->capaian_qlty : '-' }}
+                            </td>
+                            <td class="text-center align-middle">
+                                {{ isset($evaluasi->capaian_wkt) ? $evaluasi->capaian_wkt : '-' }}
+                            </td>
                             <td class="text-center align-middle">{{ $evaluasi->ber }}</td>
                             <td class="text-center align-middle">{{ $evaluasi->a }}</td>
                             <td class="text-center align-middle">{{ $evaluasi->k }}</td>

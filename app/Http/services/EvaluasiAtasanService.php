@@ -60,30 +60,40 @@ class EvaluasiAtasanService
             }
 
 
-            // Subquery untuk indikator dengan filter pembagian target_minimum
             $indikatorSubquery = DB::table('rencana_indikator_kinerja')
                 ->selectRaw('
                     rencana_atasan_id, 
-                    GROUP_CONCAT(indikator_kinerja SEPARATOR ", ") as indikator_kinerja, 
-                    satuan,target_maksimum,aspek, 
+                    GROUP_CONCAT(DISTINCT indikator_kinerja SEPARATOR ", ") as indikator_kinerja, 
+                    satuan, target_maksimum, aspek, 
                     target_minimum,
                     CASE 
-                        WHEN target_minimum = 12 AND satuan = "laporan" THEN 1 
-                        WHEN target_minimum = 4 AND satuan = "laporan" THEN CEIL(MONTH(CURRENT_DATE) / 3) 
-                    ELSE 0 
+                        WHEN target_minimum BETWEEN 1 AND 12 THEN CEIL(MONTH(CURRENT_DATE) / (12 / target_minimum))
+                        ELSE 0 
                     END as bulan_muncul
                 ')
                 ->where('user_id', $userId)
+                ->where('satuan', 'laporan') // Filter hanya untuk satuan "laporan"
+                ->whereBetween('target_minimum', [1, 12]) // Filter target minimum dalam rentang 1-12
                 ->groupBy('rencana_atasan_id', 'satuan', 'target_minimum', 'target_maksimum', 'aspek');
 
 
-            // Query utama untuk data rencana aksi dengan filter
+            // Subquery untuk total waktu berdasarkan rencana pegawai dalam bulan tertentu
+            $totalWaktuSubquery = DB::table('kegiatan_harians')
+                ->selectRaw('
+                    rencana_pegawai_id,
+                        SUM(TIMESTAMPDIFF(HOUR, waktu_mulai, waktu_selesai)) as total_waktu
+                ')
+                ->whereMonth('tanggal', $bulan)
+                ->whereYear('tanggal', $tahun)
+                ->groupBy('rencana_pegawai_id');
+
+
             $dataRencanaAksi = DB::table('rencana_hasil_kerja_pegawai')
                 ->join('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
                 ->leftJoinSub($indikatorSubquery, 'indikator', 'rencana_hasil_kerja.id', '=', 'indikator.rencana_atasan_id')
+                ->leftJoinSub($totalWaktuSubquery, 'total_waktu', 'rencana_hasil_kerja_pegawai.id', '=', 'total_waktu.rencana_pegawai_id')
                 ->leftJoin('evaluasi_pegawais', 'evaluasi_pegawais.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->leftJoin('realisasi_rencanas', 'realisasi_rencanas.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
-                ->leftJoin('kegiatan_harians', 'kegiatan_harians.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->select(
                     'rencana_hasil_kerja_pegawai.id as rencana_pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as nama_rencana_pegawai',
@@ -95,16 +105,15 @@ class EvaluasiAtasanService
                     'evaluasi_pegawais.id as evaluasi_pegawai_id',
                     'realisasi_rencanas.id as realisasi_rencana_id',
                     'realisasi_rencanas.file as file_realisasi',
-                    'kegiatan_harians.waktu_mulai',
-                    'kegiatan_harians.waktu_selesai'
+                    'total_waktu.total_waktu as waktu_total' // Total waktu yang dihitung
                 )
                 ->where('rencana_hasil_kerja_pegawai.user_id', $userId)
                 ->where(function ($query) use ($bulan) {
                     $query->whereRaw('indikator.target_minimum = 12 AND indikator.satuan = "laporan" AND MONTH(CURRENT_DATE) = ?', [$bulan])
-                        ->orWhereRaw('indikator.target_minimum = 4 AND indikator.satuan = "laporan" AND CEIL(? / 3) = indikator.bulan_muncul', [$bulan]);
+                        ->orWhereRaw('indikator.target_minimum BETWEEN 1 AND 12 AND indikator.bulan_muncul = CEIL(? / (12 / indikator.target_minimum))', [$bulan]);
                 })
-                ->whereYear('kegiatan_harians.tanggal', $tahun)
                 ->get();
+
 
             $groupedDataEvaluasi = DB::table('rencana_hasil_kerja_pegawai')
                 ->leftJoin('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
