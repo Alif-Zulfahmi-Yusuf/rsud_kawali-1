@@ -34,7 +34,7 @@
                 <h4 class="card-title">Create New Pangkat</h4>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('pangkat.store') }}">
+                <form method="POST" action="{{ route('pangkat.store') }}" class="needs-validation" novalidate="">
                     @csrf
 
                     <div class="row">

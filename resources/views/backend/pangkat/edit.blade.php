@@ -36,7 +36,8 @@
                 <h4 class="card-title">Edit Pangkat</h4>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('pangkat.update', $pangkat->uuid) }}">
+                <form method="POST" action="{{ route('pangkat.update', $pangkat->uuid) }}" class="needs-validation"
+                    novalidate="">
                     @csrf
                     @method('PUT')
 
