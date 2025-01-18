@@ -115,26 +115,48 @@ class EvaluasiAtasanService
                 ->get();
 
 
+            // Query utama untuk groupedDataEvaluasi dengan indikator unik
             $groupedDataEvaluasi = DB::table('rencana_hasil_kerja_pegawai')
                 ->leftJoin('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
-                ->leftJoinSub($indikatorSubquery, 'indikator', 'rencana_hasil_kerja.id', '=', 'indikator.rencana_atasan_id')
+                ->leftJoinSub(
+                    DB::table('rencana_indikator_kinerja') // Subquery untuk indikator
+                        ->selectRaw('
+                         rencana_atasan_id, 
+                         GROUP_CONCAT(DISTINCT indikator_kinerja SEPARATOR ", ") as indikator_kinerja,
+                         satuan, aspek, target_minimum, target_maksimum
+                     ')
+                        ->where('user_id', $userId)
+                        ->groupBy('rencana_atasan_id', 'satuan', 'aspek', 'target_minimum', 'target_maksimum'),
+                    'indikator',
+                    'rencana_hasil_kerja.id',
+                    '=',
+                    'indikator.rencana_atasan_id'
+                )
                 ->leftJoin('kegiatan_harians', 'rencana_hasil_kerja_pegawai.id', '=', 'kegiatan_harians.rencana_pegawai_id')
                 ->select(
                     'rencana_hasil_kerja_pegawai.id as pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as rencana_pegawai',
                     'rencana_hasil_kerja.rencana as rencana_pimpinan',
-                    DB::raw('GROUP_CONCAT(indikator.indikator_kinerja SEPARATOR ", ") as nama_indikator'),
+                    DB::raw('GROUP_CONCAT(DISTINCT indikator.indikator_kinerja SEPARATOR ", ") as nama_indikator'), // Indikator unik
                     'indikator.satuan',
                     'indikator.aspek',
                     'indikator.target_minimum',
                     'indikator.target_maksimum',
-                    DB::raw('MIN(kegiatan_harians.waktu_mulai) as waktu_mulai'),
-                    DB::raw('MAX(kegiatan_harians.waktu_selesai) as waktu_selesai')
+                    DB::raw('MIN(kegiatan_harians.waktu_mulai) as waktu_mulai'), // Waktu mulai terendah
+                    DB::raw('MAX(kegiatan_harians.waktu_selesai) as waktu_selesai') // Waktu selesai tertinggi
                 )
                 ->where('rencana_hasil_kerja_pegawai.user_id', $userId)
                 ->whereMonth('kegiatan_harians.tanggal', $bulan)
                 ->whereYear('kegiatan_harians.tanggal', $tahun)
-                ->groupBy('pegawai_id', 'rencana_pegawai', 'rencana_pimpinan', 'indikator.satuan', 'indikator.aspek', 'indikator.target_minimum', 'indikator.target_maksimum') // Kelompokkan sesuai kebutuhan
+                ->groupBy(
+                    'pegawai_id',
+                    'rencana_pegawai',
+                    'rencana_pimpinan',
+                    'indikator.satuan',
+                    'indikator.aspek',
+                    'indikator.target_minimum',
+                    'indikator.target_maksimum'
+                )
                 ->get()
                 ->groupBy(['rencana_pimpinan', 'rencana_pegawai']);
 

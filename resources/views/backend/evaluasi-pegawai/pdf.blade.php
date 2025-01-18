@@ -152,9 +152,7 @@
 
                 </td>
                 <td>
-                    {{ isset($item->waktu_mulai, $item->waktu_selesai) 
-                                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
-                                    : '-' }}
+                    {{ $item->waktu_total ? $item->waktu_total . ' Jam' : '-' }}
                 </td>
             </tr>
             @endforeach
@@ -197,11 +195,11 @@
                     {{ $item->output }}
                 </td>
                 <td>
-                    {{ $item->waktu_mulai }} - {{ $item->waktu_selesai }}
+                    {{ $item->waktu_mulai }} s.d {{ $item->waktu_selesai }}
                 </td>
                 <td>
                     {{ isset($item->waktu_mulai, $item->waktu_selesai) 
-                                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai)) . ' Jam' 
+                                    ? \Carbon\Carbon::parse($item->waktu_mulai)->diff(\Carbon\Carbon::parse($item->waktu_selesai))->format('%h Jam %i Menit') 
                                     : '-' }}
                 </td>
                 <td class="text-center">

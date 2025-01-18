@@ -110,7 +110,6 @@
                                 <a href="{{ asset('storage/' . $item->file_realisasi) }}" target="_blank"
                                     class="btn btn-outline-warning btn-sm">
                                     <i class="fa fa-eye"></i></a>
-
                             </td>
                         </tr>
                         @endforeach

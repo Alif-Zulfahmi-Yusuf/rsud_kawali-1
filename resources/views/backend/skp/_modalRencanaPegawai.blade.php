@@ -9,7 +9,8 @@
             </div>
             <div class="modal-body">
                 <!-- Form SKP -->
-                <form action="{{ route('rencana-pegawai.store') }}" method="POST">
+                <form action="{{ route('rencana-pegawai.store') }}" method="POST" class="needs-validation"
+                    novalidate="">
                     @csrf
                     <input type="hidden" name="skp_id" value="{{ $skpDetail->id }}">
                     <!-- Rencana Atasan -->

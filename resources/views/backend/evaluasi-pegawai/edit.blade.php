@@ -113,7 +113,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3 mx-auto">
                     <h5>Realisasi Rencana Aksi</h5>
-                    <a href="{{ route('evaluasi-pegawai.pdf', $evaluasi->uuid) }}" class="btn btn-primary"
+                    <a href="{{ route('evaluasi-pegawai.pdf', $evaluasi->uuid) }}" class="btn btn-danger"
                         target="_blank">
                         <i class="fas fa-file-pdf"></i> Download PDF
                     </a>
@@ -130,7 +130,7 @@
                             </tr>
                             <tr>
                                 <th colspan="3" class="text-center align-middle">Kuantitas Output</th>
-                                <th class="text-center align-middle">Kualitas</th>
+                                <th class="text-center align-middle" width="15%">Kualitas</th>
                                 <th class="text-center align-middle">Waktu</th>
                             </tr>
                         </thead>
@@ -140,6 +140,9 @@
                                 <td colspan="10" class="text-center">Tidak ada data untuk bulan dan tahun ini.</td>
                             </tr>
                             @else
+                            @php
+
+                            @endphp
                             @foreach ($dataRencanaAksi as $item)
                             @php
                             #idEvaluasi = [];
@@ -196,13 +199,12 @@
                                     </select>
                                 </td>
                                 <td class="text-center align-middle">
-                                    {{ $item->waktu_total ? $item->waktu_total . ' Jam' : '-' }}
+                                    {{ $item->waktu_total ? \Carbon\Carbon::parse($item->waktu_total . ':00')->format('H:i') : '-' }}
                                 </td>
                                 <td class="text-center align-middle">
                                     @if ($item->file_realisasi)
                                     <a href="{{ asset('storage/' . $item->file_realisasi) }}" target="_blank"
-                                        class="btn btn-link btn-sm">Lihat
-                                        File</a>
+                                        class="btn btn-outline-secondary btn-sm"><i class="fa fa-eye"></i></a></a>
                                     @endif
                                     <a href="#" class="btn btn-outline-warning btn-sm upload-btn"
                                         data-evaluasi-id="{{ $idEvaluasi[0] }}"

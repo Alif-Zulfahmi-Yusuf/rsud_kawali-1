@@ -63,7 +63,6 @@ class EvaluasiController extends Controller
                 // Perhitungan total waktu
                 $totalWaktu = DB::table('kegiatan_harians')
                     ->where('user_id', $evaluasi->user_id)
-                    ->where('rencana_pegawai_id', $evaluasi->rencana_pegawai_id)
                     ->whereMonth('tanggal', now()->month)
                     ->whereYear('tanggal', now()->year)
                     ->get()
@@ -74,49 +73,48 @@ class EvaluasiController extends Controller
                         }
                         return $carry;
                     }, 0);
-                $evaluasi->capaian_wkt = $totalWaktu . ' Jam';
 
-                // Perhitungan rating
-                $evaluasi->rating = $evaluasi->capaian_qlty >= 80
-                    ? 'diatas_ekspektasi'
-                    : ($evaluasi->capaian_qlty >= 60 ? 'sesuai_ekspektasi' : 'dibawah_ekspektasi');
+                // Menghitung jam
+                $jam = floor($totalWaktu);
+
+                // Menghitung menit
+                $menit = ($totalWaktu - $jam) * 60;
+
+                // Membulatkan menit ke bilangan bulat
+                $menit = round($menit);
+                $evaluasi->capaian_wkt = $jam . ' Jam ' . $menit . ' Menit';
+
 
                 // Pastikan data nilai berupa array
                 $nilaiArray = is_array($evaluasi->nilai) ? $evaluasi->nilai : (is_string($evaluasi->nilai) ? json_decode($evaluasi->nilai, true) : []);
-                $mappedNilai = collect($nilaiArray)->map(fn($item) => $nilaiMap[$item] ?? 0);
-                $averageNilai = $mappedNilai->isNotEmpty() ? $mappedNilai->avg() : 0;
-
-                // Map rata-rata ke teks
-                if ($averageNilai < 40) {
-                    $evaluasi->nilai = 'dibawah_ekspektasi';
-                } elseif ($averageNilai <= 80) {
-                    $evaluasi->nilai = 'sesuai_ekspektasi';
-                } else {
-                    $evaluasi->nilai = 'diatas_ekspektasi';
-                }
-
-                // Map perilaku kerja
-                $perilakuKerjaData = collect([$evaluasi->nilai])->map(function ($nilai) {
-                    $nilaiMap = [
-                        'dibawah_ekspektasi' => 1,
-                        'sesuai_ekspektasi' => 2,
-                        'diatas_ekspektasi' => 3,
-                    ];
-
-                    $mappedValues = collect([$nilai])->map(fn($item) => $nilaiMap[$item] ?? 0)->filter(fn($val) => $val > 0);
-
-                    $average = $mappedValues->isNotEmpty() ? $mappedValues->avg() : 0;
-
-                    if ($average < 1.5) {
-                        return "Di Bawah Ekspektasi";
-                    } elseif ($average <= 2.5) {
-                        return "Sesuai Ekspektasi";
-                    } else {
-                        return "Di Atas Ekspektasi";
+                foreach ($nilaiArray as &$value) {
+                    switch ($value) {
+                        case 'dibawah_ekspektasi':
+                            $value = 1;
+                            break;
+                        case 'sesuai_ekspektasi':
+                            $value = 2;
+                            break;
+                        case 'diatas_ekspektasi':
+                            $value = 3;
+                            break;
                     }
-                });
+                }
+                unset($value);
+                $total = array_sum($nilaiArray); // Menjumlahkan semua elemen
+                $count = count($nilaiArray); // Menghitung jumlah elemen
+                $rataRata = $count > 0 ? $total / $count : 0;
 
-                $evaluasi->perilaku_kerja = $perilakuKerjaData->first();
+                if ($rataRata < 1.5) {
+                    $evaluasi->perilaku_kerja = "Di Bawah Ekspektasi";
+                    $evaluasi->nilai = "Di Bawah Ekspektasi";
+                } elseif ($rataRata <= 2.5) {
+                    $evaluasi->perilaku_kerja = "Sesuai Ekspektasi";
+                    $evaluasi->nilai = "Sesuai Ekspektasi";
+                } else {
+                    $evaluasi->perilaku_kerja = "Di Atas Ekspektasi";
+                    $evaluasi->nilai = "Di Atas Ekspektasi";
+                }
 
                 return $evaluasi;
             });
