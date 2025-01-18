@@ -30,7 +30,7 @@
                 <h4 class="card-title">Create New User</h4>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('users.store') }}">
+                <form method="POST" action="{{ route('users.store') }}" class="needs-validation" novalidate="">
                     @csrf
 
                     <div class="row">

@@ -8,7 +8,8 @@
             </div>
             <div class="modal-body">
                 <!-- Form Kegiatan Harian -->
-                <form action="{{ route('harian-pegawai.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('harian-pegawai.store') }}" method="POST" enctype="multipart/form-data"
+                    class="needs-validation" novalidate="">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">

@@ -12,7 +12,8 @@
 
 <div class="card shadow border rounded-lg mb-4">
     <div class="card-body">
-        <form action="{{ route('category.update', $categories->uuid) }}" method="POST">
+        <form action="{{ route('category.update', $categories->uuid) }}" method="POST" class="needs-validation"
+            novalidate="">
             @csrf
             @method('PUT')
             <div class="mb-3">

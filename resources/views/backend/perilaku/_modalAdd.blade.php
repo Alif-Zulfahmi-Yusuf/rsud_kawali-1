@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('perilaku.store') }}" method="POST">
+                <form action="{{ route('perilaku.store') }}" method="POST" class="needs-validation" novalidate="">
                     @csrf
 
                     <div class="form-group mb-3">

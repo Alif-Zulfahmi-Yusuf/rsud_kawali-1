@@ -8,7 +8,8 @@
             </div>
             <div class="modal-body">
                 <!-- Form SKP -->
-                <form action="{{ route('evaluasi-pegawai.store') }}" method="POST">
+                <form action="{{ route('evaluasi-pegawai.store') }}" method="POST" class="needs-validation"
+                    novalidate="">
                     @csrf
                     <div class="form-group mb-3">
                         <label for="pegawai" class="form-label">Nama Pegawai*</label>

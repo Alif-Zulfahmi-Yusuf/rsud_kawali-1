@@ -23,7 +23,7 @@
     <div class="col-md-12">
         <div class="card mt-6">
             <div class="card-body">
-                <form method="POST" action="{{ route('atasans.store') }}">
+                <form method="POST" action="{{ route('atasans.store') }}" class="needs-validation" novalidate="">
                     @csrf
 
                     <div class="row">

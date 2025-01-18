@@ -109,8 +109,8 @@
             </div>
         </div>
     </div>
-    <form id="form-skp" action="{{ route('skp.update', $skpDetail->uuid) }}" method="POST"
-        data-submit-url="{{ route('skp.update', $skpDetail->uuid) }}"
+    <form id="form-skp" action="{{ route('skp.update', $skpDetail->uuid) }}" method="POST" class="needs-validation"
+        novalidate="" data-submit-url="{{ route('skp.update', $skpDetail->uuid) }}"
         data-toggle-url="{{ route('skp.toggle', $skpDetail->id) }}">
         @csrf
         @method('PUT')
@@ -441,15 +441,15 @@
 <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        @if(session('success'))
-        toastSuccess("{{ session('success') }}");
-        @endif
+$(document).ready(function() {
+    @if(session('success'))
+    toastSuccess("{{ session('success') }}");
+    @endif
 
-        @if(session('error'))
-        toastError("{{ session('error') }}");
-        @endif
-    });
+    @if(session('error'))
+    toastError("{{ session('error') }}");
+    @endif
+});
 </script>
 
 @endpush

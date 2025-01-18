@@ -32,7 +32,13 @@
                             <p>{{ $user->email }}</p>
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <strong>NIP:</strong>
+                            <p>{{ $user->nip }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group">
                             <strong>Roles:</strong>
                             @if(!empty($user->getRoleNames()))

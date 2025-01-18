@@ -63,7 +63,7 @@ class HomeController extends Controller
                     // Ubah nilai JSON atau string menjadi array nilai
                     $nilaiArray = is_array(json_decode($nilai, true)) ? json_decode($nilai, true) : [$nilai];
 
-                    // Map nilai ke angka menggunakan $nilaiMap
+                    // Map nilai ke angka mengguna  kan $nilaiMap
                     $mappedValues = collect($nilaiArray)->map(function ($item) use ($nilaiMap) {
                         return $nilaiMap[$item] ?? 0; // Default 0 jika nilai tidak valid
                     })->filter(fn($val) => $val > 0); // Hanya gunakan nilai valid (> 0)
@@ -121,9 +121,13 @@ class HomeController extends Controller
         }
 
         if ($user->hasRole('Admin')) {
+            // Hitung jumlah pengguna berdasarkan peran
+            $totalAtasan = User::role('Atasan')->count(); // Menghitung pengguna dengan role Atasan
+            $totalPegawai = User::role('Pegawai')->count(); // Menghitung pengguna dengan role Pegawai
 
-            return view('backend.dash.dashboard_admin');
+            return view('backend.dash.dashboard_admin', compact('totalAtasan', 'totalPegawai'));
         }
+
 
         abort(403, 'Akses ditolak');
     }

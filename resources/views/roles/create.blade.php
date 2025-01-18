@@ -30,7 +30,7 @@
                 <h4 class="card-title">New Role</h4>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('roles.store') }}">
+                <form method="POST" action="{{ route('roles.store') }}" class="needs-validation" novalidate="">
                     @csrf
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">

@@ -11,7 +11,7 @@
 </div>
 <div class="card shadow border rounded-lg mb-4">
     <div class="card-body">
-        <form action="{{ route('category.store') }}" method="POST">
+        <form action="{{ route('category.store') }}" method="POST" class="needs-validation" novalidate="">
             @csrf
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
