@@ -94,21 +94,46 @@ class EvaluasiService
                 ->whereBetween('target_minimum', [1, 12]) // Filter target minimum dalam rentang 1-12
                 ->groupBy('rencana_atasan_id', 'satuan', 'target_minimum', 'target_maksimum', 'aspek');
 
+            // Mapping nilai kualitas
+            $mappingKualitas = [
+                'sangat_kurang' => 1,
+                'kurang' => 2,
+                'butuh_perbaikan' => 3,
+                'baik' => 4,
+                'sangat_baik' => 5,
+            ];
 
             // Subquery untuk total waktu berdasarkan rencana pegawai dalam bulan tertentu
             $totalWaktuSubquery = DB::table('kegiatan_harians')
                 ->selectRaw('
                     rencana_pegawai_id,
-                        SUM(TIMESTAMPDIFF(HOUR, waktu_mulai, waktu_selesai)) as total_waktu
+                        SUM(TIMESTAMPDIFF(MINUTE, waktu_mulai, waktu_selesai)) as total_waktu
                 ')
                 ->whereMonth('tanggal', $bulan)
                 ->whereYear('tanggal', $tahun)
                 ->groupBy('rencana_pegawai_id');
 
+            // Subquery untuk menghitung rata-rata kualitas
+            $rataRataKualitasSubquery = DB::table('evaluasi_pegawais')
+                ->selectRaw('
+                            rencana_pegawai_id,
+                            ROUND(AVG(CASE
+                                WHEN JSON_CONTAINS(kualitas, \'"sangat_kurang"\') THEN 1
+                                WHEN JSON_CONTAINS(kualitas, \'"kurang"\') THEN 2
+                                WHEN JSON_CONTAINS(kualitas, \'"butuh_perbaikan"\') THEN 3
+                                WHEN JSON_CONTAINS(kualitas, \'"baik"\') THEN 4
+                                WHEN JSON_CONTAINS(kualitas, \'"sangat_baik"\') THEN 5
+                            ELSE NULL END
+                            )) as rata_rata_kualitas
+                        ')
+                ->groupBy('rencana_pegawai_id');
+
+            // Ambil data rencana aksi
             $dataRencanaAksi = DB::table('rencana_hasil_kerja_pegawai')
                 ->join('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
                 ->leftJoinSub($indikatorSubquery, 'indikator', 'rencana_hasil_kerja.id', '=', 'indikator.rencana_atasan_id')
                 ->leftJoinSub($totalWaktuSubquery, 'total_waktu', 'rencana_hasil_kerja_pegawai.id', '=', 'total_waktu.rencana_pegawai_id')
+                ->leftJoinSub($rataRataKualitasSubquery, 'rata_rata_kualitas', 'rencana_hasil_kerja_pegawai.id', '=', 'rata_rata_kualitas.rencana_pegawai_id')
                 ->leftJoin('evaluasi_pegawais', 'evaluasi_pegawais.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->leftJoin('realisasi_rencanas', 'realisasi_rencanas.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->select(
@@ -122,15 +147,36 @@ class EvaluasiService
                     'evaluasi_pegawais.id as evaluasi_pegawai_id',
                     'realisasi_rencanas.id as realisasi_rencana_id',
                     'realisasi_rencanas.file as file_realisasi',
-                    'total_waktu.total_waktu as waktu_total' // Total waktu yang dihitung
+                    'total_waktu.total_waktu as waktu_total', // Total waktu yang dihitung
+                    'rata_rata_kualitas.rata_rata_kualitas as rata_rata_kualitas' // Rata-rata kualitas
                 )
                 ->where('rencana_hasil_kerja_pegawai.user_id', $currentUserId)
                 ->where(function ($query) use ($bulan) {
                     $query->whereRaw('indikator.target_minimum = 12 AND indikator.satuan = "laporan" AND MONTH(CURRENT_DATE) = ?', [$bulan])
                         ->orWhereRaw('indikator.target_minimum BETWEEN 1 AND 12 AND indikator.bulan_muncul = CEIL(? / (12 / indikator.target_minimum))', [$bulan]);
                 })
-                ->get();
+                ->get()
+                ->map(function ($item) use ($mappingKualitas) {
+                    // Konversi rata-rata kualitas ke teks
+                    $item->rata_rata_kualitas_text = array_search(round($item->rata_rata_kualitas), $mappingKualitas) ?? 'Tidak Ada';
+                    // Hitung total waktu keseluruhan (dalam menit)
 
+                    return $item;
+                });
+
+            $totalWaktuKeseluruhan = $dataRencanaAksi->sum('waktu_total');
+            $totalWaktuKeseluruhanMenit = $totalWaktuKeseluruhan * 60;
+
+            // Konversi total waktu ke jam dan menit
+            $totalWaktuKeseluruhanJam = floor($totalWaktuKeseluruhanMenit / 60);
+            $totalWaktuKeseluruhanSisaMenit = $totalWaktuKeseluruhanMenit % 60;
+
+            $totalWaktuKeseluruhanJam = $totalWaktuKeseluruhanJam . ' Jam ' . $totalWaktuKeseluruhanSisaMenit . ' Menit';
+
+            $dataRencanaAksi = $dataRencanaAksi->map(function ($item) {
+                $item->bulan_muncul = \Carbon\Carbon::parse($item->bulan_muncul)->translatedFormat('d F Y');
+                return $item;
+            });
 
             // Query utama untuk groupedDataEvaluasi dengan indikator unik
             $groupedDataEvaluasi = DB::table('rencana_hasil_kerja_pegawai')
@@ -177,7 +223,7 @@ class EvaluasiService
                 ->get()
                 ->groupBy(['rencana_pimpinan', 'rencana_pegawai']);
 
-            return compact('dataRencanaAksi', 'groupedDataEvaluasi', 'filteredKegiatanHarian', 'totalWaktu');
+            return compact('dataRencanaAksi', 'groupedDataEvaluasi', 'filteredKegiatanHarian', 'totalWaktuKeseluruhan', 'totalWaktuKeseluruhanJam', 'totalWaktuKeseluruhanSisaMenit');
         } catch (\Exception $e) {
             // Log error jika terjadi masalah
             Log::error('Gagal mendapatkan detail evaluasi', [

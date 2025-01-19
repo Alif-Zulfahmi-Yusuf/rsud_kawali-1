@@ -199,7 +199,7 @@
                                     </select>
                                 </td>
                                 <td class="text-center align-middle">
-                                    {{ $item->waktu_total ? \Carbon\Carbon::parse($item->waktu_total . ':00')->format('H:i') : '-' }}
+                                    {{ $item->waktu_total ? $item->waktu_total . ' Menit' : '-' }}
                                 </td>
                                 <td class="text-center align-middle">
                                     @if ($item->file_realisasi)

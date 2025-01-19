@@ -249,14 +249,15 @@ class EvaluasiController extends Controller
             $dataRencanaAksi = $evaluasiData['dataRencanaAksi'];
             $groupedDataEvaluasi = $evaluasiData['groupedDataEvaluasi'];
             $filteredKegiatanHarian = $evaluasiData['filteredKegiatanHarian'];
-            $totalWaktu = $evaluasiData['totalWaktu'];
+            $totalWaktuKeseluruhan = $evaluasiData['totalWaktuKeseluruhan'];
+            $totalWaktuKeseluruhanSisaMenit = $evaluasiData['totalWaktuKeseluruhanSisaMenit'];
 
             // Load view with data
-            $pdf = Pdf::loadView('backend.evaluasi-pegawai.pdf', compact('evaluasi', 'dataRencanaAksi', 'groupedDataEvaluasi', 'filteredKegiatanHarian', 'totalWaktu'))
+            $pdf = Pdf::loadView('backend.evaluasi-pegawai.pdf', compact('evaluasi', 'dataRencanaAksi', 'groupedDataEvaluasi', 'filteredKegiatanHarian', 'totalWaktuKeseluruhan', 'totalWaktuKeseluruhanSisaMenit'))
                 ->setPaper('A4', 'portrait');
 
             // Stream or Download
-            return $pdf->stream("Laporan_Kinerja_{$evaluasi->uuid}.pdf");
+            return $pdf->stream("Laporan_Kinerja_{$evaluasi->bulan}.pdf");
         } catch (\Exception $e) {
             Log::error('Gagal membuat PDF', ['error' => $e->getMessage()]);
             return back()->with('error', 'Terjadi kesalahan saat membuat PDF.');

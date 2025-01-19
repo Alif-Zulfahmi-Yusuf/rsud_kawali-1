@@ -149,13 +149,21 @@
                     {{ isset($evaluasi->kualitas[$loop->index]) ? ucwords(str_replace('_', ' ', $evaluasi->kualitas[$loop->index])) : 'Pilih' }}
                 </td>
                 <td>
-
+                    {{ $item->rata_rata_kualitas_text }}
                 </td>
                 <td>
-                    {{ $item->waktu_total ? $item->waktu_total . ' Jam' : '-' }}
+                    {{ $item->waktu_total ? $item->waktu_total . ' Menit' : '-' }}
                 </td>
             </tr>
             @endforeach
+            <tr>
+                <td colspan="8">
+                    <strong>Total waktu</strong>
+                </td>
+                <td>
+                    {{ $totalWaktuKeseluruhan . ' jam ' . $totalWaktuKeseluruhanSisaMenit . ' menit' }}
+                </td>
+            </tr>
         </tbody>
     </table>
     <h3>B. Laporan Aktivitas Harian</h3>

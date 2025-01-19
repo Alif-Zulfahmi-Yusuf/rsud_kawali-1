@@ -103,7 +103,7 @@
                                 </select>
                             </td>
                             <td class="text-center align-middle">
-                                {{ $item->waktu_total ? $item->waktu_total . ' Jam' : '-' }}
+                                {{ $item->waktu_total ? $item->waktu_total . ' Menit' : '-' }}
                             </td>
                             <td class="text-center align-middle">
 
