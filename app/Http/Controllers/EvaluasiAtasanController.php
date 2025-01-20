@@ -40,6 +40,7 @@ class EvaluasiAtasanController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
 
+        // Ambil data evaluasi atasan dengan kondisi tertentu
         $EvaluasiAtasan = EvaluasiPegawai::with(['user', 'user.pangkat'])
             ->whereIn('status', ['review', 'revisi'])
             ->where('is_submit', 1)
@@ -61,7 +62,81 @@ class EvaluasiAtasanController extends Controller
             $EvaluasiAtasan = $EvaluasiAtasan->orWhereDoesntHave('rencanaPegawai');
         }
 
-        $EvaluasiAtasan = $EvaluasiAtasan->get()->unique('user_id');
+        // Map hasil dengan perhitungan tambahan
+        $EvaluasiAtasan = $EvaluasiAtasan->get()->unique('user_id')->map(function ($evaluasi) use ($bulan, $tahun) {
+            // Perhitungan rata-rata capaian kuantitas
+            $laporanArray = is_array($evaluasi->laporan) ? $evaluasi->laporan : (is_string($evaluasi->laporan) ? json_decode($evaluasi->laporan, true) : []);
+            $totalAda = collect($laporanArray)->filter(fn($item) => $item === 'ada')->count();
+            $evaluasi->capaian_qty = count($laporanArray) > 0
+                ? round(($totalAda / count($laporanArray)) * 100, 2) . '%'
+                : '-';
+
+            // Perhitungan rata-rata kualitas
+            $kualitasArray = is_array($evaluasi->kualitas) ? $evaluasi->kualitas : (is_string($evaluasi->kualitas) ? json_decode($evaluasi->kualitas, true) : []);
+            $nilaiMap = [
+                'sangat_kurang' => 20,
+                'kurang' => 40,
+                'butuh_perbaikan' => 60,
+                'baik' => 80,
+                'sangat_baik' => 100,
+            ];
+            $mappedValues = collect($kualitasArray)->map(fn($item) => $nilaiMap[$item] ?? 0);
+            $evaluasi->capaian_qlty = $mappedValues->isNotEmpty()
+                ? round($mappedValues->avg(), 2)
+                : '-';
+
+            // Perhitungan total waktu dari kegiatan harian
+            $totalWaktu = DB::table('kegiatan_harians')
+                ->where('user_id', $evaluasi->user_id)
+                ->whereMonth('tanggal', $bulan ?: now()->month)
+                ->whereYear('tanggal', $tahun ?: now()->year)
+                ->get()
+                ->reduce(function ($carry, $item) {
+                    if (isset($item->waktu_mulai, $item->waktu_selesai)) {
+                        $carry += \Carbon\Carbon::parse($item->waktu_mulai)
+                            ->diffInHours(\Carbon\Carbon::parse($item->waktu_selesai));
+                    }
+                    return $carry;
+                }, 0);
+
+            $jam = floor($totalWaktu);
+            $menit = round(($totalWaktu - $jam) * 60);
+            $evaluasi->capaian_wkt = $jam . ' Jam ' . $menit . ' Menit';
+
+            // Perhitungan perilaku kerja
+            $nilaiArray = is_array($evaluasi->nilai) ? $evaluasi->nilai : (is_string($evaluasi->nilai) ? json_decode($evaluasi->nilai, true) : []);
+            foreach ($nilaiArray as &$value) {
+                switch ($value) {
+                    case 'dibawah_ekspektasi':
+                        $value = 1;
+                        break;
+                    case 'sesuai_ekspektasi':
+                        $value = 2;
+                        break;
+                    case 'diatas_ekspektasi':
+                        $value = 3;
+                        break;
+                }
+            }
+            unset($value);
+
+            $total = array_sum($nilaiArray); // Total nilai
+            $count = count($nilaiArray); // Jumlah elemen
+            $rataRata = $count > 0 ? $total / $count : 0;
+
+            if ($rataRata < 1.5) {
+                $evaluasi->perilaku_kerja = "Di Bawah Ekspektasi";
+                $evaluasi->nilai = "Di Bawah Ekspektasi";
+            } elseif ($rataRata <= 2.5) {
+                $evaluasi->perilaku_kerja = "Sesuai Ekspektasi";
+                $evaluasi->nilai = "Sesuai Ekspektasi";
+            } else {
+                $evaluasi->perilaku_kerja = "Di Atas Ekspektasi";
+                $evaluasi->nilai = "Di Atas Ekspektasi";
+            }
+
+            return $evaluasi;
+        });
 
         Log::info('Query SQL:', DB::getQueryLog());
         DB::disableQueryLog();
@@ -76,6 +151,7 @@ class EvaluasiAtasanController extends Controller
 
         return view('backend.evaluasi-atasan.index', compact('EvaluasiAtasan'));
     }
+
 
     public function getByUser($userId)
     {
@@ -141,22 +217,6 @@ class EvaluasiAtasanController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            // Validasi request
-            $request->validate([
-                'tanggal_terbit' => 'nullable|date',
-                'kuantitas_output' => 'array',
-                'laporan' => 'array',
-                'kualitas' => 'array',
-                'nilai' => 'array',
-                'status' => 'required|in:review,selesai,revisi,nonaktif', // Pastikan nilai sesuai ENUM
-                'umpan_balik' => 'array',
-                'umpan_balik_berkelanjutan' => 'array',
-                'realisasi' => 'array',
-                'jumlah_periode' => 'nullable|string',
-                'rating' => 'nullable|string',
-                'permasalahan' => 'nullable|string',
-            ]);
-
             $evaluasi = EvaluasiPegawai::where('uuid', $id)->firstOrFail();
 
             // Ambil data bulan dan tahun
@@ -211,7 +271,7 @@ class EvaluasiAtasanController extends Controller
                 'nilai' => $nilai,
                 'laporan' => $laporan,
                 'kualitas' => $kualitas,
-                'status' => $request->status, // Update status dari request
+                'status' => $request->status,
                 'umpan_balik' => $umpanBalik,
                 'umpan_balik_berkelanjutan' => $umpanBalikBerkelanjutan,
                 'realisasi' => $realisasi,
@@ -226,15 +286,5 @@ class EvaluasiAtasanController extends Controller
             Log::error('Gagal mengupdate data evaluasi', ['error' => $e->getMessage()]);
             return back()->with('error', 'Terjadi kesalahan saat mengupdate data.');
         }
-    }
-
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

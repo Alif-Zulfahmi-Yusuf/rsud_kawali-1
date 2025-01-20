@@ -308,7 +308,7 @@
                         <label for="">
                             <small>Jumlah Periode Penilai Bulanan</small>
                         </label>
-                        <input style="width: 40%;" type="text" readonly class="form-control"
+                        <input style="width: 40%;" type="text" name="jumlah_periode" readonly class="form-control"
                             value="{{ $evaluasi->jumlah_periode ?? '' }}">
                     </div>
                     <div class="mb-3">

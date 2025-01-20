@@ -103,21 +103,29 @@
 
                         </td>
                         <td class="text-center align-middle">
-                            {{ $data->tanggal_capaian ? \Carbon\Carbon::parse($data->tanggal_capaian)->format('Y M d') : '-' }}
+                            {{ $data->tanggal_terbit ? \Carbon\Carbon::parse($data->tanggal_terbit)->format('Y M d') : '-' }}
                         </td>
+                        <td class="text-center align-middle">
+                            {{ isset($data->capaian_qty) ? $data->capaian_qty : '-' }}
+                        </td>
+                        <td class="text-center align-middle">
+                            {{ isset($data->capaian_qlty) ? $data->capaian_qlty : '-' }}
+                        </td>
+                        <td class="text-center align-middle">
+                            {{ isset($data->capaian_wkt) ? $data->capaian_wkt : '-' }}
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td>
-
+                            {{ ucwords(str_replace('_', ' ', $data->rating)) }}
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>
+                            {{ ucwords(str_replace('_', ' ', $data->nilai)) }}
+                        </td>
                         <td>
 
                         </td>
@@ -134,7 +142,7 @@
                         </td>
                         <td class="text-center align-middle">
                             <a href="{{ route('evaluasi-atasan.edit', ['uuid' => $data->uuid, 'pegawai_id' => $data->user_id]) }}"
-                                class="btn btn-link btn-sm">Edit</a>
+                                class="btn btn-outline-warning btn-sm">Edit</a>
                         </td>
                     </tr>
                     @endforeach
