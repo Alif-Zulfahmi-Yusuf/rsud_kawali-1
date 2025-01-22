@@ -45,7 +45,7 @@
                 </thead>
                 <tbody class="list">
                     @foreach ($data as $key => $user)
-                    <tr>
+                    <tr data-id="{{ $user->id }}">
                         <td class="text-center">{{ $key + 1 }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
@@ -75,14 +75,10 @@
                                     @endcan
 
                                     <div class="dropdown-divider"></div>
-                                    @can('user-delete')
 
-                                    <form method="POST" action="{{ route('users.destroy', $user->id) }}"
-                                        onsubmit="return confirm('Are you sure you want to delete this user?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger">Delete</button>
-                                    </form>
+                                    @can('user-delete')
+                                    <button type="button" class="dropdown-item text-danger delete-button"
+                                        onclick="deleteData(this)" data-id="{{ $user->id }}">Delete</button>
                                     @endcan
                                 </div>
                             </div>

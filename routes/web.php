@@ -23,7 +23,7 @@ use App\Http\Controllers\KegiatanHarianController;
 use App\Http\Controllers\ValidasiHarianController;
 use App\Http\Controllers\IndikatorKinerjaController;
 use App\Http\Controllers\RencanaKerjaPegawaiController;
-
+use Spatie\Permission\Contracts\Role;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -31,11 +31,18 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['auth']], function () {
 
+    // bagian dashboard
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard.index');
     Route::post('/getEvaluasiPegawai', [HomeController::class, 'getEvaluasiPegawai'])->name('getEvaluasiPegawai');
 
+    // bagian role
     Route::resource('roles', RoleController::class);
+    Route::delete('/roles/destroy/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+    // bagian user
     Route::resource('users', UserController::class);
+    Route::delete('/users/destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
     // bagian pangkat
     Route::resource('pangkat', PangkatController::class);
     Route::delete('/pangkat/destroy/{uuid}', [PangkatController::class, 'destroy'])->name('pangkat.destroy');

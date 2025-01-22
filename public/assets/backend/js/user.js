@@ -19,12 +19,12 @@ $(document).ready(function () {
 
 
 const deleteData = (e) => {
-    let uuid = e.getAttribute('data-uuid'); // Mendapatkan data-uuid
+    let id = e.getAttribute('data-id'); // Mendapatkan data-uuid
 
-    if (!uuid) {
+    if (!id) {
         Swal.fire({
             title: "Error!",
-            text: "Invalid UUID!",
+            text: "Invalid ID!",
             icon: "error"
         });
         return;
@@ -47,7 +47,7 @@ const deleteData = (e) => {
 
             $.ajax({
                 type: "DELETE",
-                url: `/users/destroy/${uuid}`,
+                url: `/users/destroy/${id}`,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -59,7 +59,7 @@ const deleteData = (e) => {
                     var table = $('#tableUsers').DataTable();
                     table.rows().every(function () {
                         var row = this.node();
-                        if ($(row).data('uuid') === uuid) {
+                        if ($(row).data('id') === id) {
                             table.row(row).remove();  // Hapus baris dari tabel
                         }
                     });
@@ -82,11 +82,11 @@ const deleteData = (e) => {
 
 
 // Fungsi untuk menghapus baris dari DataTable
-const removeRowFromTable = (uuid) => {
+const removeRowFromTable = (id) => {
     var table = $('#tableUsers').DataTable();
     table.rows().every(function () {
         var row = this.node();
-        if ($(row).data('uuid') === uuid) {
+        if ($(row).data('id') === id) {
             table.row(row).remove();  // Hapus baris dari tabel
         }
     });

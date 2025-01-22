@@ -81,12 +81,6 @@ class EvaluasiAtasanController extends Controller
                 'sangat_baik' => 100,
             ];
 
-            $ratingMap = [
-                'di_bawah_ekspektasi' => 20,
-                'sesuai_ekspektasi' => 60,
-                'di_atas_ekspektasi' => 100,
-            ];
-
             $mappedValues = collect($kualitasArray)->map(fn($item) => $nilaiMap[$item] ?? 0);
             $evaluasi->capaian_qlty = $mappedValues->isNotEmpty()
                 ? round($mappedValues->avg(), 2)
@@ -142,21 +136,29 @@ class EvaluasiAtasanController extends Controller
             }
 
 
-            // Ambil rating dan konversi ke angka
-            $rating = $ratingMap[$evaluasi->rating] ?? 0;
 
-            // Gabungkan rata-rata kualitas dan rating
-            $gabunganNilai = ($nilaiArray + $rating) / 2;
+            // Ambil langsung nilai dari kolom 'rating'
+            $rating = $evaluasi->rating ?? 'di_bawah_ekspektasi';
+            $ratingMap = [
+                'dibawah_ekspektasi' => 1,
+                'sesuai_ekspektasi' => 2,
+                'diatas_ekspektasi' => 3,
+            ];
 
-            // Tentukan predikat berdasarkan gabungan nilai
-            if ($gabunganNilai < 40) {
-                $evaluasi->predikat = "Sangat Kurang";
-            } elseif ($gabunganNilai < 60) {
-                $evaluasi->predikat = "Kurang";
-            } elseif ($gabunganNilai < 80) {
-                $evaluasi->predikat = "Baik";
-            } else {
+            $ratingValue = $ratingMap[$rating] ?? 1; // Default ke 'di_bawah_ekspektasi' jika rating tidak valid
+
+            // Gabungkan rata-rata perilaku kerja dan rating untuk predikat
+            $gabunganNilai = ($rataRata + $ratingValue) / 2;
+
+            // PRIORITAS KONDISI UNTUK PREDIKAT
+            if ($gabunganNilai === 'diatas_ekspektasi' && $rataRata > 2.5) {
                 $evaluasi->predikat = "Sangat Baik";
+            } elseif ($gabunganNilai === 'sesuai_ekspektasi' && $rataRata <= 2.5) {
+                $evaluasi->predikat = "Baik";
+            } elseif ($gabunganNilai === 'dibawah_ekspektasi' || $rataRata < 1.5) {
+                $evaluasi->predikat = "Kurang";
+            } else {
+                $evaluasi->predikat = "Baik";
             }
 
             return $evaluasi;

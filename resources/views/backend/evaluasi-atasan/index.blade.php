@@ -68,8 +68,8 @@
                 <thead class="table-dark">
                     <tr>
                         <th rowspan="2" class="text-center align-middle" width="5%">No</th>
-                        <th rowspan="2" class="text-center align-middle" width="25%">NIP/Nama</th>
-                        <th rowspan="2" class="text-center align-middle" width="10%">Tanggal</th>
+                        <th rowspan="2" class="text-center align-middle" width="24%">NIP/Nama</th>
+                        <th rowspan="2" class="text-center align-middle" width="8%">Tanggal</th>
                         <th colspan="3" class="text-center align-middle" width="15%">Capaian Rencana Aksi (%)</th>
                         <th colspan="6" class="text-center align-middle" width="25%">Perilaku</th>
                         <th colspan="3" class="text-center align-middle" width="20%">Predikat Kerja</th>
@@ -120,13 +120,13 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>
+                        <td class="text-center align-middle">
                             {{ ucwords(str_replace('_', ' ', $data->rating)) }}
                         </td>
-                        <td>
+                        <td class="text-center align-middle">
                             {{ ucwords(str_replace('_', ' ', $data->nilai)) }}
                         </td>
-                        <td>
+                        <td class="text-center align-middle">
                             {{ $data->predikat }}
                         </td>
                         <td class="text-center align-middle">

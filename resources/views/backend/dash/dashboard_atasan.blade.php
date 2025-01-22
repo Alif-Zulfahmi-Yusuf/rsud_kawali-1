@@ -82,7 +82,9 @@
             </div>
             <div class="card-body">
                 {{ $chart->container() }}
-                1 . Di Bawah Ekspektasi 2 . Sesuai Ekspektasi 3 . Di Atas Ekspektasi
+                <small>
+                    1 . Di Bawah Ekspektasi 2 . Sesuai Ekspektasi 3 . Di Atas Ekspektasi
+                </small>
             </div>
         </div>
     </div>

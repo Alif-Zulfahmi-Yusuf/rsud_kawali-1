@@ -38,7 +38,7 @@
                 </thead>
                 <tbody class="list">
                     @foreach ($roles as $key => $role)
-                    <tr>
+                    <tr data-id="{{ $role->id }}">
                         <td class="align-middle ps-3 name">{{ $role->name }}</td>
                         <td>
                             <div class="btn-reveal-trigger position-static">
@@ -63,12 +63,8 @@
                                     <div class="dropdown-divider"></div>
                                     @can('role-delete')
 
-                                    <form method="POST" action="{{ route('roles.destroy', $role->id) }}"
-                                        onsubmit="return confirm('Are you sure you want to delete this role?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger">Delete</button>
-                                    </form>
+                                    <button type="button" class="dropdown-item text-danger delete-button"
+                                        onclick="deleteData(this)" data-id="{{ $role->id }}">Delete</button>
                                     @endcan
                                 </div>
                             </div>
