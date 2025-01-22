@@ -80,6 +80,13 @@ class EvaluasiAtasanController extends Controller
                 'baik' => 80,
                 'sangat_baik' => 100,
             ];
+
+            $ratingMap = [
+                'di_bawah_ekspektasi' => 20,
+                'sesuai_ekspektasi' => 60,
+                'di_atas_ekspektasi' => 100,
+            ];
+
             $mappedValues = collect($kualitasArray)->map(fn($item) => $nilaiMap[$item] ?? 0);
             $evaluasi->capaian_qlty = $mappedValues->isNotEmpty()
                 ? round($mappedValues->avg(), 2)
@@ -99,9 +106,8 @@ class EvaluasiAtasanController extends Controller
                     return $carry;
                 }, 0);
 
-            $jam = floor($totalWaktu);
-            $menit = round(($totalWaktu - $jam) * 60);
-            $evaluasi->capaian_wkt = $jam . ' Jam ' . $menit . ' Menit';
+            $totalMenit = $totalWaktu * 60;
+            $evaluasi->capaian_wkt = $totalMenit . ' Menit';
 
             // Perhitungan perilaku kerja
             $nilaiArray = is_array($evaluasi->nilai) ? $evaluasi->nilai : (is_string($evaluasi->nilai) ? json_decode($evaluasi->nilai, true) : []);
@@ -133,6 +139,24 @@ class EvaluasiAtasanController extends Controller
             } else {
                 $evaluasi->perilaku_kerja = "Di Atas Ekspektasi";
                 $evaluasi->nilai = "Di Atas Ekspektasi";
+            }
+
+
+            // Ambil rating dan konversi ke angka
+            $rating = $ratingMap[$evaluasi->rating] ?? 0;
+
+            // Gabungkan rata-rata kualitas dan rating
+            $gabunganNilai = ($nilaiArray + $rating) / 2;
+
+            // Tentukan predikat berdasarkan gabungan nilai
+            if ($gabunganNilai < 40) {
+                $evaluasi->predikat = "Sangat Kurang";
+            } elseif ($gabunganNilai < 60) {
+                $evaluasi->predikat = "Kurang";
+            } elseif ($gabunganNilai < 80) {
+                $evaluasi->predikat = "Baik";
+            } else {
+                $evaluasi->predikat = "Sangat Baik";
             }
 
             return $evaluasi;

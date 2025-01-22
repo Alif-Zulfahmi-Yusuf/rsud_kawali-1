@@ -74,15 +74,8 @@ class EvaluasiController extends Controller
                         return $carry;
                     }, 0);
 
-                // Menghitung jam
-                $jam = floor($totalWaktu);
-
-                // Menghitung menit
-                $menit = ($totalWaktu - $jam) * 60;
-
-                // Membulatkan menit ke bilangan bulat
-                $menit = round($menit);
-                $evaluasi->capaian_wkt = $jam . ' Jam ' . $menit . ' Menit';
+                $totalMenit = $totalWaktu * 60;
+                $evaluasi->capaian_wkt = $totalMenit . ' Menit';
 
 
                 // Pastikan data nilai berupa array

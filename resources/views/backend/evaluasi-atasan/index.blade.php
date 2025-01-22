@@ -127,7 +127,7 @@
                             {{ ucwords(str_replace('_', ' ', $data->nilai)) }}
                         </td>
                         <td>
-
+                            {{ $data->predikat }}
                         </td>
                         <td class="text-center align-middle">
                             @if ($data->status === 'review')
