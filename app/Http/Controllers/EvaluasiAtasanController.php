@@ -138,12 +138,13 @@ class EvaluasiAtasanController extends Controller
 
 
             // Ambil langsung nilai dari kolom 'rating'
-            $rating = $evaluasi->rating ?? 'di_bawah_ekspektasi';
+            $rating = $evaluasi->rating ?? 'dibawah_ekspektasi';
             $ratingMap = [
                 'dibawah_ekspektasi' => 1,
                 'sesuai_ekspektasi' => 2,
                 'diatas_ekspektasi' => 3,
             ];
+
 
             $ratingValue = $ratingMap[$rating] ?? 1; // Default ke 'di_bawah_ekspektasi' jika rating tidak valid
 
@@ -151,15 +152,16 @@ class EvaluasiAtasanController extends Controller
             $gabunganNilai = ($rataRata + $ratingValue) / 2;
 
             // PRIORITAS KONDISI UNTUK PREDIKAT
-            if ($gabunganNilai === 'diatas_ekspektasi' && $rataRata > 2.5) {
+            if ($rataRata > 2.5) {
                 $evaluasi->predikat = "Sangat Baik";
-            } elseif ($gabunganNilai === 'sesuai_ekspektasi' && $rataRata <= 2.5) {
+            } elseif ($rataRata <= 2.5 && $rataRata >= 1.5) {
                 $evaluasi->predikat = "Baik";
-            } elseif ($gabunganNilai === 'dibawah_ekspektasi' || $rataRata < 1.5) {
+            } elseif ($rataRata < 1.5 && $rataRata >= 1.25) {
                 $evaluasi->predikat = "Kurang";
             } else {
-                $evaluasi->predikat = "Baik";
+                $evaluasi->predikat = "Sangat Kurang";
             }
+
 
             return $evaluasi;
         });
