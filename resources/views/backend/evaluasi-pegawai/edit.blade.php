@@ -135,6 +135,7 @@
                             </tr>
                         </thead>
                         <tbody>
+
                             @if ($dataRencanaAksi->isEmpty())
                             <tr>
                                 <td colspan="10" class="text-center">Tidak ada data untuk bulan dan tahun ini.</td>

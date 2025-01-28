@@ -136,10 +136,8 @@
                 <td>{{ $item->nama_rencana_pegawai }}</td>
                 <td>
                     {{ $item->bulan_muncul }}
-                    {{ $item->satuan }}
                 </td>
                 <td>
-                    {{ $item->bulan_muncul }}
                     {{ $item->satuan }}
                 </td>
                 <td>
@@ -161,7 +159,7 @@
                     <strong>Total waktu</strong>
                 </td>
                 <td>
-                    {{ $totalWaktuKeseluruhan . ' jam ' . $totalWaktuKeseluruhanSisaMenit . ' menit' }}
+                    {{ $totalWaktuKeseluruhan . ' menit' }}
                 </td>
             </tr>
         </tbody>
@@ -202,8 +200,9 @@
                     {{ $item->jumlah }}
                     {{ $item->output }}
                 </td>
-                <td>
-                    {{ $item->waktu_mulai }} s.d {{ $item->waktu_selesai }}
+                <td class="text-center">
+                    {{ \Carbon\Carbon::parse($item->waktu_mulai)->format('H:i') }} s.d
+                    {{ \Carbon\Carbon::parse($item->waktu_selesai)->format('H:i') }}
                 </td>
                 <td>
                     {{ isset($item->waktu_mulai, $item->waktu_selesai) 
