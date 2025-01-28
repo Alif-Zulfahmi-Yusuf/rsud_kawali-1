@@ -80,19 +80,20 @@ class EvaluasiService
 
             $indikatorSubquery = DB::table('rencana_indikator_kinerja')
                 ->selectRaw('
-                    rencana_atasan_id, 
-                    GROUP_CONCAT(DISTINCT indikator_kinerja SEPARATOR ", ") as indikator_kinerja, 
-                    satuan, target_maksimum, aspek, 
-                    target_minimum,
-                    CASE 
-                        WHEN target_minimum BETWEEN 1 AND 12 THEN CEIL(MONTH(CURRENT_DATE) / (12 / target_minimum))
-                        ELSE 0 
-                    END as bulan_muncul
-                ')
+                rencana_atasan_id, 
+                GROUP_CONCAT(DISTINCT indikator_kinerja SEPARATOR ", ") as indikator_kinerja, 
+                satuan, target_maksimum, aspek, 
+                target_minimum,
+                CASE 
+                    WHEN target_minimum BETWEEN 1 AND 12 THEN CEIL(MONTH(CURRENT_DATE) / (12 / target_minimum))
+                    ELSE 0 
+                END as bulan_muncul
+            ')
                 ->where('user_id', $currentUserId)
                 ->where('satuan', 'laporan') // Filter hanya untuk satuan "laporan"
                 ->whereBetween('target_minimum', [1, 12]) // Filter target minimum dalam rentang 1-12
                 ->groupBy('rencana_atasan_id', 'satuan', 'target_minimum', 'target_maksimum', 'aspek');
+
 
             // Mapping nilai kualitas
             $mappingKualitas = [
