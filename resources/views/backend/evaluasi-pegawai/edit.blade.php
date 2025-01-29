@@ -135,52 +135,36 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            @if ($dataRencanaAksi->isEmpty())
-                            <tr>
-                                <td colspan="10" class="text-center">Tidak ada data untuk bulan dan tahun ini.</td>
-                            </tr>
-                            @else
-
-                            @php
-
-                            @endphp
                             @foreach ($dataRencanaAksi as $item)
-                            @php
-                            #idEvaluasi = [];
-                            $idEvaluasi[] = $item->evaluasi_pegawai_id;
-                            $itemBulan = 1;
-                            @endphp
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
                                 <td class="text-center align-middle" width="5%">
-                                    {{ $itemBulan ?? '-' }}
+                                    {{ $item->bulan_muncul ?? '-' }}
                                 </td>
                                 <td class="text-center align-middle">
                                     {{ $item->satuan }}
                                 </td>
                                 <td class="text-center align-middle" width="5%">
-                                    <input type="text" name="kuantitas_output[{{ $item->rencana_pegawai_id }}]"
-                                        class="form-control"
+                                    <input type="text" name="kuantitas_output[{{ $loop->index  }}]" class="form-control"
                                         value="{{ $evaluasi->kuantitas_output[$loop->index] ?? '' }}">
                                 </td>
                                 <td class="text-center align-middle">
                                     {{ $item->satuan }}
                                 </td>
                                 <td>
-                                    <input type="radio" id="ada" name="laporan[{{ $item->rencana_pegawai_id }}]"
+                                    <input type="radio" id="ada_{{ $loop->index }}" name="laporan[{{ $loop->index  }}]"
                                         value="ada"
                                         {{ isset($evaluasi->laporan[$loop->index]) && $evaluasi->laporan[$loop->index] == 'ada' ? 'checked' : '' }}>
-                                    <label for="ada">Ada</label><br>
+                                    <label for="ada_{{ $loop->index }}">Ada</label><br>
 
-                                    <input type="radio" id="tidak_ada" name="laporan[{{ $item->rencana_pegawai_id }}]"
-                                        value="tidak_ada"
+                                    <input type="radio" id="tidak_ada_{{ $loop->index }}"
+                                        name="laporan[{{ $loop->index  }}]" value="tidak_ada"
                                         {{ isset($evaluasi->laporan[$loop->index]) && $evaluasi->laporan[$loop->index] == 'tidak_ada' ? 'checked' : '' }}>
-                                    <label for="tidak_ada">Tidak Ada</label><br>
+                                    <label for="tidak_ada_{{ $loop->index }}">Tidak Ada</label><br>
                                 </td>
                                 <td>
-                                    <select name="kualitas[{{ $item->rencana_pegawai_id }}]" class="form-select">
+                                    <select name="kualitas[{{ $loop->index  }}]" class="form-select">
                                         <option value="{{ $evaluasi->kualitas[$loop->index] ?? '' }}">
                                             {{ isset($evaluasi->kualitas[$loop->index]) ? ucwords(str_replace('_', ' ', $evaluasi->kualitas[$loop->index])) : 'Pilih' }}
                                         </option>
@@ -207,17 +191,18 @@
                                 <td class="text-center align-middle">
                                     @if ($item->file_realisasi)
                                     <a href="{{ asset('storage/' . $item->file_realisasi) }}" target="_blank"
-                                        class="btn btn-outline-secondary btn-sm"><i class="fa fa-eye"></i></a></a>
+                                        class="btn btn-outline-secondary btn-sm">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
                                     @endif
                                     <a href="#" class="btn btn-outline-warning btn-sm upload-btn"
-                                        data-evaluasi-id="{{ $idEvaluasi[0] }}"
+                                        data-evaluasi-id="{{ $item->evaluasi_pegawai_id }}"
                                         data-rencana-id="{{ $item->rencana_pegawai_id }}">
                                         <i class="fa fa-upload"></i>
                                     </a>
                                 </td>
                             </tr>
                             @endforeach
-                            @endif
                         </tbody>
                     </table>
                 </div>

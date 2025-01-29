@@ -263,24 +263,23 @@ class EvaluasiController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // dd($request->all());
         try {
             $evaluasi = EvaluasiPegawai::where('uuid', $id)->firstOrFail();
 
             $bulan = \Carbon\Carbon::parse($evaluasi->bulan)->format('m');
             $tahun = \Carbon\Carbon::parse($evaluasi->bulan)->format('Y');
-            $kegiatan = KegiatanHarian::where('user_id', $evaluasi->user_id)
-                ->whereMonth('tanggal', $bulan) // Filter bulan
-                ->whereYear('tanggal', $tahun) // Filter tahun
-                ->get();
 
             $kuantitas = [];
             $laporan = [];
             $kualitas = [];
 
-            foreach ($kegiatan as $item) {
-                $kuantitas[] = $request->kuantitas_output[$item->rencana_pegawai_id];
-                $laporan[] = $request->laporan[$item->rencana_pegawai_id];
-                $kualitas[] = $request->kualitas[$item->rencana_pegawai_id];
+            $i = 0;
+            foreach ($request->kuantitas_output as $item) {
+                $kuantitas[] = $request->kuantitas_output[$i] ?? null;
+                $laporan[] = $request->laporan[$i] ?? null;
+                $kualitas[] = $request->kualitas[$i] ?? null;
+                ++$i;
             }
 
             // Update data evaluasi
