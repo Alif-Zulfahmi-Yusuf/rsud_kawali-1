@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use Illuminate\Support\Carbon;
 use App\Models\EvaluasiPegawai;
+use App\Models\RealisasiRencana;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -129,7 +130,8 @@ class EvaluasiService
                             )) as rata_rata_kualitas
                         ')
                 ->groupBy('rencana_pegawai_id');
-
+            $tahunNew = Carbon::parse($evaluasi->bulan)->year;
+            $bulanNew = Carbon::parse($evaluasi->bulan)->month;
             // Ambil data rencana aksi
             $dataRencanaAksi = DB::table('rencana_hasil_kerja_pegawai')
                 ->join('rencana_hasil_kerja', 'rencana_hasil_kerja_pegawai.rencana_atasan_id', '=', 'rencana_hasil_kerja.id')
@@ -137,7 +139,6 @@ class EvaluasiService
                 ->leftJoinSub($totalWaktuSubquery, 'total_waktu', 'rencana_hasil_kerja_pegawai.id', '=', 'total_waktu.rencana_pegawai_id')
                 ->leftJoinSub($rataRataKualitasSubquery, 'rata_rata_kualitas', 'rencana_hasil_kerja_pegawai.id', '=', 'rata_rata_kualitas.rencana_pegawai_id')
                 ->leftJoin('evaluasi_pegawais', 'evaluasi_pegawais.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
-                ->leftJoin('realisasi_rencanas', 'realisasi_rencanas.rencana_pegawai_id', '=', 'rencana_hasil_kerja_pegawai.id')
                 ->select(
                     'rencana_hasil_kerja_pegawai.id as rencana_pegawai_id',
                     'rencana_hasil_kerja_pegawai.rencana as nama_rencana_pegawai',
@@ -147,8 +148,6 @@ class EvaluasiService
                     'indikator.target_minimum',
                     'indikator.bulan_muncul',
                     'evaluasi_pegawais.id as evaluasi_pegawai_id',
-                    'realisasi_rencanas.id as realisasi_rencana_id',
-                    'realisasi_rencanas.file as file_realisasi',
                     'total_waktu.total_waktu as waktu_total', // Total waktu yang dihitung
                     'rata_rata_kualitas.rata_rata_kualitas as rata_rata_kualitas' // Rata-rata kualitas
                 )
@@ -174,8 +173,21 @@ class EvaluasiService
 
             $totalWaktuKeseluruhanJam = $totalWaktuKeseluruhanJam . ' Jam ' . $totalWaktuKeseluruhanSisaMenit . ' Menit';
 
-            $dataRencanaAksi = $dataRencanaAksi->map(function ($item) {
+
+            $dataRencanaAksi = $dataRencanaAksi->map(function ($item) use ($evaluasi) {
+                $fileRealisasi = RealisasiRencana::where('rencana_pegawai_id', $item->rencana_pegawai_id)
+                    ->where('evaluasi_pegawai_id', $evaluasi->id)
+                    ->first();
+
+                // Debugging
+                Log::info('Item:', ['rencana_pegawai_id' => $item->rencana_pegawai_id, 'evaluasi_pegawai_id' => $item->evaluasi_pegawai_id, 'file_realisasi' => $fileRealisasi]);
+
                 $item->bulan_muncul = \Carbon\Carbon::parse($item->bulan_muncul)->translatedFormat('d F Y');
+                if (isset($fileRealisasi)) {
+                    $item->file_realisasi = $fileRealisasi->file;
+                } else {
+                    $item->file_realisasi = null;
+                }
                 return $item;
             });
 

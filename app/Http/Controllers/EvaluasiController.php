@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Services\EvaluasiService;
+use App\Models\IndikatorKinerja;
 
 class EvaluasiController extends Controller
 {

@@ -141,6 +141,7 @@
                                 <td colspan="10" class="text-center">Tidak ada data untuk bulan dan tahun ini.</td>
                             </tr>
                             @else
+
                             @php
 
                             @endphp
@@ -148,12 +149,13 @@
                             @php
                             #idEvaluasi = [];
                             $idEvaluasi[] = $item->evaluasi_pegawai_id;
+                            $itemBulan = 1;
                             @endphp
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_rencana_pegawai ?? '-' }}</td>
                                 <td class="text-center align-middle" width="5%">
-                                    {{ $item->bulan_muncul ?? '-' }}
+                                    {{ $itemBulan ?? '-' }}
                                 </td>
                                 <td class="text-center align-middle">
                                     {{ $item->satuan }}
