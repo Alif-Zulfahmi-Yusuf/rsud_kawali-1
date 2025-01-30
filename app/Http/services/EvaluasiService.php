@@ -78,28 +78,26 @@ class EvaluasiService
                 throw new \Exception('Tidak ada kegiatan harian yang ditemukan pada bulan dan tahun ini.');
             }
 
-
             $indikatorSubquery = DB::table('rencana_indikator_kinerja')
                 ->selectRaw('
-                            rencana_atasan_id, 
-                            GROUP_CONCAT(DISTINCT indikator_kinerja SEPARATOR ", ") as indikator_kinerja, 
-                            satuan, target_maksimum, aspek, 
-                            target_minimum,
-                        CASE 
-                            WHEN target_minimum = 12 THEN 1  -- Muncul di setiap bulan
-                            WHEN target_minimum IN (1, 2, 3, 4, 6) THEN 
-                        CASE 
-                            WHEN MOD(? - 1, CEIL(12 / target_minimum)) = 0 THEN 1
-                        ELSE 0
-                        END
-                        ELSE 0 
-                        END as bulan_muncul
-                ', [$bulan])
+        rencana_atasan_id, 
+        GROUP_CONCAT(DISTINCT indikator_kinerja SEPARATOR ", ") as indikator_kinerja, 
+        satuan, target_maksimum, aspek, 
+        target_minimum,
+        CASE 
+            WHEN target_minimum = 12 THEN 1  -- Muncul di setiap bulan
+            WHEN target_minimum IN (1, 2, 3, 4, 6) THEN 
+                CASE 
+                    WHEN MOD(? - 1, CEIL(12 / target_minimum)) = 0 THEN 1
+                    ELSE 0
+                END
+            ELSE 0 
+        END as bulan_muncul
+    ', [$bulan])
                 ->where('user_id', $currentUserId)
                 ->where('satuan', 'laporan')
                 ->whereBetween('target_minimum', [1, 12])
                 ->groupBy('rencana_atasan_id', 'satuan', 'target_minimum', 'target_maksimum', 'aspek');
-
 
 
             // Mapping nilai kualitas
@@ -117,6 +115,7 @@ class EvaluasiService
                     rencana_pegawai_id,
                         SUM(TIMESTAMPDIFF(MINUTE, waktu_mulai, waktu_selesai)) as total_waktu
                 ')
+                ->where('user_id', $currentUserId)
                 ->whereMonth('tanggal', $bulan)
                 ->whereYear('tanggal', $tahun)
                 ->groupBy('rencana_pegawai_id');
@@ -163,7 +162,6 @@ class EvaluasiService
                     // Konversi rata-rata kualitas ke teks
                     $item->rata_rata_kualitas_text = array_search(round($item->rata_rata_kualitas), $mappingKualitas) ?? 'Tidak Ada';
 
-
                     // Jika bukan bulan kemunculan, set semua nilai yang terkait ke 0
                     if ($item->bulan_muncul != 1) {
                         $item->waktu_total = 0;
@@ -179,6 +177,7 @@ class EvaluasiService
                 ->where('evaluasi_pegawai_id', $evaluasi->id)
                 ->unique('rencana_pegawai_id')
                 ->values();
+
             $totalWaktuKeseluruhan = $dataRencanaAksi->sum('waktu_total');
             $totalWaktuKeseluruhanMenit = $totalWaktuKeseluruhan * 60;
 
@@ -207,6 +206,7 @@ class EvaluasiService
 
                 return $item;
             });
+
 
             // Query utama untuk groupedDataEvaluasi dengan indikator unik
             $groupedDataEvaluasi = DB::table('rencana_hasil_kerja_pegawai')

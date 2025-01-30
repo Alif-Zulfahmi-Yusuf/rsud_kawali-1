@@ -61,11 +61,12 @@ class EvaluasiController extends Controller
                     ? round($mappedValues->avg(), 2)
                     : '-';
 
+
                 // Perhitungan total waktu
                 $totalWaktu = DB::table('kegiatan_harians')
                     ->where('user_id', $evaluasi->user_id)
-                    ->whereMonth('tanggal', now()->month)
-                    ->whereYear('tanggal', now()->year)
+                    ->whereMonth('tanggal', \Carbon\Carbon::parse($evaluasi->bulan)->month)
+                    ->whereYear('tanggal', \Carbon\Carbon::parse($evaluasi->bulan)->year)
                     ->get()
                     ->reduce(function ($carry, $item) {
                         if (isset($item->waktu_mulai, $item->waktu_selesai)) {
