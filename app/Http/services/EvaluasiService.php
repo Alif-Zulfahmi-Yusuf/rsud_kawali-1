@@ -18,7 +18,9 @@ class EvaluasiService
     {
         try {
             // Ambil evaluasi pegawai berdasarkan UUID
-            $evaluasi = EvaluasiPegawai::where('uuid', $uuid)->first();
+            $evaluasi = EvaluasiPegawai::where('uuid', $uuid)
+                ->whereNotNull('bulan') // Pastikan bulan ada
+                ->first();
 
             if (!$evaluasi) {
                 throw new \Exception('Evaluasi tidak ditemukan.');
@@ -32,17 +34,26 @@ class EvaluasiService
                 throw new \Exception('Anda tidak berhak mengakses evaluasi ini.');
             }
 
-            // Ambil bulan dan tahun dari tabel kegiatan_harians
+            // Ambil bulan & tahun dari evaluasi pegawai
+            $bulanEvaluasi = \Carbon\Carbon::parse($evaluasi->bulan)->format('m');
+            $tahunEvaluasi = \Carbon\Carbon::parse($evaluasi->bulan)->format('Y');
+
             $kegiatanHarian = DB::table('kegiatan_harians')
                 ->where('rencana_pegawai_id', $evaluasi->rencana_pegawai_id)
+                ->whereMonth('tanggal', $bulanEvaluasi) // Filter berdasarkan bulan evaluasi
+                ->whereYear('tanggal', $tahunEvaluasi) // Filter berdasarkan tahun evaluasi
                 ->first();
 
             if (!$kegiatanHarian) {
                 throw new \Exception('Tidak ada data kegiatan harian yang terkait.');
             }
 
+            // Ambil bulan dan tahun dari data terbaru
             $bulan = \Carbon\Carbon::parse($kegiatanHarian->tanggal)->format('m');
             $tahun = \Carbon\Carbon::parse($kegiatanHarian->tanggal)->format('Y');
+
+            // Debugging
+            Log::info('Bulan yang diambil:', ['bulan' => $bulan, 'tahun' => $tahun]);
 
             // Filter kegiatan harian berdasarkan user_id, bulan, dan tahun
             $filteredKegiatanHarian = DB::table('kegiatan_harians')
@@ -79,25 +90,29 @@ class EvaluasiService
             }
 
             $indikatorSubquery = DB::table('rencana_indikator_kinerja')
-                ->selectRaw('
-        rencana_atasan_id, 
-        GROUP_CONCAT(DISTINCT indikator_kinerja SEPARATOR ", ") as indikator_kinerja, 
-        satuan, target_maksimum, aspek, 
-        target_minimum,
-        CASE 
-            WHEN target_minimum = 12 THEN 1  -- Muncul di setiap bulan
-            WHEN target_minimum IN (1, 2, 3, 4, 6) THEN 
-                CASE 
-                    WHEN MOD(? - 1, CEIL(12 / target_minimum)) = 0 THEN 1
-                    ELSE 0
-                END
-            ELSE 0 
-        END as bulan_muncul
-    ', [$bulan])
+                ->selectRaw("
+                            rencana_atasan_id, 
+                            GROUP_CONCAT(DISTINCT indikator_kinerja SEPARATOR ', ') as indikator_kinerja, 
+                            satuan, target_maksimum, aspek, 
+                            target_minimum,
+                                CASE 
+                                    WHEN target_minimum = 12 THEN 1  
+                                    WHEN target_minimum IN (1, 2, 3, 4, 6) THEN 
+                                CASE 
+                                    WHEN MOD($bulan - 1, CEIL(12 / target_minimum)) = 0 THEN 1
+                            ELSE 0
+                        END
+                    ELSE 0 
+                    END as bulan_muncul
+                ")
                 ->where('user_id', $currentUserId)
                 ->where('satuan', 'laporan')
                 ->whereBetween('target_minimum', [1, 12])
                 ->groupBy('rencana_atasan_id', 'satuan', 'target_minimum', 'target_maksimum', 'aspek');
+
+
+            Log::info('Bulan Muncul:', ['bulan' => $bulan, 'query' => $indikatorSubquery->toSql()]);
+            Log::info('Bulan yang digunakan:', [$bulan]);
 
 
             // Mapping nilai kualitas
@@ -168,9 +183,17 @@ class EvaluasiService
                         $item->rata_rata_kualitas = 0;
                         $item->rata_rata_kualitas_text = 'Tidak Ada';
                     }
+                    if (is_null($item->bulan_muncul)) {
+                        $item->bulan_muncul = 0;
+                    }
                     if ($item->evaluasi_pegawai_id == null) {
                         $item->evaluasi_pegawai_id = $evaluasi->id;
                     }
+                    Log::info('Rencana Aksi Item:', [
+                        'rencana_pegawai_id' => $item->rencana_pegawai_id,
+                        'bulan_muncul' => $item->bulan_muncul,
+                        'waktu_total' => $item->waktu_total,
+                    ]);
 
                     return $item;
                 })
@@ -196,11 +219,8 @@ class EvaluasiService
                 Log::info('Item:', ['rencana_pegawai_id' => $item->rencana_pegawai_id, 'evaluasi_pegawai_id' => $item->evaluasi_pegawai_id, 'file_realisasi' => $fileRealisasi]);
 
                 // Perbaiki bulan_muncul agar tetap angka, bukan tanggal
-                if ($item->bulan_muncul != 0) {
-                    $item->bulan_muncul = (int) $item->bulan_muncul;
-                } else {
-                    $item->bulan_muncul = 0;
-                }
+
+                $item->bulan_muncul = (int) $item->bulan_muncul;
 
                 $item->file_realisasi = $fileRealisasi ? $fileRealisasi->file : null;
 

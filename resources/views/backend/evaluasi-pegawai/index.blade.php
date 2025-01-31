@@ -197,7 +197,7 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end py-2">
                                         <a class="dropdown-item"
-                                            href="{{ route('evaluasi-pegawai.edit', $evaluasi->uuid) }}">
+                                            href="{{ route('evaluasi-pegawai.edit', $evaluasi->uuid ,$evaluasi->bulan) }}">
                                             Edit
                                         </a>
                                         <hr class="dropdown-divider">
