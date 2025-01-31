@@ -179,7 +179,6 @@ class EvaluasiService
 
                     // Jika bukan bulan kemunculan, set semua nilai yang terkait ke 0
                     if ($item->bulan_muncul != 1) {
-                        $item->waktu_total = 0;
                         $item->rata_rata_kualitas = 0;
                         $item->rata_rata_kualitas_text = 'Tidak Ada';
                     }
