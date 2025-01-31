@@ -25,9 +25,15 @@ class EvaluasiAtasanService
                 ->where('user_id', $userId)
                 ->firstOrFail();
 
+            // Ambil bulan & tahun dari evaluasi pegawai
+            $bulanEvaluasi = \Carbon\Carbon::parse($evaluasi->bulan)->format('m');
+            $tahunEvaluasi = \Carbon\Carbon::parse($evaluasi->bulan)->format('Y');
+
             // Pastikan data kegiatan harian terkait ada
             $kegiatanHarian = KegiatanHarian::where('user_id', $userId)
                 ->where('rencana_pegawai_id', $evaluasi->rencana_pegawai_id)
+                ->whereMonth('tanggal', $bulanEvaluasi) // Filter berdasarkan bulan evaluasi
+                ->whereYear('tanggal', $tahunEvaluasi) // Filter berdasarkan tahun evaluasi
                 ->first();
 
             if (!$kegiatanHarian) {
@@ -62,21 +68,21 @@ class EvaluasiAtasanService
 
 
             $indikatorSubquery = DB::table('rencana_indikator_kinerja')
-                ->selectRaw('
+                ->selectRaw("
                             rencana_atasan_id, 
-                            GROUP_CONCAT(DISTINCT indikator_kinerja SEPARATOR ", ") as indikator_kinerja, 
+                            GROUP_CONCAT(DISTINCT indikator_kinerja SEPARATOR ', ') as indikator_kinerja, 
                             satuan, target_maksimum, aspek, 
                             target_minimum,
-                        CASE 
-                            WHEN target_minimum = 12 THEN 1  -- Muncul di setiap bulan
-                            WHEN target_minimum IN (1, 2, 3, 4, 6) THEN 
-                        CASE 
-                            WHEN MOD(? - 1, CEIL(12 / target_minimum)) = 0 THEN 1
-                        ELSE 0
+                                CASE 
+                                    WHEN target_minimum = 12 THEN 1  
+                                    WHEN target_minimum IN (1, 2, 3, 4, 6) THEN 
+                                CASE 
+                                    WHEN MOD($bulan - 1, CEIL(12 / target_minimum)) = 0 THEN 1
+                            ELSE 0
                         END
-                        ELSE 0 
-                        END as bulan_muncul
-                ', [$bulan])
+                    ELSE 0 
+                    END as bulan_muncul
+                ")
                 ->where('user_id', $userId)
                 ->where('satuan', 'laporan')
                 ->whereBetween('target_minimum', [1, 12])

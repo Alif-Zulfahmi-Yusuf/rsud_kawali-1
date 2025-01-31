@@ -8,21 +8,21 @@
 
 @push('css')
 <style>
-    .profile-img {
-        width: 120px;
-        height: 120px;
-        object-fit: cover;
-    }
+.profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
 
-    .card-body hr {
-        margin: 1rem 0;
-    }
+.card-body hr {
+    margin: 1rem 0;
+}
 
-    @media (max-width: 800px) {
-        .echart-basic-bar-chart-example {
-            min-height: 250px;
-        }
+@media (max-width: 800px) {
+    .echart-basic-bar-chart-example {
+        min-height: 250px;
     }
+}
 </style>
 @endpush
 
@@ -94,8 +94,8 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('assets/backend/js/dash.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('/assets/backend/js/helper.js') }}"></script>
+<script src="{{ asset('assets/backend/js/dash.js') }}"></script>
 @endpush

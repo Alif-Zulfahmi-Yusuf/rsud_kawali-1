@@ -35,55 +35,50 @@ class HomeController extends Controller
         // Bagian Pegawai
         if ($user->hasRole('Pegawai')) {
             // Ambil data evaluasi berdasarkan user yang sedang login
-            $evaluasi = EvaluasiPegawai::where('user_id', $user->id)
+            $evaluasiList = EvaluasiPegawai::where('user_id', $user->id)
                 ->whereRaw('bulan >= DATE_SUB(NOW(), INTERVAL 12 MONTH)')
                 ->selectRaw('MONTH(bulan) as month, YEAR(bulan) as year, nilai, rating')
-                ->first();
+                ->get();
 
-            // Inisialisasi data default jika evaluasi tidak ditemukan
-            $hasilKerjaData = [];
-            $perilakuKerjaData = collect();
+            // Inisialisasi array kosong untuk menyimpan hasil kerja dan perilaku kerja
+            $hasilKerjaData = array_fill(0, 12, "Tidak Ada Data");
+            $perilakuKerjaData = array_fill(0, 12, "Tidak Ada Data");
 
-            if ($evaluasi) {
+            // Mapping nilai perilaku kerja
+            $nilaiMap = [
+                'dibawah_ekspektasi' => 1,
+                'sesuai_ekspektasi' => 2,
+                'diatas_ekspektasi' => 3,
+            ];
+
+            foreach ($evaluasiList as $evaluasi) {
+                // Konversi bulan ke indeks array (0-based index)
+                $monthIndex = (int) $evaluasi->month - 1;
+
                 // Proses data hasil kerja
                 if (substr($evaluasi->rating, 0, 2) == 'di') {
-                    $hasilKerjaData[] = 'Di ' . ucwords(str_replace('_', ' ', substr($evaluasi->rating, 2)));
+                    $hasilKerjaData[$monthIndex] = 'Di ' . ucwords(str_replace('_', ' ', substr($evaluasi->rating, 2)));
                 } else {
-                    $hasilKerjaData[] = ucwords(str_replace('_', ' ', $evaluasi->rating));
+                    $hasilKerjaData[$monthIndex] = ucwords(str_replace('_', ' ', $evaluasi->rating));
                 }
 
                 // Proses data perilaku kerja
-                $perilakuKerjaData = collect([$evaluasi->nilai])->map(function ($nilai) {
-                    $nilaiMap = [
-                        'dibawah_ekspektasi' => 1,
-                        'sesuai_ekspektasi' => 2,
-                        'diatas_ekspektasi' => 3,
-                    ];
+                $nilaiArray = is_array(json_decode($evaluasi->nilai, true)) ? json_decode($evaluasi->nilai, true) : [$evaluasi->nilai];
 
-                    // Ubah nilai JSON atau string menjadi array nilai
-                    $nilaiArray = is_array(json_decode($nilai, true)) ? json_decode($nilai, true) : [$nilai];
+                // Map nilai ke angka menggunakan $nilaiMap
+                $mappedValues = collect($nilaiArray)->map(fn($item) => $nilaiMap[$item] ?? 0)->filter(fn($val) => $val > 0);
 
-                    // Map nilai ke angka mengguna  kan $nilaiMap
-                    $mappedValues = collect($nilaiArray)->map(function ($item) use ($nilaiMap) {
-                        return $nilaiMap[$item] ?? 0; // Default 0 jika nilai tidak valid
-                    })->filter(fn($val) => $val > 0); // Hanya gunakan nilai valid (> 0)
+                // Hitung rata-rata nilai perilaku kerja
+                $average = $mappedValues->isNotEmpty() ? $mappedValues->avg() : 0;
 
-                    // Hitung rata-rata
-                    $average = $mappedValues->isNotEmpty() ? $mappedValues->avg() : 0;
-
-                    // Map rata-rata ke teks
-                    if ($average < 1.5) {
-                        return "Di Bawah Ekspektasi";
-                    } elseif ($average <= 2.5) {
-                        return "Sesuai Ekspektasi";
-                    } else {
-                        return "Di Atas Ekspektasi";
-                    }
-                });
-            } else {
-                // Jika tidak ada data evaluasi, tambahkan placeholder data kosong
-                $hasilKerjaData[] = 'Tidak Ada Data';
-                $perilakuKerjaData[] = 'Tidak Ada Data';
+                // Tentukan kategori perilaku kerja berdasarkan rata-rata nilai
+                if ($average < 1.5) {
+                    $perilakuKerjaData[$monthIndex] = "Di Bawah Ekspektasi";
+                } elseif ($average <= 2.5) {
+                    $perilakuKerjaData[$monthIndex] = "Sesuai Ekspektasi";
+                } else {
+                    $perilakuKerjaData[$monthIndex] = "Di Atas Ekspektasi";
+                }
             }
 
             return view('backend.dash.dashboard', [
